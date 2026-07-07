@@ -5,7 +5,4 @@
   from = "/api/messages"
   to = "/.netlify/functions/messages"
   status = 200
-
-[functions]
-  included_files = ["messages.js"]
-  node_bundler = "esbuild"
+  force = true
