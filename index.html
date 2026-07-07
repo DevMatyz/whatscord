@@ -9,16 +9,18 @@
       --bg-dark: #2f3136;
       --bg-darker: #202225;
       --bg-light: #36393f;
+      --bg-modal: #18191c;
       --text-main: #dcddde;
       --text-muted: #72767d;
       --blurple: #5865f2;
       --success: #3ba55d;
+      --danger: #ed4245;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-darker); color: var(--text-main); display: flex; justify-content: center; align-items: center; hheight: 100vh; height: 100dvh; }
+    body { background-color: var(--bg-darker); color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; height: 100dvh; overflow: hidden; }
     
-    .screen { width: 100%; max-width: 1000px; height: 90vh; background: var(--bg-light); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .screen { width: 100%; max-width: 1100px; height: 95vh; height: 95dvh; background: var(--bg-light); border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.3); position: relative; }
     .hidden { display: none !important; }
 
     /* Auth & Username Setup Screens */
@@ -26,8 +28,8 @@
     .centered-form h2 { margin-bottom: 20px; color: #fff; }
     .input-group { margin-bottom: 15px; text-align: left; }
     .input-group label { display: block; font-size: 12px; margin-bottom: 5px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
-    input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 10px; background: var(--bg-darker); border: 1px solid transparent; color: #fff; border-radius: 4px; outline: none; }
-    input:focus { border-color: var(--blurple); }
+    input[type="text"], input[type="email"], input[type="password"], textarea, select { width: 100%; padding: 10px; background: var(--bg-darker); border: 1px solid transparent; color: #fff; border-radius: 4px; outline: none; resize: none; }
+    input:focus, textarea:focus { border-color: var(--blurple); }
     button { width: 100%; padding: 12px; background: var(--blurple); border: none; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; transition: 0.2s; margin-top: 10px; }
     button:hover { background: #4752c4; }
     .google-btn { background: #fff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -35,41 +37,99 @@
     .toggle-link { color: var(--blurple); cursor: pointer; font-size: 14px; margin-top: 15px; display: inline-block; }
 
     /* Main Chat Layout */
-    .chat-container { display: flex; height: 100%; width: 100%; }
+    .chat-container { display: flex; height: 100%; width: 100%; position: relative; }
     
-    /* Sidebar */
-    .sidebar { width: 260px; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(0,0,0,0.2); }
-    .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 18px; }
-    .user-profile { padding: 15px; background: rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; }
-    .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--text-muted); }
-    .user-info { flex-grow: 1; overflow: hidden; }
-    .user-info .username { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .logout-btn { background: transparent; color: var(--text-muted); font-size: 12px; padding: 2px 5px; text-align: left; width: auto; margin: 0; }
-    .logout-btn:hover { color: #f04747; background: transparent; }
+    /* Sidebar Layout */
+    .sidebar { width: 280px; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(0,0,0,0.2); flex-shrink: 0; z-index: 5; }
+    .sidebar-top { display: flex; flex-direction: column; height: calc(100% - 70px); }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 18px; color: white; }
+    
+    /* Friend Request Section */
+    .friend-search-box { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.1); }
+    .friend-search-box flex { display: flex; gap: 6px; }
+    .friend-search-box input { padding: 6px; font-size: 13px; }
+    .friend-search-box button { width: auto; padding: 6px 12px; margin-top: 0; font-size: 13px; background: var(--success); }
+    .friend-search-box button:hover { background: #2e854b; }
 
-    /* Chat Area */
-    .main-chat { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-light); }
+    /* Channels & Friend Lists */
+    .channels-list { flex-grow: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+    .list-section-title { font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; padding: 8px 5px 4px 5px; }
+    .channel-item { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 4px; cursor: pointer; color: var(--text-main); font-size: 15px; }
+    .channel-item:hover, .channel-item.active { background: rgba(255,255,255,0.05); color: #fff; }
+    .channel-item .avatar-sm { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #40444b; }
+    
+    /* Current User Footer Section */
+    .user-profile { padding: 12px; background: rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; border-top: 1px solid rgba(0,0,0,0.1); }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--text-muted); cursor: pointer; transition: filter 0.2s; }
+    .avatar:hover { filter: brightness(0.8); }
+    .user-info { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .user-info .username { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; font-size: 14px; cursor: pointer; }
+    .user-info .username:hover { text-decoration: underline; }
+    .user-controls { display: flex; gap: 8px; align-items: center; }
+    .control-icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; font-size: 16px; width: auto; margin: 0; display: flex; align-items: center; }
+    .control-icon-btn:hover { color: #fff; }
+
+    /* Chat Windows Area */
+    .main-chat { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-light); position: relative; }
+    .chat-header { height: 60px; padding: 0 20px; border-bottom: 1px solid rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; background: var(--bg-light); }
+    .chat-header h3 { color: #fff; font-size: 16px; }
+    .back-btn { display: none; background: transparent; color: var(--text-main); border: none; font-size: 18px; cursor: pointer; font-weight: bold; width: auto; margin: 0; padding: 5px; }
+    
     .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
     
-    /* Message styling */
+    /* Messaging Rows */
     .message { display: flex; gap: 15px; align-items: flex-start; }
     .message-content { display: flex; flex-direction: column; }
     .message-header { display: flex; align-items: baseline; gap: 8px; }
-    .msg-username { font-weight: 600; color: #fff; font-size: 15px; }
+    .msg-username { font-weight: 600; color: #fff; font-size: 15px; cursor: pointer; }
+    .msg-username:hover { text-decoration: underline; }
     .msg-time { font-size: 11px; color: var(--text-muted); }
-    .msg-text { color: var(--text-main); font-size: 15px; word-break: break-word; line-height: 1.4; margin-top: 4px; }
-    
-    /* Media Embeds */
+    .msg-text { color: var(--text-main); font-size: 15px; word-break: break-word; line-height: 1.4; margin-top: 2px; }
     .embed-gif { max-width: 300px; max-height: 250px; border-radius: 4px; margin-top: 8px; display: block; }
 
-    /* Input area */
+    /* Active Message Bar */
     .input-area { padding: 20px; background: var(--bg-light); }
-    .input-box-wrapper { background: #40444b; border-radius: 8px; padding: 10px 15px; display: flex; align-items: center; }
+    .input-box-wrapper { background: #40444b; border-radius: 8px; padding: 12px 15px; display: flex; align-items: center; }
     .input-box-wrapper input { background: transparent; border: none; flex-grow: 1; color: #fff; font-size: 15px; outline: none; }
+
+    /* Modals Infrastructure */
+    .modal-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 100; }
+    
+    /* Settings Popout */
+    .settings-card { width: 90%; max-width: 500px; background: var(--bg-dark); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+    .settings-header { padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 18px; color: #fff; }
+    .settings-body { padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; max-height: 70vh; }
+    .settings-footer { padding: 15px 20px; background: var(--bg-darker); display: flex; justify-content: flex-end; gap: 10px; }
+    .settings-footer button { width: auto; margin: 0; padding: 8px 16px; }
+    .cancel-btn { background: transparent; color: #fff; }
+    .cancel-btn:hover { text-decoration: underline; background: transparent; }
+
+    /* Discord Profile Card View Overlay */
+    .profile-popup-card { width: 300px; background: var(--bg-modal); border-radius: 12px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
+    .profile-banner { height: 100px; width: 100%; background-color: var(--blurple); position: relative; }
+    .profile-avatar-wrapper { position: absolute; bottom: -30px; left: 16px; }
+    .profile-avatar-wrapper .avatar-lg { width: 75px; height: 75px; border-radius: 50%; border: 6px solid var(--bg-modal); object-fit: cover; background: var(--text-muted); }
+    .profile-info-content { padding: 45px 16px 16px 16px; background: var(--bg-modal); }
+    .profile-info-content h4 { color: #fff; font-size: 20px; font-weight: bold; margin-bottom: 12px; }
+    .profile-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 12px 0; }
+    .profile-section-heading { font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    .profile-bio-text { font-size: 13px; color: var(--text-main); line-height: 1.4; word-break: break-word; }
+
+    /* RESPONSIVE LAYOUT MATRIX (MOBILE FOCUS) */
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; display: flex; }
+      .main-chat { display: none; width: 100%; }
+      .back-btn { display: block; }
+      
+      /* Toggle view active states */
+      .show-chat-window .sidebar { display: none; }
+      .show-chat-window .main-chat { display: flex; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- AUTH SCREEN -->
   <div id="auth-screen" class="screen">
     <div class="centered-form">
       <h2 id="auth-title">Welcome to WhatsCord</h2>
@@ -92,6 +152,7 @@
     </div>
   </div>
 
+  <!-- INITIAL USERNAME SETUP -->
   <div id="username-screen" class="screen hidden">
     <div class="centered-form">
       <h2>Choose your Username</h2>
@@ -106,32 +167,129 @@
     </div>
   </div>
 
+  <!-- APPLICATION CORE WINDOW -->
   <div id="chat-screen" class="screen hidden">
-    <div class="chat-container">
+    <div class="chat-container" id="chat-layout-wrapper">
+      
+      <!-- Left Hand Nav / Sidebar -->
       <div class="sidebar">
-        <div>
-          <div class="sidebar-header">WhatsCord Chat</div>
+        <div class="sidebar-top">
+          <div class="sidebar-header">WhatsCord</div>
+          
+          <!-- Add Friends Box -->
+          <div class="friend-search-box">
+            <div class="list-section-title" style="padding:0 0 5px 0;">Add Friend</div>
+            <form id="friend-search-form" class="flex">
+              <input type="text" id="friend-username-input" placeholder="Enter exact username..." required>
+              <button type="submit">Add</button>
+            </form>
+          </div>
+
+          <!-- Channel System lists -->
+          <div class="channels-list">
+            <div class="list-section-title">Public Feeds</div>
+            <div class="channel-item active" id="chan-global" onclick="switchChannel('global', 'Global Chat Room')">
+              <span style="color: var(--text-muted); font-weight: bold; font-size: 18px;">#</span>
+              <span>global-chat</span>
+            </div>
+
+            <div class="list-section-title" style="margin-top: 15px;">Direct Messages</div>
+            <div id="friends-list-render-target">
+              <!-- Friends appear dynamically here -->
+            </div>
+          </div>
         </div>
+
+        <!-- Self Identity Footer panel -->
         <div class="user-profile">
-          <img id="user-avatar" class="avatar" src="" alt="Avatar">
+          <img id="user-avatar" class="avatar" src="" alt="Avatar" onclick="openSelfProfile()">
           <div class="user-info">
-            <div id="user-display-name" class="username">Loading...</div>
-            <button id="logout-btn" class="logout-btn">Log Out</button>
+            <div id="user-display-name" class="username" onclick="openSelfProfile()">Loading...</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Online</div>
+          </div>
+          <div class="user-controls">
+            <!-- Settings cog wheel -->
+            <button class="control-icon-btn" title="Settings" onclick="toggleModal('settings-modal', true)">⚙️</button>
+            <button id="logout-btn" class="control-icon-btn" title="Log Out" style="color: var(--danger)">🚪</button>
           </div>
         </div>
       </div>
+
+      <!-- Main Messaging Board Panel -->
       <div class="main-chat">
+        <div class="chat-header">
+          <button class="back-btn" onclick="leaveChatMobile()">⬅</button>
+          <h3 id="active-room-title">Global Chat Room</h3>
+        </div>
         <div class="messages-container" id="messages-container">
-          </div>
+          <!-- Text streams pop in here -->
+        </div>
         <div class="input-area">
           <form id="chat-form" class="input-box-wrapper">
             <input type="text" id="chat-input" placeholder="Type a message or paste a .gif link..." autocomplete="off" required>
           </form>
         </div>
       </div>
+
     </div>
   </div>
 
+  <!-- PROFILE CARD POPUP POPPING DIALOG -->
+  <div id="profile-popup-modal" class="modal-overlay hidden" onclick="toggleModal('profile-popup-modal', false)">
+    <div class="profile-popup-card" onclick="event.stopPropagation()">
+      <div class="profile-banner" id="popup-banner">
+        <div class="profile-avatar-wrapper">
+          <img class="avatar-lg" id="popup-avatar" src="" alt="Avatar">
+        </div>
+      </div>
+      <div class="profile-info-content">
+        <h4 id="popup-username">Username</h4>
+        <div class="profile-divider"></div>
+        <div class="profile-section-heading">About Me</div>
+        <div class="profile-bio-text" id="popup-bio">No description provided.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER SETTINGS FORM PANEL MODAL -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="settings-card">
+      <div class="settings-header">User Profile Settings</div>
+      <form id="settings-form">
+        <div class="settings-body">
+          <div class="input-group">
+            <label>Display Username</label>
+            <input type="text" id="settings-username" required minlength="3">
+          </div>
+          <div class="input-group">
+            <label>Profile Image URL</label>
+            <input type="text" id="settings-avatar-url" placeholder="Paste image link Address">
+          </div>
+          <div class="input-group">
+            <label>Profile Banner Color</label>
+            <select id="settings-banner-color">
+              <option value="#5865f2">Default Blurple</option>
+              <option value="#3ba55d">Forest Green</option>
+              <option value="#ed4245">Crimson Flare</option>
+              <option value="#faa61a">Amber Gold</option>
+              <option value="#eb14a4">Neon Magenta</option>
+              <option value="#111111">Obsidian Night</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>About Me (Description)</label>
+            <textarea id="settings-bio" rows="3" maxlength="160" placeholder="Tell us about yourself..."></textarea>
+          </div>
+        </div>
+        <div class="settings-footer">
+          <button type="button" class="cancel-btn" onclick="toggleModal('settings-modal', false)">Cancel</button>
+          <button type="submit" style="background: var(--success)">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FIREBASE PLATFORM SCRIPT PACKAGES -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { 
@@ -139,10 +297,10 @@
       signInWithEmailAndPassword, signOut, onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { 
-      getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp 
+      getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, where, onSnapshot, serverTimestamp, arrayUnion, getDocs 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Your exact Firebase configuration
+    // App Firestore configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDeotdYyLjrcyN9PfGRp3zlt0x1iRoSQIU",
       authDomain: "whatscord-616d2.firebaseapp.com",
@@ -152,21 +310,32 @@
       appId: "1:453859845825:web:af5250fbb1206607f5d640"
     };
 
-    // Initialize Firebase Services
+    // Initialization bindings
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // DOM Elements
+    // Structural states tracking
+    let currentUserData = null;
+    let isLoginMode = true;
+    let currentChannelId = "global";
+    let unsubscribeMessages = null;
+    let unsubscribeFriends = null;
+
+    // View Elements references
     const authScreen = document.getElementById('auth-screen');
     const usernameScreen = document.getElementById('username-screen');
     const chatScreen = document.getElementById('chat-screen');
-    
-    let currentUserData = null;
-    let isLoginMode = true;
+    const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
 
-    // --- SCREEN NAVIGATION ROUTER ---
+    // Make global handlers link up to standard HTML layouts
+    window.switchChannel = switchChannel;
+    window.toggleModal = toggleModal;
+    window.openSelfProfile = () => openUserProfileCard(currentUserData.uid);
+    window.openUserProfileCard = openUserProfileCard;
+    window.leaveChatMobile = () => chatLayoutWrapper.classList.remove('show-chat-window');
+
     function showScreen(screenId) {
       authScreen.classList.add('hidden');
       usernameScreen.classList.add('hidden');
@@ -174,31 +343,45 @@
       document.getElementById(screenId).classList.remove('hidden');
     }
 
-    // --- AUTHENTICATION STATE WATCHER ---
+    function toggleModal(modalId, showStatus) {
+      const targetModal = document.getElementById(modalId);
+      if (showStatus) targetModal.classList.remove('hidden');
+      else targetModal.classList.add('hidden');
+    }
+
+    // --- TRACK ACCOUNT CHANGES IN REAL-TIME ---
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // User logged in, now fetch details from Firestore 'users' collection
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
+        // Run live tracking stream over personal user Document settings card
+        onSnapshot(doc(db, "users", user.uid), (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            currentUserData = docSnapshot.data();
+            document.getElementById('user-display-name').innerText = currentUserData.username;
+            document.getElementById('user-avatar').src = currentUserData.photoURL;
+            
+            // Populate profile adjustments configuration dashboard fields values
+            document.getElementById('settings-username').value = currentUserData.username || "";
+            document.getElementById('settings-avatar-url').value = currentUserData.photoURL || "";
+            document.getElementById('settings-bio').value = currentUserData.bio || "";
+            document.getElementById('settings-banner-color').value = currentUserData.bannerColor || "#5865f2";
 
-        if (userDoc.exists()) {
-          // Profile exists, load chat room
-          currentUserData = userDoc.data();
-          setupChatInterface();
-          showScreen('chat-screen');
-        } else {
-          // New account, redirect to pick a username
-          showScreen('username-screen');
-        }
+            if (chatScreen.classList.contains('hidden')) {
+              setupFriendsStream();
+              switchChannel('global', 'Global Chat Room');
+              showScreen('chat-screen');
+            }
+          } else {
+            showScreen('username-screen');
+          }
+        });
       } else {
-        // Logged out
-        currentUserData = null;
+        if(unsubscribeFriends) unsubscribeFriends();
+        if(unsubscribeMessages) unsubscribeMessages();
         showScreen('auth-screen');
       }
     });
 
-    // --- FORM SUBMISSIONS (AUTH) ---
-    // Toggle Registration Mode
+    // --- ACCOUNT FORMS SIGNIN HANDLING ---
     document.getElementById('auth-toggle').addEventListener('click', () => {
       isLoginMode = !isLoginMode;
       document.getElementById('auth-title').innerText = isLoginMode ? "Welcome to WhatsCord" : "Create an Account";
@@ -206,143 +389,235 @@
       document.getElementById('auth-toggle').innerText = isLoginMode ? "Need an account? Register" : "Already have an account? Login";
     });
 
-    // Email/Password Signup & Login
     document.getElementById('email-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-
       try {
-        if (isLoginMode) {
-          await signInWithEmailAndPassword(auth, email, password);
-        } else {
-          await createUserWithEmailAndPassword(auth, email, password);
-        }
-      } catch (err) {
-        alert(err.message);
-      }
+        if (isLoginMode) await signInWithEmailAndPassword(auth, email, password);
+        else await createUserWithEmailAndPassword(auth, email, password);
+      } catch (err) { alert(err.message); }
     });
 
-    // Google Sign-In
     document.getElementById('google-btn').addEventListener('click', async () => {
-      try {
-        await signInWithPopup(auth, googleProvider);
-      } catch (err) {
-        alert(err.message);
-      }
+      try { await signInWithPopup(auth, googleProvider); } catch (err) { alert(err.message); }
     });
 
-    // Logout Action
     document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
 
-    // --- USERNAME ONBOARDING ---
+    // --- BASE ONBOARDING FOR HANDLING USERNAMES ---
     document.getElementById('username-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const user = auth.currentUser;
       const usernameInput = document.getElementById('setup-username').value.trim();
-
-      // Generates a neat placeholder robot image based on username if Google picture isn't available
       const generatedAvatar = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(usernameInput)}`;
 
-      const newProfile = {
+      const accountPayload = {
         uid: user.uid,
         username: usernameInput,
         photoURL: generatedAvatar,
-        email: user.email
+        email: user.email,
+        bio: "Hey there! I am using WhatsCord.",
+        bannerColor: "#5865f2",
+        friends: []
       };
 
       try {
-        await setDoc(doc(db, "users", user.uid), newProfile);
-        currentUserData = newProfile;
-        setupChatInterface();
-        showScreen('chat-screen');
-      } catch (err) {
-        alert("Error creating account data: " + err.message);
-      }
+        await setDoc(doc(db, "users", user.uid), accountPayload);
+      } catch (err) { alert("Failed configuration upload: " + err.message); }
     });
 
-    // --- CHAT SYSTEM LOGIC ---
-    function setupChatInterface() {
-      document.getElementById('user-display-name').innerText = currentUserData.username;
-      document.getElementById('user-avatar').src = currentUserData.photoURL;
-      loadMessages();
-    }
+    // --- CHANGE ACCOUNT PROFILE SETTINGS ---
+    document.getElementById('settings-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const updatedUsername = document.getElementById('settings-username').value.trim();
+      const updatedAvatar = document.getElementById('settings-avatar-url').value.trim();
+      const updatedBio = document.getElementById('settings-bio').value.trim();
+      const updatedBanner = document.getElementById('settings-banner-color').value;
 
-    // Embed parser: converts direct links ending in .gif (or matching common configurations) into image tags
-    function parseMessageContent(text) {
-      // Escape generic HTML tags to secure input against standard script injections
-      let safeText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-      // Regex matching URLs
-      const urlRegex = /(https?:\/\/[^\s]+)/gi;
-
-      return safeText.replace(urlRegex, (url) => {
-        // If the URL features a .gif signature extension or contains Giphy/Tenor delivery configurations
-        if (url.match(/\.(jpeg|jpg|gif|png|webp)/i) || url.includes("giphy.com/media") || url.includes("tenor.com/view")) {
-          let cleanUrl = url;
-          // Handle standard Tenor share links if pasted directly (alternative parsing can expand this)
-          return `${url}<br><img src="${cleanUrl}" class="embed-gif" onerror="this.style.display='none'" />`;
-        }
-        return `<a href="${url}" target="_blank" style="color: var(--blurple);">${url}</a>`;
-      });
-    }
-
-    // Real-Time Message Streams
-    let unsubscribeStream = null;
-    function loadMessages() {
-      if (unsubscribeStream) unsubscribeStream(); // Clean up duplicate listeners
-
-      const msgQuery = query(collection(db, "messages"), orderBy("createdAt", "asc"));
-      const container = document.getElementById('messages-container');
-
-      unsubscribeStream = onSnapshot(msgQuery, (snapshot) => {
-        container.innerHTML = ""; // Refresh board view safely
-        
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const timeString = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
-          
-          const msgDiv = document.createElement('div');
-          msgDiv.className = 'message';
-          msgDiv.innerHTML = `
-            <img class="avatar" src="${data.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=fallback'}" alt="User Avatar">
-            <div class="message-content">
-              <div class="message-header">
-                <span class="msg-username">${data.username}</span>
-                <span class="msg-time">${timeString}</span>
-              </div>
-              <div class="msg-text">${parseMessageContent(data.text)}</div>
-            </div>
-          `;
-          container.appendChild(msgDiv);
+      try {
+        await updateDoc(doc(db, "users", auth.currentUser.uid), {
+          username: updatedUsername,
+          photoURL: updatedAvatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(updatedUsername)}`,
+          bio: updatedBio,
+          bannerColor: updatedBanner
         });
+        toggleModal('settings-modal', false);
+      } catch(err) { alert("Error saving profile changes: " + err.message); }
+    });
+
+    // --- LOOKUP PROFILE CARD POPUPS CONFIGURATION ---
+    async function openUserProfileCard(uid) {
+      try {
+        const userSnapshot = await getDoc(doc(db, "users", uid));
+        if (userSnapshot.exists()) {
+          const profileInfoData = userSnapshot.data();
+          document.getElementById('popup-username').innerText = profileInfoData.username;
+          document.getElementById('popup-avatar').src = profileInfoData.photoURL;
+          document.getElementById('popup-bio').innerText = profileInfoData.bio || "No description provided.";
+          document.getElementById('popup-banner').style.backgroundColor = profileInfoData.bannerColor || "#5865f2";
+          toggleModal('profile-popup-modal', true);
+        }
+      } catch(err) { console.error("Could not trace profile details object reference:", err); }
+    }
+
+    // --- ADD FRIENDS LOGIC ENGINE ---
+    document.getElementById('friend-search-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const targetInput = document.getElementById('friend-username-input');
+      const targetName = targetInput.value.trim();
+
+      if(targetName === currentUserData.username) {
+        alert("You cannot add yourself as a friend.");
+        return;
+      }
+
+      try {
+        const userSearchQuery = query(collection(db, "users"), where("username", "==", targetName));
+        const matchingSnapshots = await getDocs(userSearchQuery);
+
+        if(matchingSnapshots.empty) {
+          alert("User not found! Ensure spelling matches exactly.");
+          return;
+        }
+
+        const foundUserDoc = matchingSnapshots.docs[0].data();
         
-        // Auto-scroll mechanics to follow the newest messages
-        container.scrollTop = container.scrollHeight;
+        // Add target uid to your friends index array list mapping elements directly
+        await updateDoc(doc(db, "users", auth.currentUser.uid), {
+          friends: arrayUnion(foundUserDoc.uid)
+        });
+
+        // Mutually add current user to target user friends list
+        await updateDoc(doc(db, "users", foundUserDoc.uid), {
+          friends: arrayUnion(auth.currentUser.uid)
+        });
+
+        targetInput.value = "";
+        alert(`Successfully added ${foundUserDoc.username} to friends!`);
+      } catch(err) { alert("Could not execute profile pairing sequence: " + err.message); }
+    });
+
+    // --- TRACK FRIENDS STREAM UPDATES ---
+    function setupFriendsStream() {
+      const profileDocRef = doc(db, "users", auth.currentUser.uid);
+      
+      unsubscribeFriends = onSnapshot(profileDocRef, async (profileSnap) => {
+        const targetContainer = document.getElementById('friends-list-render-target');
+        targetContainer.innerHTML = "";
+        
+        const friendsUIDList = profileSnap.data()?.friends || [];
+        
+        for(let friendUID of friendsUIDList) {
+          const friendSnap = await getDoc(doc(db, "users", friendUID));
+          if(friendSnap.exists()) {
+            const fData = friendSnap.data();
+            
+            // Generate clean isolated unique ID channel signature structure string tracking
+            const dynamicDmChannelId = [auth.currentUser.uid, fData.uid].sort().join("___");
+            
+            const elementRow = document.createElement('div');
+            elementRow.className = `channel-item ${currentChannelId === dynamicDmChannelId ? 'active' : ''}`;
+            elementRow.id = `chan-${dynamicDmChannelId}`;
+            elementRow.onclick = () => switchChannel(dynamicDmChannelId, fData.username);
+            
+            elementRow.innerHTML = `
+              <img class="avatar-sm" src="${fData.photoURL}" alt="Avatar">
+              <span class="friend-name" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${fData.username}</span>
+            `;
+            targetContainer.appendChild(elementRow);
+          }
+        }
       });
     }
 
-    // Send Message Form Actions
+    // --- SWITCH FEED CHANNELS MATRIX ---
+    function switchChannel(channelId, layoutTitle) {
+      // Manage visual toggles
+      document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
+      const activeElement = document.getElementById(`chan-${channelId}`);
+      if(activeElement) activeElement.classList.add('active');
+
+      currentChannelId = channelId;
+      document.getElementById('active-room-title').innerText = layoutTitle;
+      
+      // Handle responsiveness screen presentation mechanics layout toggles
+      chatLayoutWrapper.classList.add('show-chat-window');
+
+      // Refresh text stream logs pipeline listener hooks links
+      loadChatMessagesLogs();
+    }
+
+    // --- SEND CHAT MESSAGES BLOCK PACKAGES ---
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const inputEl = document.getElementById('chat-input');
-      const textMessage = inputEl.value.trim();
+      const inputField = document.getElementById('chat-input');
+      const inputPayloadText = inputField.value.trim();
 
-      if (!textMessage) return;
+      if (!inputPayloadText) return;
 
       try {
         await addDoc(collection(db, "messages"), {
+          channelId: currentChannelId,
           uid: currentUserData.uid,
           username: currentUserData.username,
           photoURL: currentUserData.photoURL,
-          text: textMessage,
+          text: inputPayloadText,
           createdAt: serverTimestamp()
         });
-        inputEl.value = ""; // Clear active input area
-      } catch (err) {
-        console.error("Failed to send text package:", err);
-      }
+        inputField.value = "";
+      } catch (err) { console.error("Payload streaming failure occurred:", err); }
     });
+
+    // --- LIVE FEED CHAT LIVE ENGINE ---
+    function loadChatMessagesLogs() {
+      if (unsubscribeMessages) unsubscribeMessages(); // Clean existing streams
+
+      const messagesQuery = query(
+        collection(db, "messages"), 
+        where("channelId", "==", currentChannelId),
+        orderBy("createdAt", "asc")
+      );
+      
+      const logsViewBoard = document.getElementById('messages-container');
+
+      unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+        logsViewBoard.innerHTML = "";
+        
+        snapshot.forEach((doc) => {
+          const item = doc.data();
+          const timestampLabel = item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
+          
+          const rowBox = document.createElement('div');
+          rowBox.className = 'message';
+          rowBox.innerHTML = `
+            <img class="avatar" src="${item.photoURL}" alt="Avatar" onclick="openUserProfileCard('${item.uid}')">
+            <div class="message-content">
+              <div class="message-header">
+                <span class="msg-username" onclick="openUserProfileCard('${item.uid}')">${item.username}</span>
+                <span class="msg-time">${timestampLabel}</span>
+              </div>
+              <div class="msg-text">${parseRenderBodyEmbeds(item.text)}</div>
+            </div>
+          `;
+          logsViewBoard.appendChild(rowBox);
+        });
+        logsViewBoard.scrollTop = logsViewBoard.scrollHeight;
+      });
+    }
+
+    // --- EMIT MEDIA EMBED INTERPRETER PIPELINES ---
+    function parseRenderBodyEmbeds(plainText) {
+      let sanitized = plainText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const urlPattern = /(https?:\/\/[^\s]+)/gi;
+
+      return sanitized.replace(urlPattern, (matchedUrl) => {
+        if (matchedUrl.match(/\.(jpeg|jpg|gif|png|webp)/i) || matchedUrl.includes("giphy.com/media") || matchedUrl.includes("tenor.com/view")) {
+          return `${matchedUrl}<br><img src="${matchedUrl}" class="embed-gif" onerror="this.style.display='none'" />`;
+        }
+        return `<a href="${matchedUrl}" target="_blank" style="color: var(--blurple); text-decoration: none;">${matchedUrl}</a>`;
+      });
+    }
   </script>
 </body>
 </html>
