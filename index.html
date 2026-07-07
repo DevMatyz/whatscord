@@ -440,7 +440,7 @@
       signInWithEmailAndPassword, signOut, onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { 
-      getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, where, onSnapshot, serverTimestamp, arrayUnion, getDocs, deleteDoc, arrayRemove 
+      getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, onSnapshot, arrayUnion, getDocs, deleteDoc, arrayRemove 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -463,15 +463,12 @@
     let currentChannelId = "global";   
     let activeServerMetadata = null; 
 
-    let appInitializationTime = Date.now();
     let unreadTrackingRegistry = {}; 
     let globalActiveUsersCache = [];
 
-    let unsubscribeMessages = null;
     let unsubscribeServerDock = null;
     let unsubscribeContextSidebar = null;
     let unsubscribeTypingWatcher = null;
-    let unsubscribeGlobalMessages = null;
     let typingDebounceTimeout = null;
 
     const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
@@ -554,7 +551,6 @@
             document.getElementById('user-display-name').innerText = currentUserData.username;
             document.getElementById('user-avatar').src = currentUserData.photoURL;
 
-            // Pre-fill account configuration panel data fields
             document.getElementById('settings-username').value = currentUserData.username || "";
             document.getElementById('settings-bio').value = currentUserData.bio || "";
             document.getElementById('settings-banner-gradient').value = currentUserData.bannerGradient || "";
@@ -563,7 +559,6 @@
 
             if (document.getElementById('chat-screen').classList.contains('hidden')) {
               setupServerDockStream();
-              setupGlobalUnreadListener();
               setupGlobalUsersDirectoryCache();
               switchServerContext('home');
               showScreen('chat-screen');
@@ -635,51 +630,6 @@
       });
     });
 
-    function setupGlobalUnreadListener() {
-      if(unsubscribeGlobalMessages) unsubscribeGlobalMessages();
-      
-      const q = query(collection(db, "messages"));
-      unsubscribeGlobalMessages = onSnapshot(q, (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === "added") {
-            const msgData = change.doc.data();
-            
-            if (!msgData.createdAt || msgData.uid === auth.currentUser.uid) return;
-            const msgTimestamp = msgData.createdAt.toMillis ? msgData.createdAt.toMillis() : Date.now();
-            if (msgTimestamp < appInitializationTime) return;
-
-            const targetChanId = msgData.channelId || "global";
-            const targetServerId = msgData.serverId || "home";
-
-            if (targetChanId === currentChannelId) return;
-
-            let conditionIsDirectMessage = targetChanId.includes("___") && targetChanId.includes(auth.currentUser.uid);
-            let conditionContainsUserMention = false;
-
-            if (currentUserData) {
-              const localizedMatchToken = `@${currentUserData.username.toLowerCase()}`;
-              if (msgData.text && msgData.text.toLowerCase().includes(localizedMatchToken)) {
-                conditionContainsUserMention = true;
-              }
-            }
-
-            if (conditionIsDirectMessage || conditionContainsUserMention) {
-              unreadTrackingRegistry[targetChanId] = "ping";
-              if (targetServerId !== "home") unreadTrackingRegistry[targetServerId] = "ping";
-              dispatchNotificationAudioPing();
-            } else {
-              if (!unreadTrackingRegistry[targetChanId]) unreadTrackingRegistry[targetChanId] = "unread";
-              if (targetServerId !== "home" && !unreadTrackingRegistry[targetServerId]) {
-                unreadTrackingRegistry[targetServerId] = "unread";
-              }
-            }
-
-            evaluateBadgeRenderingStates();
-          }
-        });
-      });
-    }
-
     function evaluateBadgeRenderingStates() {
       document.querySelectorAll(".server-icon").forEach(el => {
         const componentId = el.id ? el.id.replace("dock-", "") : null;
@@ -739,8 +689,6 @@
       activeServerMetadata = null;
       
       delete unreadTrackingRegistry[contextPointer];
-
-      // CRITICAL: Aggressively clear old layout UI to guarantee channel views refresh instantly 
       document.getElementById('navigation-list-render-target').innerHTML = "";
 
       document.querySelectorAll('.server-icon').forEach(el => el.classList.remove('active'));
@@ -873,7 +821,6 @@
 
     function switchChannel(channelPointerId, layoutDisplayTitle) {
       currentChannelId = channelPointerId;
-      
       delete unreadTrackingRegistry[channelPointerId];
 
       document.getElementById('active-room-title').innerText = layoutDisplayTitle;
@@ -939,55 +886,53 @@
       }
     });
 
+    // ==========================================
+    // TURSO MIGRATED INTERACTION WRAPPERS
+    // ==========================================
+
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fieldInput = document.getElementById('chat-input');
       const plaintext = fieldInput.value.trim();
       if(!plaintext) return;
 
-      await addDoc(collection(db, "messages"), {
-        channelId: currentChannelId,
-        serverId: currentServerContext, 
-        uid: currentUserData.uid,
-        username: currentUserData.username,
-        photoURL: currentUserData.photoURL,
-        text: plaintext,
-        isEdited: false,
-        createdAt: serverTimestamp()
-      });
-      fieldInput.value = "";
-      autocompleteBox.classList.add("hidden");
-      broadcastTypingStatus(false);
+      try {
+        await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            channelId: currentChannelId,
+            username: currentUserData.username,
+            photoUrl: currentUserData.photoURL,
+            text: plaintext
+          })
+        });
+        fieldInput.value = "";
+        autocompleteBox.classList.add("hidden");
+        broadcastTypingStatus(false);
+        await loadMessagesStreamLog(); 
+      } catch (err) {
+        console.error("Error creating message row via Turso:", err);
+      }
     });
 
-    function loadMessagesStreamLog() {
-      if(unsubscribeMessages) unsubscribeMessages();
-      
+    async function loadMessagesStreamLog() {
       const logsViewBoard = document.getElementById('messages-container');
-      
-      // FIX FLICKER: Query by channelId directly without server-side orderBy to protect local echoes
-      const msgQuery = query(collection(db, "messages"), where("channelId", "==", currentChannelId));
+      if (!logsViewBoard) return;
 
-      unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
+      try {
+        const response = await fetch(`/api/messages?channelId=${currentChannelId}`);
+        if (!response.ok) throw new Error("API Route failure");
+
+        const messagesArray = await response.json();
         logsViewBoard.innerHTML = "";
-        const serverOwnerId = activeServerMetadata ? activeServerMetadata.ownerId : null;
         
-        let messagesArray = [];
-        snapshot.forEach((docItem) => {
-          messagesArray.push({ id: docItem.id, ...docItem.data() });
-        });
-
-        // CLIENT-SIDE SORTING: Gracefully places temporary null-timestamps at the bottom 
-        messagesArray.sort((a, b) => {
-          const valA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt) : Date.now() + 9999;
-          const valB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt) : Date.now() + 9999;
-          return valA - valB;
-        });
+        const serverOwnerId = activeServerMetadata ? activeServerMetadata.ownerId : null;
 
         messagesArray.forEach((item) => {
           const isMsgOwner = (item.uid === serverOwnerId);
-          const isSelfMessage = (item.uid === auth.currentUser.uid);
-          const currentSessionUserIsServerOwner = (serverOwnerId === auth.currentUser.uid);
+          const isSelfMessage = (item.uid === auth.currentUser?.uid);
+          const currentSessionUserIsServerOwner = (serverOwnerId === auth.currentUser?.uid);
 
           let roleTagsMarkup = "";
           if(isMsgOwner) {
@@ -1005,17 +950,21 @@
             actionControlElements += `<button class="action-btn delete" type="button" onclick="triggerDeleteMessage('${item.id}')" title="Delete Message">🗑️</button>`;
           }
 
-          const stamp = item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
+          // Handle format support from SQLite string schemas
+          const photoUrl = item.photo_url || item.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=fallback';
+          const isEditedFlag = item.is_edited || item.isEdited;
+          const stamp = item.created_at ? new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
+
           const msgRow = document.createElement('div');
           msgRow.className = 'message';
           msgRow.innerHTML = `
-            <img class="avatar" src="${item.photoURL}" alt="Avatar" onclick="openUserProfileCard('${item.uid}')">
+            <img class="avatar" src="${photoUrl}" alt="Avatar" onclick="openUserProfileCard('${item.uid || ''}')">
             <div class="message-content">
               <div class="message-header">
-                <span class="msg-username" onclick="openUserProfileCard('${item.uid}')">${item.username}</span>
+                <span class="msg-username" onclick="openUserProfileCard('${item.uid || ''}')">${item.username}</span>
                 ${roleTagsMarkup}
                 <span class="msg-time">${stamp}</span>
-                ${item.isEdited ? `<span class="msg-edited">(edited)</span>` : ''}
+                ${isEditedFlag ? `<span class="msg-edited">(edited)</span>` : ''}
               </div>
               <div class="msg-text">${parseBodyEmbeds(item.text)}</div>
             </div>
@@ -1024,7 +973,9 @@
           logsViewBoard.appendChild(msgRow);
         });
         logsViewBoard.scrollTop = logsViewBoard.scrollHeight;
-      });
+      } catch (err) {
+        console.error("Failed pulling channel text data feeds:", err);
+      }
     }
 
     async function triggerEditMessage(msgId, oldText) {
@@ -1035,17 +986,37 @@
         triggerDeleteMessage(msgId);
         return;
       }
-      await updateDoc(doc(db, "messages", msgId), {
-        text: trimmed,
-        isEdited: true
+      
+      // Hit backend route with PUT request method
+      await fetch('/api/messages', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: msgId, text: trimmed })
       });
+      await loadMessagesStreamLog();
     }
 
     async function triggerDeleteMessage(msgId) {
       if(confirm("Permanently delete this message?")) {
-        await deleteDoc(doc(db, "messages", msgId));
+        await fetch('/api/messages', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: msgId })
+        });
+        await loadMessagesStreamLog();
       }
     }
+
+    // Polling engine loops for background activity replication
+    setInterval(() => {
+      if (document.getElementById('chat-screen').classList.contains('hidden') === false) {
+        loadMessagesStreamLog();
+      }
+    }, 3000);
+
+    // ==========================================
+    // SYSTEM HANDLERS & PROFILE UTILITIES
+    // ==========================================
 
     chatInputElem.addEventListener('input', () => {
       broadcastTypingStatus(true);
@@ -1105,7 +1076,7 @@
         memberRoles: {} 
       });
 
-      await addDoc(collection(db, "channels"), {
+      await setDoc(doc(collection(db, "channels")), {
         name: "general",
         serverId: serverDocRef.id
       });
@@ -1153,7 +1124,7 @@
       const cName = document.getElementById('new-channel-name').value.trim().toLowerCase().replace(/\s+/g, '-');
       if(!cName) return;
 
-      await addDoc(collection(db, "channels"), {
+      await setDoc(doc(collection(db, "channels")), {
         name: cName,
         serverId: currentServerContext
       });
@@ -1164,7 +1135,6 @@
 
     function openServerSettingsModal() {
       if (!activeServerMetadata || activeServerMetadata.ownerId !== auth.currentUser.uid) return;
-      
       document.getElementById('mgmt-server-title-label').innerText = `Settings: ${activeServerMetadata.name}`;
       renderServerManagementRolesList();
       toggleModal('server-mgmt-modal', true);
@@ -1268,6 +1238,7 @@
     });
 
     async function openUserProfileCard(uid) {
+      if(!uid) return;
       const uSnap = await getDoc(doc(db, "users", uid));
       if(!uSnap.exists()) return;
       const data = uSnap.data();
@@ -1282,7 +1253,6 @@
       
       const bannerTarget = document.getElementById('popup-banner');
       
-      // NITRO IMPLEMENTATION RENDERING LOGIC TREE
       if (data.bannerGradient) {
         bannerTarget.style.backgroundImage = data.bannerGradient;
       } else if (data.bannerURL) {
@@ -1302,11 +1272,11 @@
       } else {
         roleZone.classList.remove("hidden");
         
-        const assignedRolesMap = activeServerMetadata.memberRoles || {};
+        const assignedRolesMap = activeServerMetadata?.memberRoles || {};
         const currentAssignedRole = assignedRolesMap[uid] || "None";
         roleBadge.innerText = currentAssignedRole.toUpperCase();
 
-        if (activeServerMetadata.ownerId === auth.currentUser.uid) {
+        if (activeServerMetadata?.ownerId === auth.currentUser.uid) {
           assignmentBlock.classList.remove("hidden");
           const selector = document.getElementById("popup-server-role-selector");
           
@@ -1345,6 +1315,7 @@
     }
 
     function parseBodyEmbeds(text) {
+      if(!text) return "";
       let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const urlPattern = /(https?:\/\/[^\s]+)/gi;
 
