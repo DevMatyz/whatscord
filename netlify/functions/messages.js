@@ -1,7 +1,9 @@
 import { createClient } from "@libsql/client";
+import crypto from "crypto";
 
+// Initialize the Turso client
 const turso = createClient({
-  url: "libsql://whatscord-devmatryca.turso.io", // Verified from your Turso dashboard screenshot
+  url: "libsql://whatscord-devmatryca.turso.io",
   authToken: process.env.TURSO_AUTH_TOKEN, 
 });
 
@@ -12,8 +14,8 @@ export const handler = async (event) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       },
     };
   }
@@ -45,10 +47,13 @@ export const handler = async (event) => {
       const body = JSON.parse(event.body || "{}");
       const { channelId, uid, username, photoUrl, text } = body;
 
+      // Ensure crypto.randomUUID() executes from the node module import
+      const messageId = crypto.randomUUID();
+
       await turso.execute({
         sql: "INSERT INTO messages (id, channel_id, uid, username, photo_url, text, created_at, is_edited) VALUES (?, ?, ?, ?, ?, ?, datetime('now'), 0)",
         args: [
-          crypto.randomUUID(),
+          messageId,
           channelId || "global",
           uid || "anonymous",
           username || "User",
@@ -60,7 +65,7 @@ export const handler = async (event) => {
       return {
         statusCode: 201,
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-        body: JSON.stringify({ success: true }),
+        body: JSON.stringify({ success: true, id: messageId }),
       };
     }
 
@@ -102,17 +107,24 @@ export const handler = async (event) => {
       };
     }
 
+    // Method not matched
     return {
       statusCode: 405,
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       body: JSON.stringify({ error: "Method Not Allowed" }),
     };
 
   } catch (err) {
+    // This allows you to inspect the breakdown inside your Netlify Function logs
+    console.error("Function error caught:", err.message);
+
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ error: err.message }),
+      body: JSON.stringify({ 
+        error: err.message,
+        details: "Check your Netlify environment variables if database authentication failed." 
+      }),
     };
   }
 };
-
