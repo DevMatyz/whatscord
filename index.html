@@ -32,8 +32,12 @@
     input:focus, textarea:focus { border-color: var(--blurple); }
     button { width: 100%; padding: 12px; background: var(--blurple); border: none; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; transition: 0.2s; margin-top: 10px; }
     button:hover { background: #4752c4; }
+    
+    /* Fixed Google Button styling with inline SVG support */
     .google-btn { background: #fff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .google-btn:hover { background: #e6e6e6; }
+    .google-btn svg { width: 18px; height: 18px; }
+    
     .toggle-link { color: var(--blurple); cursor: pointer; font-size: 14px; margin-top: 15px; display: inline-block; }
 
     /* Main Chat Layout */
@@ -44,11 +48,11 @@
     .sidebar-top { display: flex; flex-direction: column; height: calc(100% - 70px); }
     .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 18px; color: white; }
     
-    /* Friend Request Section */
+    /* Friend Request Section Layout Fixes */
     .friend-search-box { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.1); }
-    .friend-search-box flex { display: flex; gap: 6px; }
-    .friend-search-box input { padding: 6px; font-size: 13px; }
-    .friend-search-box button { width: auto; padding: 6px 12px; margin-top: 0; font-size: 13px; background: var(--success); }
+    .friend-search-box .flex { display: flex; gap: 6px; }
+    .friend-search-box input { padding: 8px; font-size: 13px; }
+    .friend-search-box button { width: auto; padding: 6px 12px; margin-top: 0; font-size: 13px; background: var(--success); white-space: nowrap; }
     .friend-search-box button:hover { background: #2e854b; }
 
     /* Channels & Friend Lists */
@@ -58,37 +62,37 @@
     .channel-item:hover, .channel-item.active { background: rgba(255,255,255,0.05); color: #fff; }
     .channel-item .avatar-sm { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #40444b; }
     
-    /* Current User Footer Section */
-    .user-profile { padding: 12px; background: rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; border-top: 1px solid rgba(0,0,0,0.1); }
-    .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--text-muted); cursor: pointer; transition: filter 0.2s; }
+    /* Identity Footer Section */
+    .user-profile { padding: 12px; background: rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; border-top: 1px solid rgba(0,0,0,0.1); height: 70px; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--text-muted); cursor: pointer; transition: filter 0.2s; flex-shrink: 0; }
     .avatar:hover { filter: brightness(0.8); }
     .user-info { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; }
     .user-info .username { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; font-size: 14px; cursor: pointer; }
     .user-info .username:hover { text-decoration: underline; }
-    .user-controls { display: flex; gap: 8px; align-items: center; }
+    .user-controls { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
     .control-icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; font-size: 16px; width: auto; margin: 0; display: flex; align-items: center; }
     .control-icon-btn:hover { color: #fff; }
 
     /* Chat Windows Area */
-    .main-chat { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-light); position: relative; }
-    .chat-header { height: 60px; padding: 0 20px; border-bottom: 1px solid rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; background: var(--bg-light); }
-    .chat-header h3 { color: #fff; font-size: 16px; }
+    .main-chat { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-light); position: relative; width: 0; }
+    .chat-header { height: 60px; padding: 0 20px; border-bottom: 1px solid rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; background: var(--bg-light); flex-shrink: 0; }
+    .chat-header h3 { color: #fff; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .back-btn { display: none; background: transparent; color: var(--text-main); border: none; font-size: 18px; cursor: pointer; font-weight: bold; width: auto; margin: 0; padding: 5px; }
     
     .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
     
     /* Messaging Rows */
     .message { display: flex; gap: 15px; align-items: flex-start; }
-    .message-content { display: flex; flex-direction: column; }
+    .message-content { display: flex; flex-direction: column; width: 100%; overflow: hidden; }
     .message-header { display: flex; align-items: baseline; gap: 8px; }
     .msg-username { font-weight: 600; color: #fff; font-size: 15px; cursor: pointer; }
     .msg-username:hover { text-decoration: underline; }
     .msg-time { font-size: 11px; color: var(--text-muted); }
     .msg-text { color: var(--text-main); font-size: 15px; word-break: break-word; line-height: 1.4; margin-top: 2px; }
-    .embed-gif { max-width: 300px; max-height: 250px; border-radius: 4px; margin-top: 8px; display: block; }
+    .embed-gif { max-width: 100%; max-height: 250px; border-radius: 4px; margin-top: 8px; display: block; object-fit: contain; }
 
-    /* Active Message Bar */
-    .input-area { padding: 20px; background: var(--bg-light); }
+    /* Input Bar */
+    .input-area { padding: 20px; background: var(--bg-light); flex-shrink: 0; }
     .input-box-wrapper { background: #40444b; border-radius: 8px; padding: 12px 15px; display: flex; align-items: center; }
     .input-box-wrapper input { background: transparent; border: none; flex-grow: 1; color: #fff; font-size: 15px; outline: none; }
 
@@ -98,13 +102,13 @@
     /* Settings Popout */
     .settings-card { width: 90%; max-width: 500px; background: var(--bg-dark); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
     .settings-header { padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 18px; color: #fff; }
-    .settings-body { padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; max-height: 70vh; }
+    .settings-body { padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; max-height: 60vh; }
     .settings-footer { padding: 15px 20px; background: var(--bg-darker); display: flex; justify-content: flex-end; gap: 10px; }
     .settings-footer button { width: auto; margin: 0; padding: 8px 16px; }
     .cancel-btn { background: transparent; color: #fff; }
     .cancel-btn:hover { text-decoration: underline; background: transparent; }
 
-    /* Discord Profile Card View Overlay */
+    /* Profile Card View Overlay */
     .profile-popup-card { width: 300px; background: var(--bg-modal); border-radius: 12px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
     .profile-banner { height: 100px; width: 100%; background-color: var(--blurple); position: relative; }
     .profile-avatar-wrapper { position: absolute; bottom: -30px; left: 16px; }
@@ -115,13 +119,12 @@
     .profile-section-heading { font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
     .profile-bio-text { font-size: 13px; color: var(--text-main); line-height: 1.4; word-break: break-word; }
 
-    /* RESPONSIVE LAYOUT MATRIX (MOBILE FOCUS) */
+    /* Mobile Adaptations */
     @media (max-width: 768px) {
       .sidebar { width: 100%; display: flex; }
       .main-chat { display: none; width: 100%; }
       .back-btn { display: block; }
       
-      /* Toggle view active states */
       .show-chat-window .sidebar { display: none; }
       .show-chat-window .main-chat { display: flex; }
     }
@@ -144,8 +147,14 @@
         </div>
         <button type="submit" id="auth-submit-btn">Login</button>
       </form>
+      <!-- Guaranteed Inline Google Vector Icon -->
       <button class="google-btn" id="google-btn">
-        <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/logo_googleg_color_24dp.png" width="18" alt="Google">
+        <svg viewBox="0 0 24 24">
+          <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0112 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.33 0 3.357 2.673 1.414 6.564l3.852 3.201z"/>
+          <path fill="#4285F4" d="M23.455 12.273c0-.818-.068-1.609-.205-2.364H12v4.483h6.436c-.277 1.477-1.114 2.727-2.368 3.568v2.964h3.823c2.236-2.064 3.564-5.105 3.564-8.651z"/>
+          <path fill="#FBBC05" d="M5.266 14.235L1.414 17.436A11.947 11.947 0 010 12c0-1.959.473-3.814 1.309-5.464l3.957 3.11c-.245.728-.377 1.505-.377 2.354 0 .895.145 1.755.477 2.235z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.973-1.077 7.964-2.923l-3.823-2.964c-1.06.714-2.427 1.141-4.141 1.141-3.186 0-5.89-2.155-6.855-5.055L.291 17.305C2.205 21.236 6.273 24 12 24z"/>
+        </svg>
         Sign in with Google
       </button>
       <span class="toggle-link" id="auth-toggle">Need an account? Register</span>
@@ -208,7 +217,6 @@
             <div style="font-size: 11px; color: var(--text-muted);">Online</div>
           </div>
           <div class="user-controls">
-            <!-- Settings cog wheel -->
             <button class="control-icon-btn" title="Settings" onclick="toggleModal('settings-modal', true)">⚙️</button>
             <button id="logout-btn" class="control-icon-btn" title="Log Out" style="color: var(--danger)">🚪</button>
           </div>
@@ -234,7 +242,7 @@
     </div>
   </div>
 
-  <!-- PROFILE CARD POPUP POPPING DIALOG -->
+  <!-- PROFILE CARD POPUP -->
   <div id="profile-popup-modal" class="modal-overlay hidden" onclick="toggleModal('profile-popup-modal', false)">
     <div class="profile-popup-card" onclick="event.stopPropagation()">
       <div class="profile-banner" id="popup-banner">
@@ -310,26 +318,22 @@
       appId: "1:453859845825:web:af5250fbb1206607f5d640"
     };
 
-    // Initialization bindings
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // Structural states tracking
     let currentUserData = null;
     let isLoginMode = true;
     let currentChannelId = "global";
     let unsubscribeMessages = null;
     let unsubscribeFriends = null;
 
-    // View Elements references
     const authScreen = document.getElementById('auth-screen');
     const usernameScreen = document.getElementById('username-screen');
     const chatScreen = document.getElementById('chat-screen');
     const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
 
-    // Make global handlers link up to standard HTML layouts
     window.switchChannel = switchChannel;
     window.toggleModal = toggleModal;
     window.openSelfProfile = () => openUserProfileCard(currentUserData.uid);
@@ -349,17 +353,14 @@
       else targetModal.classList.add('hidden');
     }
 
-    // --- TRACK ACCOUNT CHANGES IN REAL-TIME ---
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Run live tracking stream over personal user Document settings card
         onSnapshot(doc(db, "users", user.uid), (docSnapshot) => {
           if (docSnapshot.exists()) {
             currentUserData = docSnapshot.data();
             document.getElementById('user-display-name').innerText = currentUserData.username;
             document.getElementById('user-avatar').src = currentUserData.photoURL;
             
-            // Populate profile adjustments configuration dashboard fields values
             document.getElementById('settings-username').value = currentUserData.username || "";
             document.getElementById('settings-avatar-url').value = currentUserData.photoURL || "";
             document.getElementById('settings-bio').value = currentUserData.bio || "";
@@ -381,7 +382,7 @@
       }
     });
 
-    // --- ACCOUNT FORMS SIGNIN HANDLING ---
+    // --- ACCOUNT AUTHENTICATION FORMS ---
     document.getElementById('auth-toggle').addEventListener('click', () => {
       isLoginMode = !isLoginMode;
       document.getElementById('auth-title').innerText = isLoginMode ? "Welcome to WhatsCord" : "Create an Account";
@@ -405,7 +406,7 @@
 
     document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
 
-    // --- BASE ONBOARDING FOR HANDLING USERNAMES ---
+    // --- USERNAME ONBOARDING ---
     document.getElementById('username-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const user = auth.currentUser;
@@ -427,7 +428,7 @@
       } catch (err) { alert("Failed configuration upload: " + err.message); }
     });
 
-    // --- CHANGE ACCOUNT PROFILE SETTINGS ---
+    // --- CHANGE PROFILE SETTINGS ---
     document.getElementById('settings-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const updatedUsername = document.getElementById('settings-username').value.trim();
@@ -446,7 +447,7 @@
       } catch(err) { alert("Error saving profile changes: " + err.message); }
     });
 
-    // --- LOOKUP PROFILE CARD POPUPS CONFIGURATION ---
+    // --- USER PROFILE DISPLAY LOOKUP ---
     async function openUserProfileCard(uid) {
       try {
         const userSnapshot = await getDoc(doc(db, "users", uid));
@@ -483,12 +484,10 @@
 
         const foundUserDoc = matchingSnapshots.docs[0].data();
         
-        // Add target uid to your friends index array list mapping elements directly
         await updateDoc(doc(db, "users", auth.currentUser.uid), {
           friends: arrayUnion(foundUserDoc.uid)
         });
 
-        // Mutually add current user to target user friends list
         await updateDoc(doc(db, "users", foundUserDoc.uid), {
           friends: arrayUnion(auth.currentUser.uid)
         });
@@ -498,22 +497,19 @@
       } catch(err) { alert("Could not execute profile pairing sequence: " + err.message); }
     });
 
-    // --- TRACK FRIENDS STREAM UPDATES ---
+    // --- REALTIME FRIENDS SECTION PIPELINE ---
     function setupFriendsStream() {
       const profileDocRef = doc(db, "users", auth.currentUser.uid);
       
       unsubscribeFriends = onSnapshot(profileDocRef, async (profileSnap) => {
         const targetContainer = document.getElementById('friends-list-render-target');
         targetContainer.innerHTML = "";
-        
         const friendsUIDList = profileSnap.data()?.friends || [];
         
         for(let friendUID of friendsUIDList) {
           const friendSnap = await getDoc(doc(db, "users", friendUID));
           if(friendSnap.exists()) {
             const fData = friendSnap.data();
-            
-            // Generate clean isolated unique ID channel signature structure string tracking
             const dynamicDmChannelId = [auth.currentUser.uid, fData.uid].sort().join("___");
             
             const elementRow = document.createElement('div');
@@ -533,18 +529,14 @@
 
     // --- SWITCH FEED CHANNELS MATRIX ---
     function switchChannel(channelId, layoutTitle) {
-      // Manage visual toggles
       document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
       const activeElement = document.getElementById(`chan-${channelId}`);
       if(activeElement) activeElement.classList.add('active');
 
       currentChannelId = channelId;
       document.getElementById('active-room-title').innerText = layoutTitle;
-      
-      // Handle responsiveness screen presentation mechanics layout toggles
       chatLayoutWrapper.classList.add('show-chat-window');
 
-      // Refresh text stream logs pipeline listener hooks links
       loadChatMessagesLogs();
     }
 
@@ -569,16 +561,12 @@
       } catch (err) { console.error("Payload streaming failure occurred:", err); }
     });
 
-    // --- LIVE FEED CHAT LIVE ENGINE ---
+    // --- FIXED: CLIENT-SIDE RE-STREAMING CHAT ENGINE ---
+    // This removes the index constraint so messages update across rooms seamlessly.
     function loadChatMessagesLogs() {
-      if (unsubscribeMessages) unsubscribeMessages(); // Clean existing streams
+      if (unsubscribeMessages) unsubscribeMessages();
 
-      const messagesQuery = query(
-        collection(db, "messages"), 
-        where("channelId", "==", currentChannelId),
-        orderBy("createdAt", "asc")
-      );
-      
+      const messagesQuery = query(collection(db, "messages"), orderBy("createdAt", "asc"));
       const logsViewBoard = document.getElementById('messages-container');
 
       unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
@@ -586,6 +574,10 @@
         
         snapshot.forEach((doc) => {
           const item = doc.data();
+          
+          // Client-side channel filtering bypasses strict Firestore index structural rules
+          if (item.channelId !== currentChannelId) return;
+
           const timestampLabel = item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
           
           const rowBox = document.createElement('div');
@@ -606,7 +598,7 @@
       });
     }
 
-    // --- EMIT MEDIA EMBED INTERPRETER PIPELINES ---
+    // --- EMIT MEDIA EMBED INTERPRETER ---
     function parseRenderBodyEmbeds(plainText) {
       let sanitized = plainText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const urlPattern = /(https?:\/\/[^\s]+)/gi;
