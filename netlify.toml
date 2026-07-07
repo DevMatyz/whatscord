@@ -1,8 +1,7 @@
 [build]
-  publish = "."
+  publish = "." # Or your build folder if you use a bundler
 
 [[redirects]]
-  from = "/api/messages"
-  to = "/.netlify/functions/messages"
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
   status = 200
-  force = true
