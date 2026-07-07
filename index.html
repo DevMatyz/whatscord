@@ -6,11 +6,11 @@
   <title>WhatsCord Premium</title>
   <style>
     :root {
-      --bg-servers: #1e1f22;
-      --bg-dark: #2b2d31;
-      --bg-darker: #1e1f22;
+      --bg-servers: #111214;
+      --bg-dark: #1e1f22;
+      --bg-darker: #111214;
       --bg-light: #313338;
-      --bg-modal: #111214;
+      --bg-modal: #18191c;
       --text-main: #dbdee1;
       --text-muted: #949ba4;
       --blurple: #5865f2;
@@ -167,28 +167,36 @@
     .cancel-btn { background: transparent; color: #fff; }
     .cancel-btn:hover { background: rgba(255,255,255,0.05); }
 
-    .profile-popup-card { width: 310px; background: var(--bg-modal); border-radius: 10px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; }
-    .profile-banner { height: 95px; width: 100%; background-color: var(--blurple); background-size: cover; background-position: center; position: relative; flex-shrink: 0; }
-    .profile-avatar-wrapper { position: absolute; bottom: -30px; left: 16px; }
-    .profile-avatar-wrapper .avatar-lg { width: 72px; height: 72px; border-radius: 50%; border: 5px solid var(--bg-modal); object-fit: cover; background: var(--text-muted); }
+    /* HIGH FIDELITY DISCORD METROPOLIS PROFILE THEME OVERHAUL */
+    .profile-popup-card { width: 340px; background: #18191c; border-radius: 12px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; position: relative; }
+    .profile-banner { height: 120px; width: 100%; background-color: var(--blurple); background-size: cover; background-position: center; position: relative; flex-shrink: 0; transition: background 0.2s; }
     
-    .profile-info-content { padding: 40px 16px 16px 16px; transition: background 0.2s; }
-    .profile-info-content h4 { color: #fff; font-size: 17px; font-weight: bold; }
+    .profile-avatar-wrapper { position: absolute; bottom: -34px; left: 16px; z-index: 5; }
+    .profile-avatar-wrapper .avatar-lg { width: 80px; height: 80px; border-radius: 50%; border: 6px solid #18191c; object-fit: cover; background: #2f3136; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
     
-    .profile-card-presence-status { font-size: 12px; display: flex; align-items: center; gap: 6px; margin: 4px 0 12px 0; font-weight: 500; text-transform: capitalize; }
+    .profile-badges-container { position: absolute; top: 132px; right: 16px; display: flex; gap: 6px; align-items: center; }
+    .nitro-badge-icon { width: 22px; height: 22px; background: rgba(255,255,255,0.1); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: help; }
+
+    .profile-info-content { padding: 48px 16px 16px 16px; background: #18191c; display: flex; flex-direction: column; gap: 12px; }
+    
+    .profile-card-main-box { background: #111214; border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.04); }
+    .profile-info-content h4 { color: #fff; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    
+    .profile-card-presence-status { font-size: 12px; display: flex; align-items: center; gap: 6px; margin: 2px 0 8px 0; font-weight: 500; text-transform: capitalize; }
     .profile-card-presence-status .dot { width: 8px; height: 8px; border-radius: 50%; background: #80848e; }
     .profile-card-presence-status.online { color: var(--success); }
     .profile-card-presence-status.online .dot { background: var(--success); box-shadow: 0 0 8px var(--success); }
     .profile-card-presence-status.offline { color: var(--text-muted); }
 
-    .profile-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 12px 0; }
-    .profile-section-heading { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
-    .profile-bio-text { font-size: 13px; color: var(--text-main); line-height: 1.4; word-break: break-word; }
+    .profile-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 0; }
+    .profile-section-heading { font-size: 10px; font-weight: 800; color: #b5bac1; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .profile-bio-text { font-size: 13px; color: #dbdee1; line-height: 1.5; word-break: break-word; font-weight: 400; }
     
-    .profile-action-row { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
-    .profile-action-row button { margin-top: 0; font-size: 12px; padding: 6px 10px; flex-grow: 1; }
-    .profile-action-row button.block-action-btn { background: var(--danger); }
-    .profile-action-row button.block-action-btn:hover { background: #b8282b; }
+    .profile-action-row { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .profile-action-row button { margin-top: 0; font-size: 12px; padding: 8px 12px; flex-grow: 1; background: #4e5058; color: #fff; transition: background 0.15s; }
+    .profile-action-row button:hover { background: #6d6f78; }
+    .profile-action-row button.block-action-btn { background: rgba(242, 63, 67, 0.15); color: var(--danger); border: 1px solid rgba(242, 63, 67, 0.2); }
+    .profile-action-row button.block-action-btn:hover { background: var(--danger); color: #fff; }
 
     .roles-management-container { display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; max-height: 140px; overflow-y: auto; }
     .role-config-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-darker); padding: 6px 10px; border-radius: 3px; font-size: 12px; }
@@ -374,6 +382,7 @@
     </div>
   </div>
 
+  <!-- STYLISHLY REDESIGNED MODAL POPUP BOARD OVERLAY -->
   <div id="profile-popup-modal" class="modal-overlay hidden animate-fade" onclick="toggleModal('profile-popup-modal', false)">
     <div class="profile-popup-card animate-scale" onclick="event.stopPropagation()">
       <div class="profile-banner" id="popup-banner">
@@ -381,28 +390,37 @@
           <img class="avatar-lg" id="popup-avatar" src="" alt="Avatar">
         </div>
       </div>
+      
+      <!-- Premium Nitro Asset Badge Containers Slot -->
+      <div class="profile-badges-container" id="popup-badges-slot">
+        <div class="nitro-badge-icon" title="WhatsCord Premium Nitro User">🔮</div>
+        <div class="nitro-badge-icon" title="Server Boosting Supporter">🔺</div>
+      </div>
+
       <div class="profile-info-content" id="popup-info-body">
-        <h4 id="popup-username">Username</h4>
-        <div id="popup-presence-status-row" class="profile-card-presence-status">
-          <div class="dot"></div>
-          <span class="status-text-label"></span>
-        </div>
-        
-        <div id="popup-server-role-zone" class="hidden">
-          <div class="profile-section-heading">Server Specific Role</div>
-          <div id="popup-server-role-badge" style="display:inline-block; margin-bottom:8px;" class="role-badge server-custom-tag">None</div>
+        <div class="profile-card-main-box">
+          <h4 id="popup-username">Username</h4>
+          <div id="popup-presence-status-row" class="profile-card-presence-status">
+            <div class="dot"></div>
+            <span class="status-text-label">Online</span>
+          </div>
           
-          <div id="popup-server-role-assignment-controls" class="hidden">
-            <div class="profile-section-heading" style="margin-top:4px;">Modify User Server Role</div>
-            <select id="popup-server-role-selector" style="font-size:12px; padding:6px; margin-top:4px;"></select>
+          <div id="popup-server-role-zone" class="hidden">
+            <div class="profile-divider"></div>
+            <div class="profile-section-heading">Server Specific Role</div>
+            <div id="popup-server-role-badge" style="display:inline-block; margin-bottom:8px;" class="role-badge server-custom-tag">None</div>
+            
+            <div id="popup-server-role-assignment-controls" class="hidden">
+              <select id="popup-server-role-selector" style="font-size:12px; padding:6px; margin-top:4px;"></select>
+            </div>
           </div>
         </div>
 
-        <div class="profile-divider"></div>
-        <div class="profile-section-heading">About Me</div>
-        <div class="profile-bio-text" id="popup-bio">No description provided.</div>
+        <div class="profile-card-main-box">
+          <div class="profile-section-heading">About Me</div>
+          <div class="profile-bio-text" id="popup-bio">No description provided.</div>
+        </div>
         
-        <div class="profile-divider"></div>
         <div class="profile-action-row" id="popup-social-actions-bar"></div>
       </div>
     </div>
@@ -435,11 +453,10 @@
             <label>Nitro Color Gradient Style (Profile Card Background)</label>
             <select id="settings-banner-gradient">
               <option value="">None (Use Solid Color or Gallery Asset)</option>
-              <option value="linear-gradient(135deg, #ff007f, #7f00ff)">🔮 Nitro Neon Amethyst (Pink/Purple)</option>
-              <option value="linear-gradient(135deg, #00c6ff, #0072ff)">🌊 Nitro Cosmic Ocean (Teal Blue)</option>
-              <option value="linear-gradient(135deg, #f12711, #f5af19)">🔥 Nitro Sunset Overdrive (Gold Orange)</option>
-              <option value="linear-gradient(135deg, #11998e, #38ef7d)">🌿 Nitro Emerald Genesis (Mint Green)</option>
-              <option value="linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)">🌈 Nitro Pastel Chroma</option>
+              <option value="linear-gradient(135deg, #2b002a, #11001c)">🔮 Nitro Dark Amethyst (Deep Purple)</option>
+              <option value="linear-gradient(135deg, #0f2027, #203a43, #2c5364)">🌊 Nitro Midnight Blue</option>
+              <option value="linear-gradient(135deg, #1f1c2c, #928dab)">🔥 Nitro Dark Pastel Chroma</option>
+              <option value="linear-gradient(135deg, #0d1b2a, #1b263b, #415a77)">🌿 Nitro Steel Slate</option>
             </select>
           </div>
 
@@ -507,6 +524,9 @@
     let unsubscribeContextSidebar = null;
     let unsubscribeTypingWatcher = null;
     let typingDebounceTimeout = null;
+
+    // RACE CONDITION NETWORK REQUEST CONTROLLER
+    let currentMessageFetchController = null; 
 
     const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
 
@@ -885,7 +905,12 @@
       });
     }
 
+    // FIXED SWITCH CHANNEL NETWORK KILL-SWITCH CONTEXT GUARD
     function switchChannel(channelPointerId, layoutDisplayTitle) {
+      if (currentMessageFetchController) {
+        currentMessageFetchController.abort();
+      }
+
       currentChannelId = channelPointerId;
       cancelReplyThread();
 
@@ -945,6 +970,7 @@
       });
     }
 
+    // OPTIMIZED SUBMISSION WORKER WITH LIVE UI FALLBACK INJECTOR
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const plaintext = chatInputElem.value.trim();
@@ -954,11 +980,36 @@
       autocompleteBox.classList.add("hidden");
       broadcastTypingStatus(false);
 
-      await handleSendPayloadMessage(plaintext);
+      const logsViewBoard = document.getElementById('messages-container');
+      const tempOptimisticRow = document.createElement('div');
+      tempOptimisticRow.className = 'message';
+      tempOptimisticRow.style.opacity = '0.5';
+      tempOptimisticRow.innerHTML = `
+        <div style="display: flex; gap: 14px; align-items: flex-start; width: 100%;">
+          <img class="avatar" src="${currentUserData.photoURL}">
+          <div class="message-content">
+            <div class="message-header">
+              <span class="msg-username">${currentUserData.username}</span>
+              <span class="msg-time">Sending...</span>
+            </div>
+            <div class="msg-text">${plaintext}</div>
+          </div>
+        </div>
+      `;
+      logsViewBoard.appendChild(tempOptimisticRow);
+      logsViewBoard.scrollTop = logsViewBoard.scrollHeight;
+
+      try {
+        await handleSendPayloadMessage(plaintext);
+        tempOptimisticRow.remove();
+      } catch (err) {
+        tempOptimisticRow.style.opacity = '1';
+        tempOptimisticRow.style.borderLeft = '3px solid var(--danger)';
+        tempOptimisticRow.querySelector('.msg-time').innerText = '⚠️ Send Failed - Proxy Timeout';
+      }
     });
 
     async function handleSendPayloadMessage(textString) {
-      // 1. Robotic DM Filter Blocker Check
       if (currentChannelId.includes("___")) {
         const participants = currentChannelId.split("___");
         const recipientUid = participants.find(id => id !== auth.currentUser.uid);
@@ -975,7 +1026,6 @@
         }
       }
 
-      // 2. Global Broadcast Ping System
       if (textString.startsWith("/pingall ") && (currentServerContext === "global" || (activeServerMetadata && activeServerMetadata.ownerId === auth.currentUser.uid))) {
         const cleanBroadCastMsg = textString.replace("/pingall ", "").trim();
         if (cleanBroadCastMsg) {
@@ -985,7 +1035,6 @@
         }
       }
 
-      // 3. Normal Messaging Payload Dispatches
       let payloadBody = {
         channelId: currentChannelId,
         uid: auth.currentUser.uid,
@@ -1000,18 +1049,13 @@
         cancelReplyThread();
       }
 
-      try {
-        const response = await fetch('/api/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payloadBody)
-        });
-        if(!response.ok) throw new Error("Proxy response error");
-        await loadMessagesStreamLog(); 
-      } catch (err) {
-        console.error("Error creating message row via Turso:", err);
-        alert("Failed to send message over proxy link.");
-      }
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payloadBody)
+      });
+      if(!response.ok) throw new Error("Proxy response error");
+      await loadMessagesStreamLog(); 
     }
 
     async function triggerGlobalDmPingBroadcast(messageContent) {
@@ -1064,12 +1108,16 @@
       } catch(err) { alert("Error joining server."); }
     }
 
+    // CHAT LOAD STREAM TIMEOUT RESILIENT ABORT PIPELINE
     async function loadMessagesStreamLog() {
       const logsViewBoard = document.getElementById('messages-container');
       if (!logsViewBoard) return;
 
+      currentMessageFetchController = new AbortController();
+      const { signal } = currentMessageFetchController;
+
       try {
-        const response = await fetch(`/api/messages?channelId=${currentChannelId}`);
+        const response = await fetch(`/api/messages?channelId=${currentChannelId}`, { signal });
         if (!response.ok) throw new Error("API Route failure");
 
         const messagesArray = await response.json();
@@ -1142,7 +1190,9 @@
           logsViewBoard.scrollTop = logsViewBoard.scrollHeight;
         }
       } catch (err) {
-        console.error("Failed pulling channel text data feeds:", err);
+        if (err.name !== 'AbortError') {
+          console.error("Failed pulling channel text data feeds:", err);
+        }
       }
     }
 
@@ -1430,6 +1480,7 @@
       toggleModal('settings-modal', false);
     });
 
+    // HIGH FIDELITY DISCORD PROFILE POPUP GRAPHICS RENDERING SYSTEM
     async function openUserProfileCard(uid) {
       if(!uid || uid === "system_robot_dyno") return;
       const uSnap = await getDoc(doc(db, "users", uid));
@@ -1447,17 +1498,22 @@
       const bannerTarget = document.getElementById('popup-banner');
       const infoBodyTarget = document.getElementById('popup-info-body');
       
-      // Clear premium styles completely
+      // Clean defaults before applying premium overrides
       bannerTarget.style.backgroundImage = "none";
       bannerTarget.style.backgroundColor = "var(--blurple)";
-      infoBodyTarget.style.background = "var(--bg-modal)";
+      infoBodyTarget.style.background = "#18191c";
 
-      // Premium Nitro Color Gradient applied fully to Profile Preview Body
-      if (data.bannerGradient) {
-        infoBodyTarget.style.background = data.bannerGradient;
-        bannerTarget.style.backgroundColor = "rgba(0,0,0,0.15)";
-      } else if (data.bannerURL) {
+      // Prioritize image links over solid theme fallbacks
+      if (data.bannerURL) {
         bannerTarget.style.backgroundImage = `url('${data.bannerURL}')`;
+        if (data.bannerGradient) {
+          infoBodyTarget.style.background = data.bannerGradient;
+        }
+      } else if (data.bannerGradient) {
+        bannerTarget.style.backgroundImage = "none";
+        bannerTarget.style.backgroundColor = "transparent";
+        infoBodyTarget.style.background = data.bannerGradient;
+        bannerTarget.parentElement.style.background = data.bannerGradient;
       }
 
       const roleZone = document.getElementById("popup-server-role-zone");
@@ -1509,7 +1565,6 @@
         }
       }
 
-      // Social Actions Bar Generation (Friendship / Block / DM without adding)
       const actionBar = document.getElementById("popup-social-actions-bar");
       actionBar.innerHTML = "";
       
@@ -1543,9 +1598,6 @@
       let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       escaped = escaped.replace(/`([^`]+)`/g, '<code style="background:var(--bg-darker); color:#e67e22; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:12px;">$1</code>');
 
-      // Server Embed invite card popup intercept regex regex
-      const invitePattern = /\b([a-zA-Z0-9]{15,25})\b/g;
-      
       const urlPattern = /(https?:\/\/[^\s]+)/gi;
       let outputHTML = escaped.replace(urlPattern, (url) => {
         if (url.match(/\.(jpeg|jpg|gif|png|webp)/i) || url.includes("giphy.com/media") || url.includes("tenor.com/view")) {
@@ -1554,7 +1606,6 @@
         return `<a href="${url}" target="_blank" style="color: var(--blurple); text-decoration:none;">${url}</a>`;
       });
 
-      // Inject Discord-Style Join Prompt Embed Popup Cards
       if (currentServerContext === "home" || currentServerContext === "global") {
         const structuralWords = text.split(/\s+/);
         structuralWords.forEach(word => {
