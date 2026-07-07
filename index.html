@@ -133,8 +133,11 @@
 
     .input-area { padding: 0 20px 20px 20px; background: var(--bg-light); flex-shrink: 0; position: relative; }
     .typing-indicator-bar { height: 18px; font-size: 11px; color: var(--text-muted); padding-left: 4px; display: flex; align-items: center; font-style: italic; }
-    .input-box-wrapper { background: #383a40; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; }
+    .input-box-wrapper { background: #383a40; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
     .input-box-wrapper input { background: transparent; border: none; flex-grow: 1; color: #fff; font-size: 14px; outline: none; }
+    
+    .chat-attach-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; width: auto; margin: 0; padding: 0 4px; }
+    .chat-attach-btn:hover { color: #fff; }
 
     .mention-autocomplete-box { position: absolute; bottom: 64px; left: 20px; right: 20px; background: var(--bg-modal); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; max-height: 160px; overflow-y: auto; z-index: 99; box-shadow: 0 -8px 24px rgba(0,0,0,0.5); }
     .autocomplete-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; font-size: 13px; transition: background 0.15s; }
@@ -263,7 +266,9 @@
           <div id="mention-autocomplete" class="mention-autocomplete-box hidden"></div>
           <div class="typing-indicator-bar" id="typing-indicator-output-zone"></div>
           <form id="chat-form" class="input-box-wrapper">
-            <input type="text" id="chat-input" placeholder="Type a message or paste an image link..." autocomplete="off" required>
+            <button type="button" class="chat-attach-btn" title="Upload Photo" onclick="document.getElementById('chat-image-upload').click()">➕</button>
+            <input type="file" id="chat-image-upload" accept="image/*" style="display: none;">
+            <input type="text" id="chat-input" placeholder="Type a message, paste links, or use ➕ to upload photos..." autocomplete="off">
           </form>
         </div>
       </div>
@@ -497,24 +502,6 @@
       else modal.classList.add('hidden');
     }
 
-    function dispatchNotificationAudioPing() {
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
-        gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.2);
-      } catch (err) { console.warn("Audio Context processing deferred."); }
-    }
-
     document.getElementById('settings-avatar-file-field').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -539,6 +526,38 @@
       const fileReader = new FileReader();
       fileReader.onloadend = () => { document.getElementById('settings-banner-url-base64').value = fileReader.result; };
       fileReader.readAsDataURL(file);
+    });
+
+    // Handle Image Upload within Chat Area
+    document.getElementById('chat-image-upload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 500000) {
+        alert("Please select an image smaller than 500KB.");
+        this.value = ""; return;
+      }
+      
+      const fileReader = new FileReader();
+      fileReader.onloadend = async () => {
+        try {
+          await fetch('/api/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              channelId: currentChannelId,
+              uid: auth.currentUser.uid,
+              username: currentUserData.username,
+              photoUrl: currentUserData.photoURL,
+              text: fileReader.result
+            })
+          });
+          await loadMessagesStreamLog();
+        } catch (err) {
+          console.error("Failed sending upload:", err);
+        }
+      };
+      fileReader.readAsDataURL(file);
+      this.value = ""; 
     });
 
     onAuthStateChanged(auth, async (user) => {
@@ -886,10 +905,6 @@
       }
     });
 
-    // ==========================================
-    // TURSO MIGRATED INTERACTION WRAPPERS
-    // ==========================================
-
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fieldInput = document.getElementById('chat-input');
@@ -902,6 +917,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             channelId: currentChannelId,
+            uid: auth.currentUser.uid,
             username: currentUserData.username,
             photoUrl: currentUserData.photoURL,
             text: plaintext
@@ -950,7 +966,6 @@
             actionControlElements += `<button class="action-btn delete" type="button" onclick="triggerDeleteMessage('${item.id}')" title="Delete Message">🗑️</button>`;
           }
 
-          // Handle format support from SQLite string schemas
           const photoUrl = item.photo_url || item.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=fallback';
           const isEditedFlag = item.is_edited || item.isEdited;
           const stamp = item.created_at ? new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
@@ -987,7 +1002,6 @@
         return;
       }
       
-      // Hit backend route with PUT request method
       await fetch('/api/messages', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -1007,16 +1021,11 @@
       }
     }
 
-    // Polling engine loops for background activity replication
     setInterval(() => {
       if (document.getElementById('chat-screen').classList.contains('hidden') === false) {
         loadMessagesStreamLog();
       }
     }, 3000);
-
-    // ==========================================
-    // SYSTEM HANDLERS & PROFILE UTILITIES
-    // ==========================================
 
     chatInputElem.addEventListener('input', () => {
       broadcastTypingStatus(true);
@@ -1316,11 +1325,17 @@
 
     function parseBodyEmbeds(text) {
       if(!text) return "";
+      
+      // If the content itself is a raw base64 image strings from file upload
+      if (text.startsWith("data:image/")) {
+        return `<img src="${text}" class="embed-gif" />`;
+      }
+
       let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const urlPattern = /(https?:\/\/[^\s]+)/gi;
 
       return escaped.replace(urlPattern, (url) => {
-        if (url.match(/\.(jpeg|jpg|gif|png|webp)/i) || url.includes("giphy.com/media") || url.includes("tenor.com/view") || url.startsWith("data:image")) {
+        if (url.match(/\.(jpeg|jpg|gif|png|webp)/i) || url.includes("giphy.com/media") || url.includes("tenor.com/view")) {
           return `${url}<br><img src="${url}" class="embed-gif" onerror="this.style.display='none'" />`;
         }
         return `<a href="${url}" target="_blank" style="color: var(--blurple); text-decoration:none;">${url}</a>`;
