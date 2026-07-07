@@ -40,7 +40,7 @@
     .input-group label { display: block; font-size: 11px; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
     
     input[type="text"], input[type="email"], input[type="password"], textarea, select { width: 100%; padding: 10px; background: var(--bg-darker); border: 1px solid transparent; color: #fff; border-radius: 4px; outline: none; transition: border-color 0.2s; }
-    input:focus, textarea:focus { border-color: var(--blurple); }
+    input:focus, textarea:focus, select:focus { border-color: var(--blurple); }
     
     /* Device Gallery Input Styling */
     .file-upload-container { position: relative; width: 100%; margin-bottom: 4px; }
@@ -63,12 +63,16 @@
     
     /* Left Server Dock */
     .server-sidebar { width: 72px; background: var(--bg-servers); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 8px; flex-shrink: 0; overflow-y: auto; }
-    .server-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid transparent; background-size: cover; background-position: center; }
+    .server-icon { position: relative; width: 48px; height: 48px; border-radius: 50%; background: var(--bg-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid transparent; background-size: cover; background-position: center; }
     .server-icon:hover, .server-icon.active { border-radius: 14px; background-color: var(--blurple); color: #fff; }
     .server-icon.active { border-color: #fff; }
     .server-separator { width: 32px; height: 2px; background: #35363c; margin: 4px 0; }
     .server-add-btn { background: #35363c; color: var(--success); font-size: 20px; }
     .server-add-btn:hover { background: var(--success); color: #fff; }
+
+    /* Activity Badges for Dock Elements */
+    .server-icon.has-unread::before { content: ''; position: absolute; left: -4px; top: calc(50% - 4px); width: 8px; height: 8px; background-color: #fff; border-radius: 50%; }
+    .server-icon.has-ping::after { content: '!'; position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; background-color: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #fff; border: 2px solid var(--bg-servers); }
 
     /* Navigation Sidebar */
     .sidebar { width: 240px; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(0,0,0,0.2); flex-shrink: 0; }
@@ -86,10 +90,12 @@
     .channels-list { flex-grow: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 2px; }
     .list-section-title { font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 8px 4px 6px; }
 
-    .channel-item { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 4px; cursor: pointer; color: var(--text-muted); font-size: 14px; transition: background 0.1s, color 0.1s; }
+    .channel-item { position: relative; display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 4px; cursor: pointer; color: var(--text-muted); font-size: 14px; transition: background 0.1s, color 0.1s; }
     .channel-item:hover, .channel-item.active { background: rgba(78,80,88,0.3); color: var(--text-main); }
     .channel-item.active { color: #fff; background: rgba(78,80,88,0.4); }
     .channel-item .avatar-sm { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #35363c; }
+    .channel-item.has-ping::after { content: ''; position: absolute; right: 10px; top: calc(50% - 4px); width: 8px; height: 8px; background-color: var(--danger); border-radius: 50%; box-shadow: 0 0 6px var(--danger); }
+    .channel-item.has-unread::after { content: ''; position: absolute; right: 10px; top: calc(50% - 4px); width: 6px; height: 6px; background-color: var(--text-muted); border-radius: 50%; }
     
     /* Presence Indicators */
     .presence-wrapper { position: relative; display: inline-block; flex-shrink: 0; }
@@ -119,6 +125,7 @@
     
     .role-badge { font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; color: #fff; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; vertical-align: middle; }
     .owner-tag { background: var(--warning); color: #111214; }
+    .server-custom-tag { background: var(--blurple); }
 
     .message-content { display: flex; flex-direction: column; width: 100%; overflow: hidden; }
     .message-header { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -136,11 +143,16 @@
     .action-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
     .action-btn.delete:hover { color: var(--danger); background: rgba(242,63,67,0.12); }
 
-    /* Input Dock */
-    .input-area { padding: 0 20px 20px 20px; background: var(--bg-light); flex-shrink: 0; }
+    /* Input Dock & Autocomplete Component */
+    .input-area { padding: 0 20px 20px 20px; background: var(--bg-light); flex-shrink: 0; position: relative; }
     .typing-indicator-bar { height: 18px; font-size: 11px; color: var(--text-muted); padding-left: 4px; display: flex; align-items: center; font-style: italic; }
     .input-box-wrapper { background: #383a40; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; }
     .input-box-wrapper input { background: transparent; border: none; flex-grow: 1; color: #fff; font-size: 14px; outline: none; }
+
+    .mention-autocomplete-box { position: absolute; bottom: 64px; left: 20px; right: 20px; background: var(--bg-modal); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; max-height: 160px; overflow-y: auto; z-index: 99; box-shadow: 0 -8px 24px rgba(0,0,0,0.5); }
+    .autocomplete-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; font-size: 13px; transition: background 0.15s; }
+    .autocomplete-row:hover, .autocomplete-row.focused { background: var(--blurple); color: #fff; }
+    .autocomplete-row img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
 
     /* Modals & Overlays */
     .modal-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(2px); }
@@ -187,6 +199,7 @@
 </head>
 <body>
 
+  <!-- AUTHENTICATION FRAME -->
   <div id="auth-screen" class="screen">
     <div class="centered-form animate-scale">
       <h2 id="auth-title">Welcome to WhatsCord</h2>
@@ -209,6 +222,7 @@
     </div>
   </div>
 
+  <!-- INITIAL USER SETUP RECTIFIER -->
   <div id="username-screen" class="screen hidden">
     <div class="centered-form animate-scale">
       <h2>Choose your Username</h2>
@@ -222,11 +236,14 @@
     </div>
   </div>
 
+  <!-- MAIN APP PLATFORM -->
   <div id="chat-screen" class="screen hidden">
     <div class="chat-container" id="chat-layout-wrapper">
       
+      <!-- Server Sidebar Strip -->
       <div class="server-sidebar" id="server-dock-render-target"></div>
 
+      <!-- Left Navigation Column -->
       <div class="sidebar">
         <div class="sidebar-top">
           <div class="sidebar-header">
@@ -238,6 +255,7 @@
           <div class="channels-list" id="navigation-list-render-target"></div>
         </div>
 
+        <!-- Local Identity Block -->
         <div class="user-profile">
           <div class="presence-wrapper">
             <img id="user-avatar" class="avatar" src="" alt="Avatar" onclick="openSelfProfile()">
@@ -254,6 +272,7 @@
         </div>
       </div>
 
+      <!-- Messaging Hub Window -->
       <div class="main-chat">
         <div class="chat-header">
           <button class="back-btn" onclick="leaveChatMobile()">⬅</button>
@@ -264,6 +283,9 @@
         <div class="messages-container" id="messages-container"></div>
         
         <div class="input-area">
+          <!-- Real-Time Mention Autocomplete Suggestions Box -->
+          <div id="mention-autocomplete" class="mention-autocomplete-box hidden"></div>
+
           <div class="typing-indicator-bar" id="typing-indicator-output-zone"></div>
           <form id="chat-form" class="input-box-wrapper">
             <input type="text" id="chat-input" placeholder="Type a message or paste an image link..." autocomplete="off" required>
@@ -274,6 +296,7 @@
     </div>
   </div>
 
+  <!-- MODAL: SERVER CREATOR / JOINER -->
   <div id="server-create-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">Create or Join a Server</div>
@@ -302,6 +325,7 @@
     </div>
   </div>
 
+  <!-- MODAL: SERVER CONFIG & ROLES (OWNER ONLY GATED) -->
   <div id="server-mgmt-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header" id="mgmt-server-title-label">Server Control Settings</div>
@@ -315,6 +339,10 @@
           <button type="submit" style="width:auto; margin:0; padding:10px 16px;">Add</button>
         </form>
         <div class="roles-management-container" id="mgmt-roles-list-box"></div>
+
+        <div class="profile-divider"></div>
+        <div class="list-section-title" style="padding-left:0; color:var(--danger)">Danger Zone</div>
+        <button type="button" id="delete-server-btn" style="background: var(--danger); margin-top:4px;">🗑️ Delete Server Permanently</button>
       </div>
       <div class="settings-footer">
         <button type="button" class="cancel-btn" onclick="toggleModal('server-mgmt-modal', false)">Close Settings</button>
@@ -322,6 +350,7 @@
     </div>
   </div>
 
+  <!-- MODAL: CHANNEL CREATION (OWNER ONLY GATED) -->
   <div id="channel-create-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">Create New Text Channel</div>
@@ -340,6 +369,7 @@
     </div>
   </div>
 
+  <!-- MODAL: USER PROFILE POPUP CARD -->
   <div id="profile-popup-modal" class="modal-overlay hidden animate-fade" onclick="toggleModal('profile-popup-modal', false)">
     <div class="profile-popup-card animate-scale" onclick="event.stopPropagation()">
       <div class="profile-banner" id="popup-banner">
@@ -353,6 +383,19 @@
           <div class="dot"></div>
           <span class="status-text-label"></span>
         </div>
+        
+        <!-- Contextual Server Role Zone -->
+        <div id="popup-server-role-zone" class="hidden">
+          <div class="profile-section-heading">Server Specific Role</div>
+          <div id="popup-server-role-badge" style="display:inline-block; margin-bottom:8px;" class="role-badge server-custom-tag">None</div>
+          
+          <!-- Server Owner Specific Controls -->
+          <div id="popup-server-role-assignment-controls" class="hidden">
+            <div class="profile-section-heading" style="margin-top:4px;">Modify User Server Role</div>
+            <select id="popup-server-role-selector" style="font-size:12px; padding:6px; margin-top:4px;"></select>
+          </div>
+        </div>
+
         <div class="profile-divider"></div>
         <div class="profile-section-heading">About Me</div>
         <div class="profile-bio-text" id="popup-bio">No description provided.</div>
@@ -360,6 +403,7 @@
     </div>
   </div>
 
+  <!-- MODAL: USER ACCOUNT PROFILES & PHOTO PROCESSING PIPELINE -->
   <div id="settings-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">User Profile & App Settings</div>
@@ -369,6 +413,7 @@
             <label>Display Username</label>
             <input type="text" id="settings-username" required minlength="3">
           </div>
+          
           <div class="input-group">
             <label>Profile Avatar (Upload from Device Gallery)</label>
             <div class="file-upload-container">
@@ -381,10 +426,21 @@
             <label>Or Alternate Avatar Web URL Link</label>
             <input type="text" id="settings-avatar-url-fallback" placeholder="Direct visual assets link extension format">
           </div>
+
+          <!-- Banner Device Gallery Upload Implementation -->
           <div class="input-group">
-            <label>Profile Banner Image URL Link</label>
+            <label>Profile Banner (Upload from Device Gallery)</label>
+            <div class="file-upload-container">
+              <span class="file-upload-trigger" id="file-upload-banner-label-text">📂 Choose banner from photos...</span>
+              <input type="file" id="settings-banner-file-field" accept="image/*">
+            </div>
+            <input type="hidden" id="settings-banner-url-base64">
+          </div>
+          <div class="input-group">
+            <label>Or Alternate Banner Web URL Link</label>
             <input type="text" id="settings-banner-url" placeholder="Paste decorative background graphic URL">
           </div>
+
           <div class="input-group">
             <label>User Bio Description</label>
             <textarea id="settings-bio" rows="2" maxlength="160" placeholder="Tell us about yourself..."></textarea>
@@ -398,6 +454,7 @@
     </div>
   </div>
 
+  <!-- FIREBASE MATRIX ENGINE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { 
@@ -428,10 +485,16 @@
     let currentChannelId = "global";   
     let activeServerMetadata = null; 
 
+    // Activity tracking registers
+    let appInitializationTime = Date.now();
+    let unreadTrackingRegistry = {}; 
+    let globalActiveUsersCache = [];
+
     let unsubscribeMessages = null;
     let unsubscribeServerDock = null;
     let unsubscribeContextSidebar = null;
     let unsubscribeTypingWatcher = null;
+    let unsubscribeGlobalMessages = null;
     let typingDebounceTimeout = null;
 
     const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
@@ -461,23 +524,49 @@
       else modal.classList.add('hidden');
     }
 
-    // DEVICE PHOTO BUFFER PROCESSING PIPELINE
+    // AUDIO PING CONTROLLER ENGINE
+    function dispatchNotificationAudioPing() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5 high note alert resonance
+        gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.2);
+      } catch (err) { console.warn("Audio Context processing deferred until interaction footprint established."); }
+    }
+
+    // FILE BUFFER PROCESSING PIPELINES (AVATAR & BANNER GALLERY EXTRACTION)
     document.getElementById('settings-avatar-file-field').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
-      
       if (file.size > 400000) { 
-        alert("File size limit exceeded! Please select an image under 400KB.");
-        this.value = "";
-        return;
+        alert("File limit exceeded! Choose a photo under 400KB.");
+        this.value = ""; return;
       }
-
-      document.getElementById('file-upload-label-text').innerText = `✅ Loaded: ${file.name}`;
-      
+      document.getElementById('file-upload-label-text').innerText = `✅ Avatar: ${file.name}`;
       const fileReader = new FileReader();
-      fileReader.onloadend = function() {
-        document.getElementById('settings-avatar-url').value = fileReader.result;
-      };
+      fileReader.onloadend = () => { document.getElementById('settings-avatar-url').value = fileReader.result; };
+      fileReader.readAsDataURL(file);
+    });
+
+    document.getElementById('settings-banner-file-field').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 400000) { 
+        alert("File limit exceeded! Choose a banner photo under 400KB.");
+        this.value = ""; return;
+      }
+      document.getElementById('file-upload-banner-label-text').innerText = `✅ Banner: ${file.name}`;
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => { document.getElementById('settings-banner-url-base64').value = fileReader.result; };
       fileReader.readAsDataURL(file);
     });
 
@@ -494,6 +583,8 @@
 
             if (document.getElementById('chat-screen').classList.contains('hidden')) {
               setupServerDockStream();
+              setupGlobalUnreadListener();
+              setupGlobalUsersDirectoryCache();
               switchServerContext('home');
               showScreen('chat-screen');
             }
@@ -511,6 +602,14 @@
         updateDoc(doc(db, "users", auth.currentUser.uid), { status: "offline" });
       }
     });
+
+    // CACHE RUNTIME SYNC FOR AUTOCOMPLETE ENGINE
+    function setupGlobalUsersDirectoryCache() {
+      onSnapshot(collection(db, "users"), (snapshot) => {
+        globalActiveUsersCache = [];
+        snapshot.forEach(d => globalActiveUsersCache.push(d.data()));
+      });
+    }
 
     // SYSTEM AUTH ROUTINES
     document.getElementById('auth-toggle').addEventListener('click', () => {
@@ -557,6 +656,77 @@
       });
     });
 
+    // GLOBAL NOTIFICATION STREAM (DMs & CHANNELS PIN FILTER)
+    function setupGlobalUnreadListener() {
+      if(unsubscribeGlobalMessages) unsubscribeGlobalMessages();
+      
+      const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+      unsubscribeGlobalMessages = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            const msgData = change.doc.data();
+            
+            // Bypass processing local messages or historical data loaded during boot initialization
+            if (!msgData.createdAt || msgData.uid === auth.currentUser.uid) return;
+            const msgTimestamp = msgData.createdAt.toMillis ? msgData.createdAt.toMillis() : Date.now();
+            if (msgTimestamp < appInitializationTime) return;
+
+            const targetChanId = msgData.channelId || "global";
+            const targetServerId = msgData.serverId || "home";
+
+            // If the user is looking directly at this channel, bypass triggers
+            if (targetChanId === currentChannelId) return;
+
+            let conditionIsDirectMessage = targetChanId.includes("___") && targetChanId.includes(auth.currentUser.uid);
+            let conditionContainsUserMention = false;
+
+            if (currentUserData) {
+              const localizedMatchToken = `@${currentUserData.username.toLowerCase()}`;
+              if (msgData.text && msgData.text.toLowerCase().includes(localizedMatchToken)) {
+                conditionContainsUserMention = true;
+              }
+            }
+
+            // Flag assignments
+            if (conditionIsDirectMessage || conditionContainsUserMention) {
+              unreadTrackingRegistry[targetChanId] = "ping";
+              if (targetServerId !== "home") unreadTrackingRegistry[targetServerId] = "ping";
+              dispatchNotificationAudioPing();
+            } else {
+              if (!unreadTrackingRegistry[targetChanId]) unreadTrackingRegistry[targetChanId] = "unread";
+              if (targetServerId !== "home" && !unreadTrackingRegistry[targetServerId]) {
+                unreadTrackingRegistry[targetServerId] = "unread";
+              }
+            }
+
+            evaluateBadgeRenderingStates();
+          }
+        });
+      });
+    }
+
+    function evaluateBadgeRenderingStates() {
+      // Refresh Dock Icons Visual State Mappings
+      document.querySelectorAll(".server-icon").forEach(el => {
+        const componentId = el.id ? el.id.replace("dock-", "") : null;
+        if (!componentId) return;
+        
+        el.classList.remove("has-unread", "has-ping");
+        if (unreadTrackingRegistry[componentId] === "ping") el.classList.add("has-ping");
+        else if (unreadTrackingRegistry[componentId] === "unread") el.classList.add("has-unread");
+      });
+
+      // Refresh Sidebar Active Elements Markup Indicators
+      document.querySelectorAll(".channel-item").forEach(el => {
+        const rawId = el.id ? el.id.replace("chanRow-", "").replace("itemRow-", "") : null;
+        if (!rawId) return;
+
+        el.classList.remove("has-unread", "has-ping");
+        if (unreadTrackingRegistry[rawId] === "ping") el.classList.add("has-ping");
+        else if (unreadTrackingRegistry[rawId] === "unread") el.classList.add("has-unread");
+      });
+    }
+
     // SERVER SELECTION INTERFACES
     function setupServerDockStream() {
       if(unsubscribeServerDock) unsubscribeServerDock();
@@ -587,6 +757,8 @@
         addBtn.innerText = "+";
         addBtn.onclick = () => toggleModal('server-create-modal', true);
         targetDock.appendChild(addBtn);
+
+        evaluateBadgeRenderingStates();
       });
     }
 
@@ -594,6 +766,8 @@
       currentServerContext = contextPointer;
       activeServerMetadata = null;
       
+      delete unreadTrackingRegistry[contextPointer];
+
       document.querySelectorAll('.server-icon').forEach(el => el.classList.remove('active'));
       const targetDockIcon = document.getElementById(`dock-${contextPointer}`);
       if(targetDockIcon) targetDockIcon.classList.add('active');
@@ -625,7 +799,7 @@
         sideActionZone.className = "";
         sideActionZone.innerHTML = "";
         document.getElementById('navigation-list-render-target').innerHTML = `
-          <div class="channel-item active"><span># global-chat</span></div>
+          <div class="channel-item active" id="chanRow-global"><span># global-chat</span></div>
         `;
         switchChannel('global', 'Global Chat Room');
       } 
@@ -637,7 +811,6 @@
         sideContextTitle.innerText = activeServerMetadata.name;
         idBadge.innerText = `ID: ${contextPointer}`;
         
-        // Owner Permission Gate Evaluation
         const isOwner = (activeServerMetadata.ownerId === auth.currentUser.uid);
         if (isOwner) {
           configGear.classList.remove('hidden');
@@ -652,6 +825,7 @@
         
         loadServerChannelsSidebarList();
       }
+      evaluateBadgeRenderingStates();
     }
 
     // REALTIME SIDEBAR CONTEXT SYNCS
@@ -684,6 +858,7 @@
               </div>
               <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${fData.username}</span>
             `;
+            evaluateBadgeRenderingStates();
           });
         });
       });
@@ -718,11 +893,15 @@
         } else if (currentChannelId === "global" || !document.getElementById(`chanRow-${currentChannelId}`)) {
           switchChannel(targetedFirstChannel.id, `# ${targetedFirstChannel.name}`);
         }
+        evaluateBadgeRenderingStates();
       });
     }
 
     function switchChannel(channelPointerId, layoutDisplayTitle) {
       currentChannelId = channelPointerId;
+      
+      delete unreadTrackingRegistry[channelPointerId];
+
       document.getElementById('active-room-title').innerText = layoutDisplayTitle;
       
       document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
@@ -733,7 +912,60 @@
       
       loadMessagesStreamLog();
       listenToTypingIndicators();
+      evaluateBadgeRenderingStates();
     }
+
+    // MENTION AUTOCOMPLETE ENGINE IMPLEMENTATION
+    const chatInputElem = document.getElementById("chat-input");
+    const autocompleteBox = document.getElementById("mention-autocomplete");
+
+    chatInputElem.addEventListener("input", () => {
+      const textVal = chatInputElem.value;
+      const selectIndex = chatInputElem.selectionStart;
+      const textBeforeCursor = textVal.slice(0, selectIndex);
+      const matchWord = textBeforeCursor.match(/@(\w*)$/);
+
+      if (matchWord) {
+        const searchString = matchWord[1].toLowerCase();
+        const targetedFilteredPool = globalActiveUsersCache.filter(u => 
+          u.username.toLowerCase().includes(searchString)
+        );
+        
+        if (targetedFilteredPool.length > 0) {
+          renderAutocompleteItems(targetedFilteredPool, matchWord.index, selectIndex);
+        } else {
+          autocompleteBox.classList.add("hidden");
+        }
+      } else {
+        autocompleteBox.classList.add("hidden");
+      }
+    });
+
+    function renderAutocompleteItems(users, startIdx, endIdx) {
+      autocompleteBox.innerHTML = "";
+      autocompleteBox.classList.remove("hidden");
+
+      users.forEach(u => {
+        const row = document.createElement("div");
+        row.className = "autocomplete-row";
+        row.innerHTML = `<img src="${u.photoURL}"> <span>${u.username}</span>`;
+        row.onclick = () => {
+          const currentText = chatInputElem.value;
+          const completeReplacement = currentText.slice(0, startIdx) + `@${u.username} ` + currentText.slice(endIdx);
+          chatInputElem.value = completeReplacement;
+          autocompleteBox.classList.add("hidden");
+          chatInputElem.focus();
+        };
+        autocompleteBox.appendChild(row);
+      });
+    }
+
+    // Close autocomplete menu if user clicks outside the interface
+    document.addEventListener("click", (e) => {
+      if (!autocompleteBox.contains(e.target) && e.target !== chatInputElem) {
+        autocompleteBox.classList.add("hidden");
+      }
+    });
 
     // MESSAGE OPERATIONS & DATA PIPELINES
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
@@ -744,6 +976,7 @@
 
       await addDoc(collection(db, "messages"), {
         channelId: currentChannelId,
+        serverId: currentServerContext, 
         uid: currentUserData.uid,
         username: currentUserData.username,
         photoURL: currentUserData.photoURL,
@@ -752,6 +985,7 @@
         createdAt: serverTimestamp()
       });
       fieldInput.value = "";
+      autocompleteBox.classList.add("hidden");
       broadcastTypingStatus(false);
     });
 
@@ -777,6 +1011,10 @@
           let roleTagsMarkup = "";
           if(isMsgOwner) {
             roleTagsMarkup += `<span class="role-badge owner-tag">OWNER</span>`;
+          } else if (activeServerMetadata && activeServerMetadata.memberRoles && activeServerMetadata.memberRoles[item.uid]) {
+            // Display assigned custom server role in the active server text channel logs
+            const roleStringLabel = activeServerMetadata.memberRoles[item.uid];
+            roleTagsMarkup += `<span class="role-badge server-custom-tag">${roleStringLabel.toUpperCase()}</span>`;
           }
 
           let actionControlElements = "";
@@ -830,8 +1068,8 @@
     }
 
     // TYPING STATE CONTROLLERS
-    const textInputElement = document.getElementById('chat-input');
-    textInputElement.addEventListener('input', () => {
+    textInputElement = document.getElementById('chat-input');
+    chatInputElem.addEventListener('input', () => {
       broadcastTypingStatus(true);
       clearTimeout(typingDebounceTimeout);
       typingDebounceTimeout = setTimeout(() => {
@@ -886,7 +1124,8 @@
         name: sName,
         ownerId: auth.currentUser.uid,
         members: [auth.currentUser.uid],
-        roles: ["member", "moderator"]
+        roles: ["member", "moderator"],
+        memberRoles: {} 
       });
 
       await addDoc(collection(db, "channels"), {
@@ -911,6 +1150,24 @@
         toggleModal('server-create-modal', false);
         switchServerContext(token);
       } catch(err) { alert("Error joining server."); }
+    });
+
+    // CRITICAL SERVER DELETION LOGIC ROUTINE
+    document.getElementById('delete-server-btn').addEventListener('click', async () => {
+      if (!currentServerContext || currentServerContext === "home" || currentServerContext === "global") return;
+      if (activeServerMetadata?.ownerId !== auth.currentUser.uid) return;
+
+      if (confirm(`⚠️ CRITICAL WARNING: Are you completely sure you want to delete "${activeServerMetadata.name}"? This routine drops all channels and wipe configurations permanently.`)) {
+        const targetsChanSnap = await getDocs(query(collection(db, "channels"), where("serverId", "==", currentServerContext)));
+        targetsChanSnap.forEach(async (cDoc) => {
+          await deleteDoc(doc(db, "channels", cDoc.id));
+        });
+
+        await deleteDoc(doc(db, "servers", currentServerContext));
+        
+        toggleModal('server-mgmt-modal', false);
+        switchServerContext('home');
+      }
     });
 
     document.getElementById('channel-create-form').addEventListener('submit', async (e) => {
@@ -1010,32 +1267,35 @@
       alert(`Connected successfully with ${fUserData.username}!`);
     }
 
-    // USER PROFILE UPDATE PIPELINE
+    // USER PROFILE UPDATE PIPELINE (AVATAR & BANNER PERSISTENCE)
     document.getElementById('settings-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const uName = document.getElementById('settings-username').value.trim();
       const base64Photo = document.getElementById('settings-avatar-url').value.trim();
       const fallbackUrl = document.getElementById('settings-avatar-url-fallback').value.trim();
-      const uBann = document.getElementById('settings-banner-url').value.trim();
+      
+      const base64Banner = document.getElementById('settings-banner-url-base64').value.trim();
+      const fallbackBannerUrl = document.getElementById('settings-banner-url').value.trim();
       const uBio  = document.getElementById('settings-bio').value.trim();
 
       let finalAvatarString = currentUserData.photoURL;
-      if (base64Photo) {
-        finalAvatarString = base64Photo;
-      } else if (fallbackUrl) {
-        finalAvatarString = fallbackUrl;
-      }
+      if (base64Photo) finalAvatarString = base64Photo;
+      else if (fallbackUrl) finalAvatarString = fallbackUrl;
+
+      let finalBannerString = currentUserData.bannerURL || "";
+      if (base64Banner) finalBannerString = base64Banner;
+      else if (fallbackBannerUrl) finalBannerString = fallbackBannerUrl;
 
       await updateDoc(doc(db, "users", auth.currentUser.uid), {
         username: uName,
         photoURL: finalAvatarString,
-        bannerURL: uBann,
+        bannerURL: finalBannerString,
         bio: uBio
       });
       toggleModal('settings-modal', false);
     });
 
-    // PROFILE OVERLAY PRESENCE CHECKER
+    // CONTEXT AWARE PROFILE OVERLAY VIEW & CUSTOM ROLES ASSIGNMENT 
     async function openUserProfileCard(uid) {
       const uSnap = await getDoc(doc(db, "users", uid));
       if(!uSnap.exists()) return;
@@ -1056,6 +1316,61 @@
         bannerTarget.style.backgroundImage = "none";
         bannerTarget.style.backgroundColor = "var(--blurple)";
       }
+
+      // EVALUATING SERVER CONTEXT GATES FOR ROLE MANAGEMENT MASKS
+      const roleZone = document.getElementById("popup-server-role-zone");
+      const assignmentBlock = document.getElementById("popup-server-role-assignment-controls");
+      const roleBadge = document.getElementById("popup-server-role-badge");
+
+      // Hide server role architecture completely if user is in DMs (Home context)
+      if (currentServerContext === "home" || currentServerContext === "global") {
+        roleZone.classList.add("hidden");
+        assignmentBlock.classList.add("hidden");
+      } else {
+        // We are currently viewing inside an active workspace guild
+        roleZone.classList.remove("hidden");
+        
+        // Isolate custom role assignment array
+        const assignedRolesMap = activeServerMetadata.memberRoles || {};
+        const currentAssignedRole = assignedRolesMap[uid] || "None";
+        roleBadge.innerText = currentAssignedRole.toUpperCase();
+
+        // Gated evaluation for server owner administrative assignment operations
+        if (activeServerMetadata.ownerId === auth.currentUser.uid) {
+          assignmentBlock.classList.remove("hidden");
+          const selector = document.getElementById("popup-server-role-selector");
+          
+          selector.innerHTML = `<option value="none">-- Reset to Standard Member --</option>`;
+          const availableRoles = activeServerMetadata.roles || [];
+          availableRoles.forEach(r => {
+            const opt = document.createElement("option");
+            opt.value = r;
+            opt.innerText = r.toUpperCase();
+            if(r === currentAssignedRole) opt.selected = true;
+            selector.appendChild(opt);
+          });
+
+          selector.onchange = async () => {
+            const selectedRoleValue = selector.value;
+            let updatedRolesMap = { ...assignedRolesMap };
+            
+            if (selectedRoleValue === "none") {
+              delete updatedRolesMap[uid];
+            } else {
+              updatedRolesMap[uid] = selectedRoleValue;
+            }
+
+            await updateDoc(doc(db, "servers", currentServerContext), {
+              memberRoles: updatedRolesMap
+            });
+            activeServerMetadata.memberRoles = updatedRolesMap;
+            roleBadge.innerText = selectedRoleValue === "none" ? "NONE" : selectedRoleValue.toUpperCase();
+          };
+        } else {
+          assignmentBlock.classList.add("hidden");
+        }
+      }
+
       toggleModal('profile-popup-modal', true);
     }
 
