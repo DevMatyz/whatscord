@@ -22,7 +22,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: var(--bg-servers); color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; height: 100dvh; overflow: hidden; }
     
-    /* Animation Framework */
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     @keyframes msgBounce { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -33,7 +32,6 @@
     .screen { width: 100%; max-width: 1340px; height: 95vh; height: 95dvh; background: var(--bg-light); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.5); position: relative; }
     .hidden { display: none !important; }
 
-    /* Forms & Inputs */
     .centered-form { max-width: 400px; margin: auto; padding: 32px; background: var(--bg-dark); border-radius: 8px; text-align: center; width: 90%; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
     .centered-form h2 { margin-bottom: 24px; color: #fff; font-size: 22px; }
     .input-group { margin-bottom: 18px; text-align: left; }
@@ -42,7 +40,6 @@
     input[type="text"], input[type="email"], input[type="password"], textarea, select { width: 100%; padding: 10px; background: var(--bg-darker); border: 1px solid transparent; color: #fff; border-radius: 4px; outline: none; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { border-color: var(--blurple); }
     
-    /* Device Gallery Input Styling */
     .file-upload-container { position: relative; width: 100%; margin-bottom: 4px; }
     .file-upload-trigger { border: 2px dashed #4e5058; padding: 14px; border-radius: 6px; text-align: center; cursor: pointer; display: block; background: rgba(0,0,0,0.15); transition: all 0.2s; font-size: 13px; }
     .file-upload-trigger:hover { border-color: var(--blurple); background: rgba(88,101,242,0.05); }
@@ -58,10 +55,8 @@
     .toggle-link { color: var(--blurple); cursor: pointer; font-size: 13px; margin-top: 16px; display: inline-block; }
     .toggle-link:hover { text-decoration: underline; }
 
-    /* UI Structural Layout */
     .chat-container { display: flex; height: 100%; width: 100%; }
     
-    /* Left Server Dock */
     .server-sidebar { width: 72px; background: var(--bg-servers); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 8px; flex-shrink: 0; overflow-y: auto; }
     .server-icon { position: relative; width: 48px; height: 48px; border-radius: 50%; background: var(--bg-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid transparent; background-size: cover; background-position: center; }
     .server-icon:hover, .server-icon.active { border-radius: 14px; background-color: var(--blurple); color: #fff; }
@@ -70,11 +65,9 @@
     .server-add-btn { background: #35363c; color: var(--success); font-size: 20px; }
     .server-add-btn:hover { background: var(--success); color: #fff; }
 
-    /* Activity Badges for Dock Elements */
     .server-icon.has-unread::before { content: ''; position: absolute; left: -4px; top: calc(50% - 4px); width: 8px; height: 8px; background-color: #fff; border-radius: 50%; }
     .server-icon.has-ping::after { content: '!'; position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; background-color: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #fff; border: 2px solid var(--bg-servers); }
 
-    /* Navigation Sidebar */
     .sidebar { width: 240px; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(0,0,0,0.2); flex-shrink: 0; }
     .sidebar-top { display: flex; flex-direction: column; height: calc(100% - 68px); }
     .sidebar-header { padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 15px; color: white; display: flex; justify-content: space-between; align-items: center; }
@@ -97,12 +90,10 @@
     .channel-item.has-ping::after { content: ''; position: absolute; right: 10px; top: calc(50% - 4px); width: 8px; height: 8px; background-color: var(--danger); border-radius: 50%; box-shadow: 0 0 6px var(--danger); }
     .channel-item.has-unread::after { content: ''; position: absolute; right: 10px; top: calc(50% - 4px); width: 6px; height: 6px; background-color: var(--text-muted); border-radius: 50%; }
     
-    /* Presence Indicators */
     .presence-wrapper { position: relative; display: inline-block; flex-shrink: 0; }
     .presence-badge { width: 11px; height: 11px; border-radius: 50%; background: #80848e; border: 2px solid var(--bg-dark); position: absolute; bottom: -1px; right: -1px; transition: background 0.2s; }
     .presence-badge.online { background: var(--success); }
 
-    /* Identity Sidebar Footer */
     .user-profile { padding: 10px 12px; background: rgba(0,0,0,0.2); display: flex; align-items: center; gap: 8px; height: 68px; }
     .avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--text-muted); cursor: pointer; transition: filter 0.2s; }
     .avatar:hover { filter: brightness(0.85); }
@@ -112,14 +103,12 @@
     .control-icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 4px; font-size: 14px; display: flex; align-items: center; transition: color 0.2s, background 0.2s; }
     .control-icon-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
 
-    /* Messaging Space */
     .main-chat { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-light); position: relative; width: 0; }
     .chat-header { height: 48px; padding: 0 16px; border-bottom: 1px solid rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; background: var(--bg-light); flex-shrink: 0; }
     .chat-header h3 { color: #fff; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .back-btn { display: none; background: transparent; color: var(--text-main); border: none; font-size: 16px; cursor: pointer; width: auto; margin:0; padding:4px; }
     .server-id-badge { font-size: 10px; background: var(--bg-darker); padding: 4px 8px; border-radius: 4px; color: var(--text-muted); margin-left: auto; font-family: monospace; }
     
-    /* Messages Feed */
     .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
     .message { display: flex; gap: 14px; align-items: flex-start; position: relative; animation: msgBounce 0.22s ease-out forwards; }
     
@@ -136,14 +125,12 @@
     .msg-text { color: var(--text-main); font-size: 14px; word-break: break-word; line-height: 1.4; margin-top: 2px; }
     .embed-gif { max-width: 100%; max-height: 260px; border-radius: 4px; margin-top: 6px; display: block; object-fit: contain; }
 
-    /* Action Toolbars */
     .message-actions { position: absolute; right: 14px; top: -10px; background: var(--bg-dark); border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; display: none; gap: 2px; padding: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
     .message:hover .message-actions { display: flex; }
     .action-btn { background: transparent; color: var(--text-muted); width: 24px; height: 24px; padding: 0; font-size: 12px; margin: 0; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
     .action-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
     .action-btn.delete:hover { color: var(--danger); background: rgba(242,63,67,0.12); }
 
-    /* Input Dock & Autocomplete Component */
     .input-area { padding: 0 20px 20px 20px; background: var(--bg-light); flex-shrink: 0; position: relative; }
     .typing-indicator-bar { height: 18px; font-size: 11px; color: var(--text-muted); padding-left: 4px; display: flex; align-items: center; font-style: italic; }
     .input-box-wrapper { background: #383a40; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; }
@@ -154,7 +141,6 @@
     .autocomplete-row:hover, .autocomplete-row.focused { background: var(--blurple); color: #fff; }
     .autocomplete-row img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
 
-    /* Modals & Overlays */
     .modal-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(2px); }
     .settings-card { width: 90%; max-width: 480px; background: var(--bg-dark); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
     .settings-header { padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: 600; font-size: 16px; color: #fff; }
@@ -164,7 +150,6 @@
     .cancel-btn { background: transparent; color: #fff; }
     .cancel-btn:hover { background: rgba(255,255,255,0.05); }
 
-    /* Profile Popups */
     .profile-popup-card { width: 310px; background: var(--bg-modal); border-radius: 10px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.03); }
     .profile-banner { height: 95px; width: 100%; background-color: var(--blurple); background-size: cover; background-position: center; position: relative; }
     .profile-avatar-wrapper { position: absolute; bottom: -30px; left: 16px; }
@@ -187,7 +172,6 @@
     .role-config-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-darker); padding: 6px 10px; border-radius: 3px; font-size: 12px; }
     .role-remove-btn { color: var(--danger); cursor: pointer; font-weight: bold; }
 
-    /* Mobile Responsive Hooks */
     @media (max-width: 768px) {
       .sidebar { width: calc(100% - 72px); }
       .main-chat { display: none; }
@@ -199,7 +183,6 @@
 </head>
 <body>
 
-  <!-- AUTHENTICATION FRAME -->
   <div id="auth-screen" class="screen">
     <div class="centered-form animate-scale">
       <h2 id="auth-title">Welcome to WhatsCord</h2>
@@ -222,7 +205,6 @@
     </div>
   </div>
 
-  <!-- INITIAL USER SETUP RECTIFIER -->
   <div id="username-screen" class="screen hidden">
     <div class="centered-form animate-scale">
       <h2>Choose your Username</h2>
@@ -236,14 +218,11 @@
     </div>
   </div>
 
-  <!-- MAIN APP PLATFORM -->
   <div id="chat-screen" class="screen hidden">
     <div class="chat-container" id="chat-layout-wrapper">
       
-      <!-- Server Sidebar Strip -->
       <div class="server-sidebar" id="server-dock-render-target"></div>
 
-      <!-- Left Navigation Column -->
       <div class="sidebar">
         <div class="sidebar-top">
           <div class="sidebar-header">
@@ -255,7 +234,6 @@
           <div class="channels-list" id="navigation-list-render-target"></div>
         </div>
 
-        <!-- Local Identity Block -->
         <div class="user-profile">
           <div class="presence-wrapper">
             <img id="user-avatar" class="avatar" src="" alt="Avatar" onclick="openSelfProfile()">
@@ -272,7 +250,6 @@
         </div>
       </div>
 
-      <!-- Messaging Hub Window -->
       <div class="main-chat">
         <div class="chat-header">
           <button class="back-btn" onclick="leaveChatMobile()">⬅</button>
@@ -283,9 +260,7 @@
         <div class="messages-container" id="messages-container"></div>
         
         <div class="input-area">
-          <!-- Real-Time Mention Autocomplete Suggestions Box -->
           <div id="mention-autocomplete" class="mention-autocomplete-box hidden"></div>
-
           <div class="typing-indicator-bar" id="typing-indicator-output-zone"></div>
           <form id="chat-form" class="input-box-wrapper">
             <input type="text" id="chat-input" placeholder="Type a message or paste an image link..." autocomplete="off" required>
@@ -296,7 +271,6 @@
     </div>
   </div>
 
-  <!-- MODAL: SERVER CREATOR / JOINER -->
   <div id="server-create-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">Create or Join a Server</div>
@@ -325,7 +299,6 @@
     </div>
   </div>
 
-  <!-- MODAL: SERVER CONFIG & ROLES (OWNER ONLY GATED) -->
   <div id="server-mgmt-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header" id="mgmt-server-title-label">Server Control Settings</div>
@@ -350,7 +323,6 @@
     </div>
   </div>
 
-  <!-- MODAL: CHANNEL CREATION (OWNER ONLY GATED) -->
   <div id="channel-create-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">Create New Text Channel</div>
@@ -369,7 +341,6 @@
     </div>
   </div>
 
-  <!-- MODAL: USER PROFILE POPUP CARD -->
   <div id="profile-popup-modal" class="modal-overlay hidden animate-fade" onclick="toggleModal('profile-popup-modal', false)">
     <div class="profile-popup-card animate-scale" onclick="event.stopPropagation()">
       <div class="profile-banner" id="popup-banner">
@@ -384,12 +355,10 @@
           <span class="status-text-label"></span>
         </div>
         
-        <!-- Contextual Server Role Zone -->
         <div id="popup-server-role-zone" class="hidden">
           <div class="profile-section-heading">Server Specific Role</div>
           <div id="popup-server-role-badge" style="display:inline-block; margin-bottom:8px;" class="role-badge server-custom-tag">None</div>
           
-          <!-- Server Owner Specific Controls -->
           <div id="popup-server-role-assignment-controls" class="hidden">
             <div class="profile-section-heading" style="margin-top:4px;">Modify User Server Role</div>
             <select id="popup-server-role-selector" style="font-size:12px; padding:6px; margin-top:4px;"></select>
@@ -403,7 +372,6 @@
     </div>
   </div>
 
-  <!-- MODAL: USER ACCOUNT PROFILES & PHOTO PROCESSING PIPELINE -->
   <div id="settings-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">User Profile & App Settings</div>
@@ -427,9 +395,20 @@
             <input type="text" id="settings-avatar-url-fallback" placeholder="Direct visual assets link extension format">
           </div>
 
-          <!-- Banner Device Gallery Upload Implementation -->
           <div class="input-group">
-            <label>Profile Banner (Upload from Device Gallery)</label>
+            <label>Nitro Color Gradient Style</label>
+            <select id="settings-banner-gradient">
+              <option value="">None (Use Solid Color or Gallery Asset)</option>
+              <option value="linear-gradient(135deg, #ff007f, #7f00ff)">🔮 Nitro Neon Amethyst (Pink/Purple)</option>
+              <option value="linear-gradient(135deg, #00c6ff, #0072ff)">🌊 Nitro Cosmic Ocean (Teal Blue)</option>
+              <option value="linear-gradient(135deg, #f12711, #f5af19)">🔥 Nitro Sunset Overdrive (Gold Orange)</option>
+              <option value="linear-gradient(135deg, #11998e, #38ef7d)">🌿 Nitro Emerald Genesis (Mint Green)</option>
+              <option value="linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)">🌈 Nitro Pastel Chroma</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Or Profile Banner (Upload from Device Gallery)</label>
             <div class="file-upload-container">
               <span class="file-upload-trigger" id="file-upload-banner-label-text">📂 Choose banner from photos...</span>
               <input type="file" id="settings-banner-file-field" accept="image/*">
@@ -454,7 +433,6 @@
     </div>
   </div>
 
-  <!-- FIREBASE MATRIX ENGINE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { 
@@ -485,7 +463,6 @@
     let currentChannelId = "global";   
     let activeServerMetadata = null; 
 
-    // Activity tracking registers
     let appInitializationTime = Date.now();
     let unreadTrackingRegistry = {}; 
     let globalActiveUsersCache = [];
@@ -499,7 +476,6 @@
 
     const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
 
-    // Scoped execution bindings
     window.switchServerContext = switchServerContext;
     window.switchChannel = switchChannel;
     window.toggleModal = toggleModal;
@@ -524,7 +500,6 @@
       else modal.classList.add('hidden');
     }
 
-    // AUDIO PING CONTROLLER ENGINE
     function dispatchNotificationAudioPing() {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -532,7 +507,7 @@
         const gainNode = audioCtx.createGain();
         
         oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5 high note alert resonance
+        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
         gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
         
@@ -540,10 +515,9 @@
         gainNode.connect(audioCtx.destination);
         oscillator.start();
         oscillator.stop(audioCtx.currentTime + 0.2);
-      } catch (err) { console.warn("Audio Context processing deferred until interaction footprint established."); }
+      } catch (err) { console.warn("Audio Context processing deferred."); }
     }
 
-    // FILE BUFFER PROCESSING PIPELINES (AVATAR & BANNER GALLERY EXTRACTION)
     document.getElementById('settings-avatar-file-field').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -570,7 +544,6 @@
       fileReader.readAsDataURL(file);
     });
 
-    // PRESENCE RUNTIME LIFECYCLE
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         await updateDoc(doc(db, "users", user.uid), { status: "online" }).catch(() => {});
@@ -580,6 +553,13 @@
             currentUserData = snap.data();
             document.getElementById('user-display-name').innerText = currentUserData.username;
             document.getElementById('user-avatar').src = currentUserData.photoURL;
+
+            // Pre-fill account configuration panel data fields
+            document.getElementById('settings-username').value = currentUserData.username || "";
+            document.getElementById('settings-bio').value = currentUserData.bio || "";
+            document.getElementById('settings-banner-gradient').value = currentUserData.bannerGradient || "";
+            document.getElementById('settings-avatar-url-fallback').value = currentUserData.photoURL || "";
+            document.getElementById('settings-banner-url').value = currentUserData.bannerURL || "";
 
             if (document.getElementById('chat-screen').classList.contains('hidden')) {
               setupServerDockStream();
@@ -603,7 +583,6 @@
       }
     });
 
-    // CACHE RUNTIME SYNC FOR AUTOCOMPLETE ENGINE
     function setupGlobalUsersDirectoryCache() {
       onSnapshot(collection(db, "users"), (snapshot) => {
         globalActiveUsersCache = [];
@@ -611,7 +590,6 @@
       });
     }
 
-    // SYSTEM AUTH ROUTINES
     document.getElementById('auth-toggle').addEventListener('click', () => {
       isLoginMode = !isLoginMode;
       document.getElementById('auth-title').innerText = isLoginMode ? "Welcome to WhatsCord" : "Create an Account";
@@ -651,22 +629,21 @@
         email: user.email,
         bio: "Hey there! I am using WhatsCord.",
         bannerURL: "",
+        bannerGradient: "",
         status: "online",
         friends: []
       });
     });
 
-    // GLOBAL NOTIFICATION STREAM (DMs & CHANNELS PIN FILTER)
     function setupGlobalUnreadListener() {
       if(unsubscribeGlobalMessages) unsubscribeGlobalMessages();
       
-      const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+      const q = query(collection(db, "messages"));
       unsubscribeGlobalMessages = onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
             const msgData = change.doc.data();
             
-            // Bypass processing local messages or historical data loaded during boot initialization
             if (!msgData.createdAt || msgData.uid === auth.currentUser.uid) return;
             const msgTimestamp = msgData.createdAt.toMillis ? msgData.createdAt.toMillis() : Date.now();
             if (msgTimestamp < appInitializationTime) return;
@@ -674,7 +651,6 @@
             const targetChanId = msgData.channelId || "global";
             const targetServerId = msgData.serverId || "home";
 
-            // If the user is looking directly at this channel, bypass triggers
             if (targetChanId === currentChannelId) return;
 
             let conditionIsDirectMessage = targetChanId.includes("___") && targetChanId.includes(auth.currentUser.uid);
@@ -687,7 +663,6 @@
               }
             }
 
-            // Flag assignments
             if (conditionIsDirectMessage || conditionContainsUserMention) {
               unreadTrackingRegistry[targetChanId] = "ping";
               if (targetServerId !== "home") unreadTrackingRegistry[targetServerId] = "ping";
@@ -706,7 +681,6 @@
     }
 
     function evaluateBadgeRenderingStates() {
-      // Refresh Dock Icons Visual State Mappings
       document.querySelectorAll(".server-icon").forEach(el => {
         const componentId = el.id ? el.id.replace("dock-", "") : null;
         if (!componentId) return;
@@ -716,7 +690,6 @@
         else if (unreadTrackingRegistry[componentId] === "unread") el.classList.add("has-unread");
       });
 
-      // Refresh Sidebar Active Elements Markup Indicators
       document.querySelectorAll(".channel-item").forEach(el => {
         const rawId = el.id ? el.id.replace("chanRow-", "").replace("itemRow-", "") : null;
         if (!rawId) return;
@@ -727,7 +700,6 @@
       });
     }
 
-    // SERVER SELECTION INTERFACES
     function setupServerDockStream() {
       if(unsubscribeServerDock) unsubscribeServerDock();
       
@@ -767,6 +739,9 @@
       activeServerMetadata = null;
       
       delete unreadTrackingRegistry[contextPointer];
+
+      // CRITICAL: Aggressively clear old layout UI to guarantee channel views refresh instantly 
+      document.getElementById('navigation-list-render-target').innerHTML = "";
 
       document.querySelectorAll('.server-icon').forEach(el => el.classList.remove('active'));
       const targetDockIcon = document.getElementById(`dock-${contextPointer}`);
@@ -828,7 +803,6 @@
       evaluateBadgeRenderingStates();
     }
 
-    // REALTIME SIDEBAR CONTEXT SYNCS
     function loadFriendsSidebarList() {
       if(unsubscribeContextSidebar) unsubscribeContextSidebar();
       
@@ -915,7 +889,6 @@
       evaluateBadgeRenderingStates();
     }
 
-    // MENTION AUTOCOMPLETE ENGINE IMPLEMENTATION
     const chatInputElem = document.getElementById("chat-input");
     const autocompleteBox = document.getElementById("mention-autocomplete");
 
@@ -960,14 +933,12 @@
       });
     }
 
-    // Close autocomplete menu if user clicks outside the interface
     document.addEventListener("click", (e) => {
       if (!autocompleteBox.contains(e.target) && e.target !== chatInputElem) {
         autocompleteBox.classList.add("hidden");
       }
     });
 
-    // MESSAGE OPERATIONS & DATA PIPELINES
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fieldInput = document.getElementById('chat-input');
@@ -993,17 +964,27 @@
       if(unsubscribeMessages) unsubscribeMessages();
       
       const logsViewBoard = document.getElementById('messages-container');
-      const msgQuery = query(collection(db, "messages"), orderBy("createdAt", "asc"));
+      
+      // FIX FLICKER: Query by channelId directly without server-side orderBy to protect local echoes
+      const msgQuery = query(collection(db, "messages"), where("channelId", "==", currentChannelId));
 
       unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
         logsViewBoard.innerHTML = "";
-        
         const serverOwnerId = activeServerMetadata ? activeServerMetadata.ownerId : null;
         
+        let messagesArray = [];
         snapshot.forEach((docItem) => {
-          const item = docItem.data();
-          if (item.channelId !== currentChannelId) return;
+          messagesArray.push({ id: docItem.id, ...docItem.data() });
+        });
 
+        // CLIENT-SIDE SORTING: Gracefully places temporary null-timestamps at the bottom 
+        messagesArray.sort((a, b) => {
+          const valA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt) : Date.now() + 9999;
+          const valB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt) : Date.now() + 9999;
+          return valA - valB;
+        });
+
+        messagesArray.forEach((item) => {
           const isMsgOwner = (item.uid === serverOwnerId);
           const isSelfMessage = (item.uid === auth.currentUser.uid);
           const currentSessionUserIsServerOwner = (serverOwnerId === auth.currentUser.uid);
@@ -1012,17 +993,16 @@
           if(isMsgOwner) {
             roleTagsMarkup += `<span class="role-badge owner-tag">OWNER</span>`;
           } else if (activeServerMetadata && activeServerMetadata.memberRoles && activeServerMetadata.memberRoles[item.uid]) {
-            // Display assigned custom server role in the active server text channel logs
             const roleStringLabel = activeServerMetadata.memberRoles[item.uid];
             roleTagsMarkup += `<span class="role-badge server-custom-tag">${roleStringLabel.toUpperCase()}</span>`;
           }
 
           let actionControlElements = "";
           if (isSelfMessage) {
-            actionControlElements += `<button class="action-btn" onclick="triggerEditMessage('${docItem.id}', '${item.text.replace(/'/g, "\\'")}')" title="Edit Message">✏️</button>`;
+            actionControlElements += `<button class="action-btn" type="button" onclick="triggerEditMessage('${item.id}', '${item.text.replace(/'/g, "\\'")}')" title="Edit Message">✏️</button>`;
           }
           if (isSelfMessage || currentSessionUserIsServerOwner) {
-            actionControlElements += `<button class="action-btn delete" onclick="triggerDeleteMessage('${docItem.id}')" title="Delete Message">🗑️</button>`;
+            actionControlElements += `<button class="action-btn delete" type="button" onclick="triggerDeleteMessage('${item.id}')" title="Delete Message">🗑️</button>`;
           }
 
           const stamp = item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
@@ -1067,8 +1047,6 @@
       }
     }
 
-    // TYPING STATE CONTROLLERS
-    textInputElement = document.getElementById('chat-input');
     chatInputElem.addEventListener('input', () => {
       broadcastTypingStatus(true);
       clearTimeout(typingDebounceTimeout);
@@ -1113,7 +1091,6 @@
       });
     }
 
-    // SERVER STRUCTURE FABRICATION ENGINE
     document.getElementById('server-create-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const sName = document.getElementById('new-server-name').value.trim();
@@ -1152,12 +1129,11 @@
       } catch(err) { alert("Error joining server."); }
     });
 
-    // CRITICAL SERVER DELETION LOGIC ROUTINE
     document.getElementById('delete-server-btn').addEventListener('click', async () => {
       if (!currentServerContext || currentServerContext === "home" || currentServerContext === "global") return;
       if (activeServerMetadata?.ownerId !== auth.currentUser.uid) return;
 
-      if (confirm(`⚠️ CRITICAL WARNING: Are you completely sure you want to delete "${activeServerMetadata.name}"? This routine drops all channels and wipe configurations permanently.`)) {
+      if (confirm(`⚠️ CRITICAL WARNING: Delete "${activeServerMetadata.name}" permanently?`)) {
         const targetsChanSnap = await getDocs(query(collection(db, "channels"), where("serverId", "==", currentServerContext)));
         targetsChanSnap.forEach(async (cDoc) => {
           await deleteDoc(doc(db, "channels", cDoc.id));
@@ -1172,10 +1148,7 @@
 
     document.getElementById('channel-create-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (activeServerMetadata?.ownerId !== auth.currentUser.uid) {
-        alert("Permissions Violation: Owner authorization required.");
-        return;
-      }
+      if (activeServerMetadata?.ownerId !== auth.currentUser.uid) return;
       
       const cName = document.getElementById('new-channel-name').value.trim().toLowerCase().replace(/\s+/g, '-');
       if(!cName) return;
@@ -1189,7 +1162,6 @@
       toggleModal('channel-create-modal', false);
     });
 
-    // SYSTEM MANAGEMENT PARAMETERS (OWNER ONLY GATED)
     function openServerSettingsModal() {
       if (!activeServerMetadata || activeServerMetadata.ownerId !== auth.currentUser.uid) return;
       
@@ -1221,7 +1193,7 @@
       
       if(!targetRoleName) return;
       if(activeServerMetadata.roles?.includes(targetRoleName)) {
-        alert("Role configuration parameter already mapped!");
+        alert("Role definition already mapped!");
         return;
       }
 
@@ -1236,7 +1208,7 @@
     });
 
     async function removeServerRole(roleName) {
-      if(!confirm(`Strip role definition [${roleName}] from workspace metadata?`)) return;
+      if(!confirm(`Strip role definition [${roleName}]?`)) return;
       
       await updateDoc(doc(db, "servers", currentServerContext), {
         roles: arrayRemove(roleName)
@@ -1246,34 +1218,33 @@
       renderServerManagementRolesList();
     }
 
-    // RELATIONSHIP NETWORKS
     async function executeFriendPairSequence(e) {
       e.preventDefault();
       const targetInput = document.getElementById('friend-username-input');
       const matchName = targetInput.value.trim();
 
-      if(matchName === currentUserData.username) { alert("Invalid pairing operation."); return; }
+      if(matchName === currentUserData.username) return;
 
       const qSearch = query(collection(db, "users"), where("username", "==", matchName));
       const resDocs = await getDocs(qSearch);
 
-      if(resDocs.empty) { alert("User document mismatch!"); return; }
+      if(resDocs.empty) { alert("User missing!"); return; }
       const fUserData = resDocs.docs[0].data();
 
       await updateDoc(doc(db, "users", auth.currentUser.uid), { friends: arrayUnion(fUserData.uid) });
       await updateDoc(doc(db, "users", fUserData.uid), { friends: arrayUnion(auth.currentUser.uid) });
       
       targetInput.value = "";
-      alert(`Connected successfully with ${fUserData.username}!`);
+      alert(`Connected with ${fUserData.username}!`);
     }
 
-    // USER PROFILE UPDATE PIPELINE (AVATAR & BANNER PERSISTENCE)
     document.getElementById('settings-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const uName = document.getElementById('settings-username').value.trim();
       const base64Photo = document.getElementById('settings-avatar-url').value.trim();
       const fallbackUrl = document.getElementById('settings-avatar-url-fallback').value.trim();
       
+      const gradientPreset = document.getElementById('settings-banner-gradient').value;
       const base64Banner = document.getElementById('settings-banner-url-base64').value.trim();
       const fallbackBannerUrl = document.getElementById('settings-banner-url').value.trim();
       const uBio  = document.getElementById('settings-bio').value.trim();
@@ -1290,12 +1261,12 @@
         username: uName,
         photoURL: finalAvatarString,
         bannerURL: finalBannerString,
+        bannerGradient: gradientPreset,
         bio: uBio
       });
       toggleModal('settings-modal', false);
     });
 
-    // CONTEXT AWARE PROFILE OVERLAY VIEW & CUSTOM ROLES ASSIGNMENT 
     async function openUserProfileCard(uid) {
       const uSnap = await getDoc(doc(db, "users", uid));
       if(!uSnap.exists()) return;
@@ -1310,32 +1281,31 @@
       presWrapper.querySelector('.status-text-label').innerText = data.status === 'online' ? 'Online' : 'Offline';
       
       const bannerTarget = document.getElementById('popup-banner');
-      if (data.bannerURL) {
+      
+      // NITRO IMPLEMENTATION RENDERING LOGIC TREE
+      if (data.bannerGradient) {
+        bannerTarget.style.backgroundImage = data.bannerGradient;
+      } else if (data.bannerURL) {
         bannerTarget.style.backgroundImage = `url('${data.bannerURL}')`;
       } else {
         bannerTarget.style.backgroundImage = "none";
         bannerTarget.style.backgroundColor = "var(--blurple)";
       }
 
-      // EVALUATING SERVER CONTEXT GATES FOR ROLE MANAGEMENT MASKS
       const roleZone = document.getElementById("popup-server-role-zone");
       const assignmentBlock = document.getElementById("popup-server-role-assignment-controls");
       const roleBadge = document.getElementById("popup-server-role-badge");
 
-      // Hide server role architecture completely if user is in DMs (Home context)
       if (currentServerContext === "home" || currentServerContext === "global") {
         roleZone.classList.add("hidden");
         assignmentBlock.classList.add("hidden");
       } else {
-        // We are currently viewing inside an active workspace guild
         roleZone.classList.remove("hidden");
         
-        // Isolate custom role assignment array
         const assignedRolesMap = activeServerMetadata.memberRoles || {};
         const currentAssignedRole = assignedRolesMap[uid] || "None";
         roleBadge.innerText = currentAssignedRole.toUpperCase();
 
-        // Gated evaluation for server owner administrative assignment operations
         if (activeServerMetadata.ownerId === auth.currentUser.uid) {
           assignmentBlock.classList.remove("hidden");
           const selector = document.getElementById("popup-server-role-selector");
@@ -1374,7 +1344,6 @@
       toggleModal('profile-popup-modal', true);
     }
 
-    // REGEX EMBED RENDERING
     function parseBodyEmbeds(text) {
       let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const urlPattern = /(https?:\/\/[^\s]+)/gi;
@@ -1389,4 +1358,3 @@
   </script>
 </body>
 </html>
-
