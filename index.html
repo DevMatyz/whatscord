@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsCord Elite</title>
+  <title>WhatsCord Premium</title>
   <style>
     :root {
       --bg-servers: #1e1f22;
@@ -20,185 +20,175 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #1e1f22; color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; height: 100dvh; overflow: hidden; }
+    body { background-color: var(--bg-servers); color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; height: 100dvh; overflow: hidden; }
     
-    /* Animation Framework definitions */
+    /* Animation Framework */
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes scaleUp { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+    @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     @keyframes slideLeft { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideUpMsg { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes msgBounce { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    .animate-fade { animation: fadeIn 0.25s ease-out forwards; }
-    .animate-scale { animation: scaleUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-    .animate-slide { animation: slideLeft 0.2s ease-out forwards; }
-
-    .screen { width: 100%; max-width: 1300px; height: 95vh; height: 95dvh; background: var(--bg-light); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.6); position: relative; transition: all 0.3s ease; }
+    .animate-fade { animation: fadeIn 0.2s ease-out forwards; }
+    .animate-scale { animation: scaleUp 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    
+    .screen { width: 100%; max-width: 1340px; height: 95vh; height: 95dvh; background: var(--bg-light); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.5); position: relative; }
     .hidden { display: none !important; }
 
-    /* Auth Framework Setup styling */
-    .centered-form { max-width: 420px; margin: auto; padding: 40px; background: var(--bg-dark); border-radius: 8px; text-align: center; width: 90%; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-    .centered-form h2 { margin-bottom: 20px; color: #fff; font-size: 24px; }
-    .input-group { margin-bottom: 16px; text-align: left; }
+    /* Forms & Inputs */
+    .centered-form { max-width: 400px; margin: auto; padding: 32px; background: var(--bg-dark); border-radius: 8px; text-align: center; width: 90%; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .centered-form h2 { margin-bottom: 24px; color: #fff; font-size: 22px; }
+    .input-group { margin-bottom: 18px; text-align: left; }
     .input-group label { display: block; font-size: 11px; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
     
-    input[type="text"], input[type="email"], input[type="password"], textarea, select { width: 100%; padding: 10px; background: var(--bg-darker); border: 1px solid transparent; color: #fff; border-radius: 4px; outline: none; transition: border-color 0.2s ease; }
+    input[type="text"], input[type="email"], input[type="password"], textarea, select { width: 100%; padding: 10px; background: var(--bg-darker); border: 1px solid transparent; color: #fff; border-radius: 4px; outline: none; transition: border-color 0.2s; }
     input:focus, textarea:focus { border-color: var(--blurple); }
     
-    /* Modern Custom File Picker styling */
-    .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
-    .file-upload-btn { border: 2px dashed #4e5058; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; display: block; background: rgba(0,0,0,0.1); transition: all 0.2s; }
-    .file-upload-btn:hover { border-color: var(--blurple); background: rgba(88,101,242,0.05); }
-    .file-upload-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    /* Device Gallery Input Styling */
+    .file-upload-container { position: relative; width: 100%; margin-bottom: 4px; }
+    .file-upload-trigger { border: 2px dashed #4e5058; padding: 14px; border-radius: 6px; text-align: center; cursor: pointer; display: block; background: rgba(0,0,0,0.15); transition: all 0.2s; font-size: 13px; }
+    .file-upload-trigger:hover { border-color: var(--blurple); background: rgba(88,101,242,0.05); }
+    .file-upload-container input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 
-    button { width: 100%; padding: 12px; background: var(--blurple); border: none; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 10px; }
-    button:hover { background: #4752c4; transform: translateY(-1px); }
-    button:active { transform: translateY(0); }
+    button { width: 100%; padding: 11px; background: var(--blurple); border: none; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 8px; }
+    button:hover { background: #4752c4; }
+    button:active { transform: scale(0.98); }
     
-    .google-btn { background: #fff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .google-btn { background: #fff; color: #000; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
     .google-btn:hover { background: #e6e6e6; }
     .google-btn svg { width: 18px; height: 18px; }
-    .toggle-link { color: var(--blurple); cursor: pointer; font-size: 13px; margin-top: 15px; display: inline-block; text-decoration: none; }
+    .toggle-link { color: var(--blurple); cursor: pointer; font-size: 13px; margin-top: 16px; display: inline-block; }
     .toggle-link:hover { text-decoration: underline; }
 
-    /* Core Workspace Layout structure */
-    .chat-container { display: flex; height: 100%; width: 100%; position: relative; }
+    /* UI Structural Layout */
+    .chat-container { display: flex; height: 100%; width: 100%; }
     
-    /* Server Dock layout */
+    /* Left Server Dock */
     .server-sidebar { width: 72px; background: var(--bg-servers); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 8px; flex-shrink: 0; overflow-y: auto; }
-    .server-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid transparent; background-size: cover; background-position: center; overflow: hidden; text-align: center; }
-    .server-icon:hover, .server-icon.active { border-radius: 16px; background-color: var(--blurple); color: #fff; }
+    .server-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid transparent; background-size: cover; background-position: center; }
+    .server-icon:hover, .server-icon.active { border-radius: 14px; background-color: var(--blurple); color: #fff; }
     .server-icon.active { border-color: #fff; }
     .server-separator { width: 32px; height: 2px; background: #35363c; margin: 4px 0; }
-    .server-add-btn { background: #35363c; color: var(--success); font-size: 22px; }
+    .server-add-btn { background: #35363c; color: var(--success); font-size: 20px; }
     .server-add-btn:hover { background: var(--success); color: #fff; }
 
-    /* Context Side Panel structure */
-    .sidebar { width: 240px; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; z-index: 5; }
-    .sidebar-top { display: flex; flex-direction: column; height: calc(100% - 70px); }
-    .sidebar-header { padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 15px; color: white; display: flex; justify-content: space-between; align-items: center; }
-    .sidebar-header span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
-    .server-config-trigger { cursor: pointer; font-size: 14px; opacity: 0.6; transition: opacity 0.2s; }
-    .server-config-trigger:hover { opacity: 1; }
+    /* Navigation Sidebar */
+    .sidebar { width: 240px; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(0,0,0,0.2); flex-shrink: 0; }
+    .sidebar-top { display: flex; flex-direction: column; height: calc(100% - 68px); }
+    .sidebar-header { padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 15px; color: white; display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-header span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px; }
+    .server-config-trigger { cursor: pointer; font-size: 15px; opacity: 0.6; transition: opacity 0.2s, transform 0.2s; }
+    .server-config-trigger:hover { opacity: 1; transform: rotate(45deg); }
     
-    .friend-search-box { padding: 12px; background: rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.1); }
+    .friend-search-box { padding: 10px; background: rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.15); }
     .friend-search-box .flex { display: flex; gap: 6px; }
-    .friend-search-box input { padding: 8px; font-size: 12px; }
-    .friend-search-box button { width: auto; padding: 6px 12px; margin-top: 0; font-size: 12px; background: var(--success); white-space: nowrap; }
+    .friend-search-box input { padding: 6px; font-size: 12px; }
+    .friend-search-box button { width: auto; padding: 0 12px; margin-top: 0; font-size: 12px; background: var(--success); }
 
-    .channels-list { flex-grow: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 2px; }
-    .list-section-header-flex { display: flex; justify-content: space-between; align-items: center; padding: 12px 8px 4px 6px; }
-    .list-section-title { font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .section-add-action { color: var(--text-muted); cursor: pointer; font-size: 15px; padding: 0 4px; }
-    .section-add-action:hover { color: #fff; }
+    .channels-list { flex-grow: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 2px; }
+    .list-section-title { font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 8px 4px 6px; }
 
-    .channel-item { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 4px; cursor: pointer; color: var(--text-muted); font-size: 14px; position: relative; transition: background 0.15s, color 0.15s; }
+    .channel-item { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 4px; cursor: pointer; color: var(--text-muted); font-size: 14px; transition: background 0.1s, color 0.1s; }
     .channel-item:hover, .channel-item.active { background: rgba(78,80,88,0.3); color: var(--text-main); }
     .channel-item.active { color: #fff; background: rgba(78,80,88,0.4); }
     .channel-item .avatar-sm { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #35363c; }
     
-    /* Presence State micro-indicators */
-    .presence-wrapper { position: relative; display: inline-block; }
-    .presence-badge { width: 10px; height: 10px; border-radius: 50%; background: #80848e; border: 2px solid var(--bg-dark); position: absolute; bottom: -2px; right: -2px; transition: background 0.3s; }
+    /* Presence Indicators */
+    .presence-wrapper { position: relative; display: inline-block; flex-shrink: 0; }
+    .presence-badge { width: 11px; height: 11px; border-radius: 50%; background: #80848e; border: 2px solid var(--bg-dark); position: absolute; bottom: -1px; right: -1px; transition: background 0.2s; }
     .presence-badge.online { background: var(--success); }
 
-    /* Footer Profile layout */
-    .user-profile { padding: 10px; background: rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; height: 70px; }
-    .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--text-muted); cursor: pointer; transition: filter 0.2s; flex-shrink: 0; }
+    /* Identity Sidebar Footer */
+    .user-profile { padding: 10px 12px; background: rgba(0,0,0,0.2); display: flex; align-items: center; gap: 8px; height: 68px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--text-muted); cursor: pointer; transition: filter 0.2s; }
     .avatar:hover { filter: brightness(0.85); }
     .user-info { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; }
     .user-info .username { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; font-size: 13px; cursor: pointer; }
-    .user-controls { display: flex; align-items: center; flex-shrink: 0; }
-    .control-icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 4px; font-size: 15px; display: flex; align-items: center; transition: background 0.2s, color 0.2s; }
+    .user-controls { display: flex; align-items: center; gap: 2px; }
+    .control-icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 4px; font-size: 14px; display: flex; align-items: center; transition: color 0.2s, background 0.2s; }
     .control-icon-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
 
-    /* Main Chat Interface layout */
+    /* Messaging Space */
     .main-chat { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-light); position: relative; width: 0; }
-    .chat-header { height: 48px; padding: 0 16px; border-bottom: 1px solid rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; background: var(--bg-light); flex-shrink: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+    .chat-header { height: 48px; padding: 0 16px; border-bottom: 1px solid rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; background: var(--bg-light); flex-shrink: 0; }
     .chat-header h3 { color: #fff; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .back-btn { display: none; background: transparent; color: var(--text-main); border: none; font-size: 16px; cursor: pointer; width: auto; margin:0; padding:4px; }
     .server-id-badge { font-size: 10px; background: var(--bg-darker); padding: 4px 8px; border-radius: 4px; color: var(--text-muted); margin-left: auto; font-family: monospace; }
     
-    /* Interactive Messages Feed layout */
-    .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-    .message { display: flex; gap: 16px; align-items: flex-start; position: relative; animation: slideUpMsg 0.2s ease-out forwards; group: hover; }
+    /* Messages Feed & Syntax */
+    .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .message { display: flex; gap: 14px; align-items: flex-start; position: relative; animation: msgBounce 0.22s ease-out forwards; }
     
-    /* Structural Role Badges styling */
-    .role-badge { font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; color: #fff; display: inline-block; vertical-align: middle; text-transform: uppercase; margin-left: 4px; letter-spacing: 0.5px; }
+    /* Tags & Permissions styling */
+    .role-badge { font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; color: #fff; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; vertical-align: middle; }
     .owner-tag { background: var(--warning); color: #111214; }
-    .custom-assigned-role { background: var(--blurple); }
 
     .message-content { display: flex; flex-direction: column; width: 100%; overflow: hidden; }
-    .message-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .message-header { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .msg-username { font-weight: 500; color: #f2f3f5; font-size: 14px; cursor: pointer; }
     .msg-username:hover { text-decoration: underline; }
     .msg-time { font-size: 11px; color: var(--text-muted); }
-    .msg-edited { font-size: 10px; color: var(--text-muted); font-style: italic; margin-left: 4px; }
-    .msg-text { color: var(--text-main); font-size: 14px; word-break: break-word; line-height: 1.375; margin-top: 4px; }
-    .embed-gif { max-width: 100%; max-height: 280px; border-radius: 4px; margin-top: 6px; display: block; object-fit: contain; }
+    .msg-edited { font-size: 10px; color: var(--text-muted); font-style: italic; margin-left: 2px; }
+    .msg-text { color: var(--text-main); font-size: 14px; word-break: break-word; line-height: 1.4; margin-top: 2px; }
+    .embed-gif { max-width: 100%; max-height: 260px; border-radius: 4px; margin-top: 6px; display: block; object-fit: contain; }
 
-    /* Interactive Contextual Actions toolbar */
-    .message-actions { position: absolute; right: 10px; top: -10px; background: var(--bg-dark); border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; display: none; gap: 2px; padding: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    /* Context Action Toolbars */
+    .message-actions { position: absolute; right: 14px; top: -10px; background: var(--bg-dark); border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; display: none; gap: 2px; padding: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
     .message:hover .message-actions { display: flex; }
-    .action-btn { background: transparent; color: var(--text-muted); width: 26px; height: 26px; padding: 0; font-size: 12px; margin: 0; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
-    .action-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
-    .action-btn.delete:hover { color: var(--danger); background: rgba(242,63,67,0.1); }
+    .action-btn { background: transparent; color: var(--text-muted); width: 24px; height: 24px; padding: 0; font-size: 12px; margin: 0; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
+    .action-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .action-btn.delete:hover { color: var(--danger); background: rgba(242,63,67,0.12); }
 
-    /* Input Board layout */
-    .input-area { padding: 0 20px 20px 20px; background: var(--bg-light); flex-shrink: 0; position: relative; }
-    .typing-indicator-bar { height: 20px; font-size: 11px; color: var(--text-main); padding-left: 4px; display: flex; align-items: center; font-style: italic; }
-    .input-box-wrapper { background: #383a40; border-radius: 8px; padding: 10px 16px; display: flex; align-items: center; }
+    /* Input Dock */
+    .input-area { padding: 0 20px 20px 20px; background: var(--bg-light); flex-shrink: 0; }
+    .typing-indicator-bar { height: 18px; font-size: 11px; color: var(--text-muted); padding-left: 4px; display: flex; align-items: center; font-style: italic; }
+    .input-box-wrapper { background: #383a40; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; }
     .input-box-wrapper input { background: transparent; border: none; flex-grow: 1; color: #fff; font-size: 14px; outline: none; }
 
-    /* Layout Overlay layer */
+    /* Modals & Overlays */
     .modal-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(2px); }
-    
-    .settings-card { width: 90%; max-width: 520px; background: var(--bg-dark); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
-    .settings-header { padding: 18px 20px; border-bottom: 1px solid rgba(0,0,0,0.15); font-weight: 600; font-size: 17px; color: #fff; }
-    .settings-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; max-height: 58vh; }
-    .settings-footer { padding: 14px 20px; background: var(--bg-darker); display: flex; justify-content: flex-end; gap: 10px; }
-    .settings-footer button { width: auto; margin: 0; padding: 8px 16px; font-size: 14px; }
+    .settings-card { width: 90%; max-width: 480px; background: var(--bg-dark); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
+    .settings-header { padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: 600; font-size: 16px; color: #fff; }
+    .settings-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; max-height: 55vh; }
+    .settings-footer { padding: 12px 20px; background: var(--bg-darker); display: flex; justify-content: flex-end; gap: 10px; }
+    .settings-footer button { width: auto; margin: 0; padding: 8px 16px; font-size: 13px; }
     .cancel-btn { background: transparent; color: #fff; }
     .cancel-btn:hover { background: rgba(255,255,255,0.05); }
 
-    /* Interactive Profile Overlay card component */
-    .profile-popup-card { width: 330px; background: var(--bg-modal); border-radius: 12px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.04); }
-    .profile-banner { height: 105px; width: 100%; background-color: var(--blurple); background-size: cover; background-position: center; position: relative; }
-    .profile-avatar-wrapper { position: absolute; bottom: -36px; left: 16px; }
-    .profile-avatar-wrapper .avatar-lg { width: 82px; height: 82px; border-radius: 50%; border: 6px solid var(--bg-modal); object-fit: cover; background: var(--text-muted); }
+    /* Profile Popups */
+    .profile-popup-card { width: 310px; background: var(--bg-modal); border-radius: 10px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.03); }
+    .profile-banner { height: 95px; width: 100%; background-color: var(--blurple); background-size: cover; background-position: center; position: relative; }
+    .profile-avatar-wrapper { position: absolute; bottom: -30px; left: 16px; }
+    .profile-avatar-wrapper .avatar-lg { width: 72px; height: 72px; border-radius: 50%; border: 5px solid var(--bg-modal); object-fit: cover; background: var(--text-muted); }
     
-    .profile-info-content { padding: 46px 16px 16px 16px; background: var(--bg-modal); }
-    .profile-info-content h4 { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-    .profile-card-presence-status { font-size: 12px; display: flex; align-items: center; gap: 6px; margin: 4px 0 12px 0; font-weight: 500; }
-    .profile-card-presence-status .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #80848e; }
-    .profile-card-presence-status.online .dot { background: var(--success); color: var(--success); }
-    .profile-card-presence-status.online .label-text::after { content: "Online"; color: var(--success); }
-    .profile-card-presence-status.offline .label-text::after { content: "Offline"; color: var(--text-muted); }
+    .profile-info-content { padding: 40px 16px 16px 16px; background: var(--bg-modal); }
+    .profile-info-content h4 { color: #fff; font-size: 17px; font-weight: bold; }
+    
+    .profile-card-presence-status { font-size: 12px; display: flex; align-items: center; gap: 6px; margin: 4px 0 12px 0; font-weight: 500; text-transform: capitalize; }
+    .profile-card-presence-status .dot { width: 8px; height: 8px; border-radius: 50%; background: #80848e; }
+    .profile-card-presence-status.online { color: var(--success); }
+    .profile-card-presence-status.online .dot { background: var(--success); box-shadow: 0 0 8px var(--success); }
+    .profile-card-presence-status.offline { color: var(--text-muted); }
 
     .profile-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 12px 0; }
-    .profile-section-heading { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .profile-section-heading { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
     .profile-bio-text { font-size: 13px; color: var(--text-main); line-height: 1.4; word-break: break-word; }
 
-    /* Custom Roles Config list styles */
-    .roles-management-container { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 6px; max-height: 150px; overflow-y: auto; }
-    .role-config-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-darker); padding: 6px 10px; border-radius: 4px; font-size: 13px; }
-    .role-remove-btn { color: var(--danger); cursor: pointer; font-size: 12px; font-weight: bold; }
+    .roles-management-container { display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; max-height: 140px; overflow-y: auto; }
+    .role-config-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-darker); padding: 6px 10px; border-radius: 3px; font-size: 12px; }
+    .role-remove-btn { color: var(--danger); cursor: pointer; font-weight: bold; }
 
-    /* Device Responsive layout rules */
+    /* Mobile Adaptations */
     @media (max-width: 768px) {
-      .server-sidebar { display: flex; }
-      .sidebar { width: calc(100% - 72px); display: flex; }
+      .sidebar { width: calc(100% - 72px); }
       .main-chat { display: none; }
       .back-btn { display: block; }
-      
-      .show-chat-window .sidebar { display: none; }
-      .show-chat-window .server-sidebar { display: none; }
+      .show-chat-window .sidebar, .show-chat-window .server-sidebar { display: none; }
       .show-chat-window .main-chat { display: flex; width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- LAYER 1: AUTHENTICATION FRAME -->
   <div id="auth-screen" class="screen">
     <div class="centered-form animate-scale">
       <h2 id="auth-title">Welcome to WhatsCord</h2>
@@ -221,11 +211,9 @@
     </div>
   </div>
 
-  <!-- LAYER 2: CHOOSE USERNAME ON REGISTER -->
   <div id="username-screen" class="screen hidden">
     <div class="centered-form animate-scale">
       <h2>Choose your Username</h2>
-      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Identity handling config element</p>
       <form id="username-form">
         <div class="input-group">
           <label>Username</label>
@@ -236,26 +224,22 @@
     </div>
   </div>
 
-  <!-- LAYER 3: CORE DESKTOP LAYOUT MAIN INTERFACE -->
   <div id="chat-screen" class="screen hidden">
     <div class="chat-container" id="chat-layout-wrapper">
       
-      <!-- Server Selection Left Dock strip -->
       <div class="server-sidebar" id="server-dock-render-target"></div>
 
-      <!-- Left Action Navigation column -->
       <div class="sidebar">
         <div class="sidebar-top">
           <div class="sidebar-header">
             <span id="sidebar-context-title">Home</span>
-            <div id="server-owner-settings-gear" class="server-config-trigger hidden" onclick="openServerSettingsModal()" title="Guild Server Configuration Settings">⚙️</div>
+            <div id="server-owner-settings-gear" class="server-config-trigger hidden" onclick="openServerSettingsModal()" title="Server Settings Panel">⚙️</div>
           </div>
           
           <div id="sidebar-action-context-zone"></div>
           <div class="channels-list" id="navigation-list-render-target"></div>
         </div>
 
-        <!-- Identity Matrix Footer block -->
         <div class="user-profile">
           <div class="presence-wrapper">
             <img id="user-avatar" class="avatar" src="" alt="Avatar" onclick="openSelfProfile()">
@@ -263,16 +247,15 @@
           </div>
           <div class="user-info">
             <div id="user-display-name" class="username" onclick="openSelfProfile()">Loading...</div>
-            <div style="font-size: 11px; color: var(--text-muted);">Active Status</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Online</div>
           </div>
           <div class="user-controls">
-            <button class="control-icon-btn" title="Profile Settings" onclick="toggleModal('settings-modal', true)">⚙️</button>
+            <button class="control-icon-btn" title="App Settings" onclick="toggleModal('settings-modal', true)">⚙️</button>
             <button id="logout-btn" class="control-icon-btn" title="Log Out" style="color: var(--danger)">🚪</button>
           </div>
         </div>
       </div>
 
-      <!-- Main Messages View panel -->
       <div class="main-chat">
         <div class="chat-header">
           <button class="back-btn" onclick="leaveChatMobile()">⬅</button>
@@ -282,11 +265,10 @@
         
         <div class="messages-container" id="messages-container"></div>
         
-        <!-- Chat Area Form structure -->
         <div class="input-area">
           <div class="typing-indicator-bar" id="typing-indicator-output-zone"></div>
           <form id="chat-form" class="input-box-wrapper">
-            <input type="text" id="chat-input" placeholder="Type a message or paste image link..." autocomplete="off" required>
+            <input type="text" id="chat-input" placeholder="Type a message or paste an image link..." autocomplete="off" required>
           </form>
         </div>
       </div>
@@ -294,47 +276,45 @@
     </div>
   </div>
 
-  <!-- MODAL: SERVER CREATION SYSTEM MODAL OVERLAY -->
   <div id="server-create-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">Create or Join a Server</div>
       <div class="settings-body">
         <form id="server-create-form">
-          <div class="list-section-title" style="margin-bottom: 5px;">Option A: Establish New Guild</div>
+          <div class="list-section-title" style="padding-left:0; padding-top:0;">Option A: Initialize New Server</div>
           <div class="input-group">
             <label>Server Name</label>
-            <input type="text" id="new-server-name" placeholder="My Awesome Guild">
+            <input type="text" id="new-server-name" placeholder="My New Server">
           </div>
           <button type="submit" style="background: var(--success)">Create Server</button>
         </form>
         <div class="profile-divider"></div>
         <form id="server-join-form">
-          <div class="list-section-title" style="margin-bottom: 5px;">Option B: Bind onto Guild ID Token</div>
+          <div class="list-section-title" style="padding-left:0; padding-top:0;">Option B: Enter Invite ID Token</div>
           <div class="input-group">
             <label>Server Token ID</label>
-            <input type="text" id="join-server-id" placeholder="Paste server token target reference string" required>
+            <input type="text" id="join-server-id" placeholder="Paste server token target reference" required>
           </div>
           <button type="submit">Join Server</button>
         </form>
       </div>
       <div class="settings-footer">
-        <button type="button" class="cancel-btn" onclick="toggleModal('server-create-modal', false)">Close Window</button>
+        <button type="button" class="cancel-btn" onclick="toggleModal('server-create-modal', false)">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: SERVER ADMINISTRATIVE MANAGEMENT CONTROL PANEL -->
   <div id="server-mgmt-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
-      <div class="settings-header" id="mgmt-server-title-label">Server Settings</div>
+      <div class="settings-header" id="mgmt-server-title-label">Server Control Settings</div>
       <div class="settings-body">
-        <div class="list-section-title">Roles configuration framework</div>
+        <div class="list-section-title" style="padding-left:0; padding-top:0;">Server Custom Roles Management</div>
         <form id="server-add-role-form" style="display:flex; gap:8px; align-items:flex-end; margin-bottom:10px;">
           <div class="input-group" style="flex-grow:1; margin-bottom:0;">
-            <label>Create Custom Server Role Tag</label>
+            <label>Create Custom Role Tag</label>
             <input type="text" id="mgmt-role-name-input" placeholder="e.g. Moderator" required>
           </div>
-          <button type="submit" style="width:auto; margin:0; padding:10px 16px;">Add Role</button>
+          <button type="submit" style="width:auto; margin:0; padding:10px 16px;">Add</button>
         </form>
         <div class="roles-management-container" id="mgmt-roles-list-box"></div>
       </div>
@@ -344,7 +324,6 @@
     </div>
   </div>
 
-  <!-- MODAL: CHANNEL CREATION ACTION FORM -->
   <div id="channel-create-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">Create New Text Channel</div>
@@ -352,7 +331,7 @@
         <div class="settings-body">
           <div class="input-group">
             <label>Channel Name</label>
-            <input type="text" id="new-channel-name" placeholder="e.g. general-chat" required>
+            <input type="text" id="new-channel-name" placeholder="e.g. announcements" required>
           </div>
         </div>
         <div class="settings-footer">
@@ -363,7 +342,6 @@
     </div>
   </div>
 
-  <!-- MODAL: INSPECT USER PROFILE COMPONENT CARD OVERLAY -->
   <div id="profile-popup-modal" class="modal-overlay hidden animate-fade" onclick="toggleModal('profile-popup-modal', false)">
     <div class="profile-popup-card animate-scale" onclick="event.stopPropagation()">
       <div class="profile-banner" id="popup-banner">
@@ -375,7 +353,7 @@
         <h4 id="popup-username">Username</h4>
         <div id="popup-presence-status-row" class="profile-card-presence-status">
           <div class="dot"></div>
-          <span class="label-text"></span>
+          <span class="status-text-label"></span>
         </div>
         <div class="profile-divider"></div>
         <div class="profile-section-heading">About Me</div>
@@ -384,7 +362,6 @@
     </div>
   </div>
 
-  <!-- MODAL: PERSONAL USER PROFILE & PREFERENCE PARAMETERS -->
   <div id="settings-modal" class="modal-overlay hidden animate-fade">
     <div class="settings-card animate-scale">
       <div class="settings-header">User Profile & App Settings</div>
@@ -395,24 +372,23 @@
             <input type="text" id="settings-username" required minlength="3">
           </div>
           <div class="input-group">
-            <label>Profile Avatar Picture (Select Image from Device Gallery)</label>
-            <div class="file-upload-wrapper">
-              <span class="file-upload-btn" id="file-upload-label-text">📂 Choose local image asset...</span>
+            <label>Profile Avatar (Upload from Device Gallery)</label>
+            <div class="file-upload-container">
+              <span class="file-upload-trigger" id="file-upload-label-text">📂 Choose from device photos...</span>
               <input type="file" id="settings-avatar-file-field" accept="image/*">
             </div>
-            <!-- Hidden input link layer container target -->
             <input type="hidden" id="settings-avatar-url">
           </div>
           <div class="input-group">
-            <label>Or Alternative Profile Picture Web URL Link</label>
-            <input type="text" id="settings-avatar-url-fallback" placeholder="Direct web link ending in image format extension">
+            <label>Or Alternate Avatar Web URL Link</label>
+            <input type="text" id="settings-avatar-url-fallback" placeholder="Direct visual assets link extension format">
           </div>
           <div class="input-group">
             <label>Profile Banner Image URL Link</label>
-            <input type="text" id="settings-banner-url" placeholder="Paste background graphic web link address">
+            <input type="text" id="settings-banner-url" placeholder="Paste decorative background graphic URL">
           </div>
           <div class="input-group">
-            <label>User Description (Bio)</label>
+            <label>User Bio Description</label>
             <textarea id="settings-bio" rows="2" maxlength="160" placeholder="Tell us about yourself..."></textarea>
           </div>
         </div>
@@ -424,7 +400,6 @@
     </div>
   </div>
 
-  <!-- FIREBASE APPLICATION CODE LAYER CORE PACKAGES -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { 
@@ -449,23 +424,23 @@
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // Context Navigation variables
+    // Application state
     let currentUserData = null;
     let isLoginMode = true;
-    
     let currentServerContext = "home"; 
     let currentChannelId = "global";   
     let activeServerMetadata = null; 
-    
-    // Unsubscribe Listener Hooks 
+
+    // Subscription Cleaners
     let unsubscribeMessages = null;
     let unsubscribeServerDock = null;
     let unsubscribeContextSidebar = null;
     let unsubscribeTypingWatcher = null;
-    
     let typingDebounceTimeout = null;
 
-    // Bind execution context methods onto global window matrix scope
+    const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
+
+    // Bind procedures to window scope
     window.switchServerContext = switchServerContext;
     window.switchChannel = switchChannel;
     window.toggleModal = toggleModal;
@@ -476,8 +451,6 @@
     window.triggerEditMessage = triggerEditMessage;
     window.triggerDeleteMessage = triggerDeleteMessage;
     window.leaveChatMobile = () => chatLayoutWrapper.classList.remove('show-chat-window');
-
-    const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
 
     function showScreen(screenId) {
       document.getElementById('auth-screen').classList.add('hidden');
@@ -492,28 +465,27 @@
       else modal.classList.add('hidden');
     }
 
-    // GALLERY BASE64 IMAGE UPLOAD PIPELINE
+    // GALLERY SELECTION & OPTIMIZED BASE64 PIPELINE
     document.getElementById('settings-avatar-file-field').addEventListener('change', function(e) {
-      const selectedFile = e.target.files[0];
-      if (!selectedFile) return;
+      const file = e.target.files[0];
+      if (!file) return;
       
-      // Validation Check: Guard against huge base64 documents crashing Firestore 1MB limits
-      if (selectedFile.size > 400000) { 
-        alert("Image asset optimization required! Please select a file under 400KB.");
+      if (file.size > 400000) { 
+        alert("File size threshold exceeded! Please select an image asset under 400KB.");
         this.value = "";
         return;
       }
 
-      document.getElementById('file-upload-label-text').innerText = `✅ Asset loaded: ${selectedFile.name}`;
+      document.getElementById('file-upload-label-text').innerText = `✅ Loaded: ${file.name}`;
       
-      const fileReaderModule = new FileReader();
-      fileReaderModule.onloadend = function() {
-        document.getElementById('settings-avatar-url').value = fileReaderModule.result;
+      const fileReader = new FileReader();
+      fileReader.onloadend = function() {
+        document.getElementById('settings-avatar-url').value = fileReader.result;
       };
-      fileReaderModule.readAsDataURL(selectedFile);
+      fileReader.readAsDataURL(file);
     });
 
-    // --- USER PRESENCE & IDENTITY SYSTEMS ---
+    // USER PRESENCE RUNTIME PIPELINE
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         await updateDoc(doc(db, "users", user.uid), { status: "online" }).catch(() => {});
@@ -544,12 +516,12 @@
       }
     });
 
-    // --- REGISTER / LOGIN CAPTURES ---
+    // AUTH CAPTURE BINDINGS
     document.getElementById('auth-toggle').addEventListener('click', () => {
       isLoginMode = !isLoginMode;
       document.getElementById('auth-title').innerText = isLoginMode ? "Welcome to WhatsCord" : "Create an Account";
       document.getElementById('auth-submit-btn').innerText = isLoginMode ? "Login" : "Sign Up";
-      document.getElementById('auth-toggle').innerText = isLoginMode ? "Already a member? Login" : "Need an account? Register";
+      document.getElementById('auth-toggle').innerText = isLoginMode ? "Need an account? Register" : "Already a member? Login";
     });
 
     document.getElementById('email-form').addEventListener('submit', async (e) => {
@@ -589,7 +561,7 @@
       });
     });
 
-    // --- DOCK STRIP NAVIGATION LOGIC ---
+    // SERVER DOCK MANAGED CONTROLLER
     function setupServerDockStream() {
       if(unsubscribeServerDock) unsubscribeServerDock();
       
@@ -597,7 +569,7 @@
         const targetDock = document.getElementById('server-dock-render-target');
         targetDock.innerHTML = `
           <div class="server-icon ${currentServerContext === 'home' ? 'active' : ''}" id="dock-home" onclick="switchServerContext('home')" title="Home & DMs">🏠</div>
-          <div class="server-icon ${currentServerContext === 'global' ? 'active' : ''}" id="dock-global" onclick="switchServerContext('global')" title="Global Board">🌐</div>
+          <div class="server-icon ${currentServerContext === 'global' ? 'active' : ''}" id="dock-global" onclick="switchServerContext('global')" title="Global Chat">🌐</div>
           <div class="server-separator"></div>
         `;
 
@@ -622,7 +594,7 @@
       });
     }
 
-    // --- CHANNEL CONTEXT SWAPBOARD ROUTER ---
+    // SERVER OR DM ROUTING ENVIRONMENT CONTROL
     async function switchServerContext(contextPointer) {
       currentServerContext = contextPointer;
       activeServerMetadata = null;
@@ -640,12 +612,12 @@
       configGear.classList.add('hidden');
 
       if (contextPointer === "home") {
-        sideContextTitle.innerText = "Direct Messaging";
+        sideContextTitle.innerText = "Direct Messages";
         sideActionZone.className = "friend-search-box";
         sideActionZone.innerHTML = `
-          <div class="list-section-title" style="padding-bottom:5px;">Add Friend</div>
+          <div class="list-section-title" style="padding-bottom:5px; padding-left:0; padding-top:0;">Add Friend Connection</div>
           <form id="friend-search-form" class="flex">
-            <input type="text" id="friend-username-input" placeholder="User match tag..." required>
+            <input type="text" id="friend-username-input" placeholder="Enter username tag..." required>
             <button type="submit">Add</button>
           </form>
         `;
@@ -654,7 +626,7 @@
         switchChannel('global', 'Global Chat Room');
       } 
       else if (contextPointer === "global") {
-        sideContextTitle.innerText = "Public Grid";
+        sideContextTitle.innerText = "Global Server";
         sideActionZone.className = "";
         sideActionZone.innerHTML = "";
         document.getElementById('navigation-list-render-target').innerHTML = `
@@ -663,7 +635,6 @@
         switchChannel('global', 'Global Chat Room');
       } 
       else {
-        // Active Server Processing Loop
         const serverSnapshot = await getDoc(doc(db, "servers", contextPointer));
         if(!serverSnapshot.exists()) return;
         
@@ -671,13 +642,13 @@
         sideContextTitle.innerText = activeServerMetadata.name;
         idBadge.innerText = `ID: ${contextPointer}`;
         
+        // GATING LOGIC: Render channel creator and settings gear only for Server Owner
         const isOwner = (activeServerMetadata.ownerId === auth.currentUser.uid);
-        
         if (isOwner) {
           configGear.classList.remove('hidden');
           sideActionZone.className = "friend-search-box";
           sideActionZone.innerHTML = `
-            <button onclick="toggleModal('channel-create-modal', true)" style="margin-top:0; padding:8px; font-size:12px;">+ Create Server Channel</button>
+            <button onclick="toggleModal('channel-create-modal', true)" style="margin-top:0; padding:8px; font-size:12px; background: var(--blurple);">+ Add Server Channel</button>
           `;
         } else {
           sideActionZone.className = "";
@@ -688,7 +659,7 @@
       }
     }
 
-    // --- SIDEBAR NESTED CONTAINER STREAMS ---
+    // LIVE INTERACTION SIDEBAR RENDERING
     function loadFriendsSidebarList() {
       if(unsubscribeContextSidebar) unsubscribeContextSidebar();
       
@@ -769,7 +740,7 @@
       listenToTypingIndicators();
     }
 
-    // --- CORE CHAT OPERATIONS LAYER ---
+    // MESSAGES CONTEXT HUB
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fieldInput = document.getElementById('chat-input');
@@ -813,7 +784,7 @@
             roleTagsMarkup += `<span class="role-badge owner-tag">OWNER</span>`;
           }
 
-          // Build context access action row elements
+          // Build Dynamic Contextual Actions Bar
           let actionControlElements = "";
           if (isSelfMessage) {
             actionControlElements += `<button class="action-btn" onclick="triggerEditMessage('${docItem.id}', '${item.text.replace(/'/g, "\\'")}')" title="Edit Message">✏️</button>`;
@@ -845,7 +816,7 @@
     }
 
     async function triggerEditMessage(msgId, oldText) {
-      const updatedText = prompt("Modify message text context payload:", oldText);
+      const updatedText = prompt("Modify text content:", oldText);
       if (updatedText === null) return; 
       const trimmed = updatedText.trim();
       if (!trimmed) {
@@ -859,19 +830,19 @@
     }
 
     async function triggerDeleteMessage(msgId) {
-      if(confirm("Confirm removal of target message data node?")) {
+      if(confirm("Permanently delete this message?")) {
         await deleteDoc(doc(db, "messages", msgId));
       }
     }
 
-    // --- TYPING TRACKING ENGINE ---
+    // TYPING TRACKING ENGINE
     const textInputElement = document.getElementById('chat-input');
     textInputElement.addEventListener('input', () => {
       broadcastTypingStatus(true);
       clearTimeout(typingDebounceTimeout);
       typingDebounceTimeout = setTimeout(() => {
         broadcastTypingStatus(false);
-      }, 3000);
+      }, 2500);
     });
 
     async function broadcastTypingStatus(isTyping) {
@@ -898,7 +869,7 @@
         snapshot.forEach((tDoc) => {
           const tData = tDoc.data();
           if(tData.channelId === currentChannelId && tData.uid !== currentUserData.uid) {
-            if (Date.now() - tData.lastActive < 5000) {
+            if (Date.now() - tData.lastActive < 4000) {
               typers.push(tData.username);
             }
           }
@@ -910,7 +881,7 @@
       });
     }
 
-    // --- ADMINISTRATIVE SERVER CONTROL CONFIGS ---
+    // SERVER STRUCTURE CREATION / MODIFICATION
     document.getElementById('server-create-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const sName = document.getElementById('new-server-name').value.trim();
@@ -921,11 +892,11 @@
         name: sName,
         ownerId: auth.currentUser.uid,
         members: [auth.currentUser.uid],
-        roles: ["member", "admin"]
+        roles: ["member", "moderator"]
       });
 
       await addDoc(collection(db, "channels"), {
-        name: "general-chat",
+        name: "general",
         serverId: serverDocRef.id
       });
 
@@ -939,7 +910,7 @@
       const token = document.getElementById('join-server-id').value.trim();
       try {
         const sSnap = await getDoc(doc(db, "servers", token));
-        if(!sSnap.exists()) { alert("Target workspace server does not exist!"); return; }
+        if(!sSnap.exists()) { alert("Target server registry missing!"); return; }
         
         await updateDoc(doc(db, "servers", token), { members: arrayUnion(auth.currentUser.uid) });
         document.getElementById('join-server-id').value = "";
@@ -951,7 +922,7 @@
     document.getElementById('channel-create-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       if (activeServerMetadata?.ownerId !== auth.currentUser.uid) {
-        alert("Operation Aborted: Server Owner permissions required.");
+        alert("Permissions Violation: Owner authorization required.");
         return;
       }
       
@@ -967,7 +938,7 @@
       toggleModal('channel-create-modal', false);
     });
 
-    // --- ADMINISTRATIVE ROLES MANAGER INTERACTION ---
+    // ROLES PANEL CONFIGS (OWNER ONLY GATED)
     function openServerSettingsModal() {
       if (!activeServerMetadata || activeServerMetadata.ownerId !== auth.currentUser.uid) return;
       
@@ -999,7 +970,7 @@
       
       if(!targetRoleName) return;
       if(activeServerMetadata.roles?.includes(targetRoleName)) {
-        alert("Role configuration entry already exists!");
+        alert("Role configuration parameter already mapped!");
         return;
       }
 
@@ -1014,7 +985,7 @@
     });
 
     async function removeServerRole(roleName) {
-      if(!confirm(`Remove specified server role [${roleName}]?`)) return;
+      if(!confirm(`Strip role definition [${roleName}] from workspace metadata?`)) return;
       
       await updateDoc(doc(db, "servers", currentServerContext), {
         roles: arrayRemove(roleName)
@@ -1024,53 +995,53 @@
       renderServerManagementRolesList();
     }
 
-    // --- SOCIAL FREND CONNECTIONS ---
+    // SOCIAL INTERFACE MANAGER
     async function executeFriendPairSequence(e) {
       e.preventDefault();
       const targetInput = document.getElementById('friend-username-input');
       const matchName = targetInput.value.trim();
 
-      if(matchName === currentUserData.username) { alert("You cannot link onto yourself."); return; }
+      if(matchName === currentUserData.username) { alert("Invalid pairing operation."); return; }
 
       const qSearch = query(collection(db, "users"), where("username", "==", matchName));
       const resDocs = await getDocs(qSearch);
 
-      if(resDocs.empty) { alert("User profile missing!"); return; }
+      if(resDocs.empty) { alert("User document mismatch!"); return; }
       const fUserData = resDocs.docs[0].data();
 
       await updateDoc(doc(db, "users", auth.currentUser.uid), { friends: arrayUnion(fUserData.uid) });
       await updateDoc(doc(db, "users", fUserData.uid), { friends: arrayUnion(auth.currentUser.uid) });
       
       targetInput.value = "";
-      alert(`Linked with ${fUserData.username}!`);
+      alert(`Successfully coupled connections with ${fUserData.username}!`);
     }
 
-    // --- DATA SAVE INTERFACE CAPTURES ---
+    // SAVING USER PREFERENCES
     document.getElementById('settings-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const uName = document.getElementById('settings-username').value.trim();
-      const fileUploadValue = document.getElementById('settings-avatar-url').value.trim();
+      const base64Photo = document.getElementById('settings-avatar-url').value.trim();
       const fallbackUrl = document.getElementById('settings-avatar-url-fallback').value.trim();
       const uBann = document.getElementById('settings-banner-url').value.trim();
       const uBio  = document.getElementById('settings-bio').value.trim();
 
-      // Prioritize file upload, fallback to manual input URL string if file is unselected
-      let finalAvatarUrlString = currentUserData.photoURL;
-      if (fileUploadValue) {
-        finalAvatarUrlString = fileUploadValue;
+      let finalAvatarString = currentUserData.photoURL;
+      if (base64Photo) {
+        finalAvatarString = base64Photo;
       } else if (fallbackUrl) {
-        finalAvatarUrlString = fallbackUrl;
+        finalAvatarString = fallbackUrl;
       }
 
       await updateDoc(doc(db, "users", auth.currentUser.uid), {
         username: uName,
-        photoURL: finalAvatarUrlString,
+        photoURL: finalAvatarString,
         bannerURL: uBann,
         bio: uBio
       });
       toggleModal('settings-modal', false);
     });
 
+    // PROFILE VISUALIZATION WITH ONLINE/OFFLINE PRESENCE EXTRACTION
     async function openUserProfileCard(uid) {
       const uSnap = await getDoc(doc(db, "users", uid));
       if(!uSnap.exists()) return;
@@ -1078,10 +1049,11 @@
 
       document.getElementById('popup-username').innerText = data.username;
       document.getElementById('popup-avatar').src = data.photoURL;
-      document.getElementById('popup-bio').innerText = data.bio || "No profile bio description provided.";
+      document.getElementById('popup-bio').innerText = data.bio || "No profile biography supplied.";
       
       const presWrapper = document.getElementById('popup-presence-status-row');
       presWrapper.className = `profile-card-presence-status ${data.status === 'online' ? 'online' : 'offline'}`;
+      presWrapper.querySelector('.status-text-label').innerText = data.status === 'online' ? 'Online' : 'Offline';
       
       const bannerTarget = document.getElementById('popup-banner');
       if (data.bannerURL) {
@@ -1093,7 +1065,7 @@
       toggleModal('profile-popup-modal', true);
     }
 
-    // --- ENHANCED EMBED IMAGE PROCESSOR ---
+    // EMBED PARSER PIPELINE
     function parseBodyEmbeds(text) {
       let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const urlPattern = /(https?:\/\/[^\s]+)/gi;
@@ -1108,1114 +1080,3 @@
   </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsCord Elite</title>
-  <style>
-    :root {
-      --bg-servers: #1e1f22;
-      --bg-dark: #2b2d31;
-      --bg-darker: #1e1f22;
-      --bg-light: #313338;
-      --bg-modal: #111214;
-      --text-main: #dbdee1;
-      --text-muted: #949ba4;
-      --blurple: #5865f2;
-      --success: #23a55a;
-      --danger: #f23f43;
-      --warning: #f0b232;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #1e1f22; color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; height: 100dvh; overflow: hidden; }
-    
-    /* Animation Framework definitions */
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes scaleUp { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
-    @keyframes slideLeft { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideUpMsg { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    .animate-fade { animation: fadeIn 0.25s ease-out forwards; }
-    .animate-scale { animation: scaleUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-    .animate-slide { animation: slideLeft 0.2s ease-out forwards; }
-
-    .screen { width: 100%; max-width: 1300px; height: 95vh; height: 95dvh; background: var(--bg-light); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.6); position: relative; transition: all 0.3s ease; }
-    .hidden { display: none !important; }
-
-    /* Auth Framework Setup styling */
-    .centered-form { max-width: 420px; margin: auto; padding: 40px; background: var(--bg-dark); border-radius: 8px; text-align: center; width: 90%; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-    .centered-form h2 { margin-bottom: 20px; color: #fff; font-size: 24px; }
-    .input-group { margin-bottom: 16px; text-align: left; }
-    .input-group label { display: block; font-size: 11px; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
-    
-    input[type="text"], input[type="email"], input[type="password"], textarea, select { width: 100%; padding: 10px; background: var(--bg-darker); border: 1px solid transparent; color: #fff; border-radius: 4px; outline: none; transition: border-color 0.2s ease; }
-    input:focus, textarea:focus { border-color: var(--blurple); }
-    
-    /* Modern Custom File Picker styling */
-    .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
-    .file-upload-btn { border: 2px dashed #4e5058; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; display: block; background: rgba(0,0,0,0.1); transition: all 0.2s; }
-    .file-upload-btn:hover { border-color: var(--blurple); background: rgba(88,101,242,0.05); }
-    .file-upload-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-
-    button { width: 100%; padding: 12px; background: var(--blurple); border: none; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 10px; }
-    button:hover { background: #4752c4; transform: translateY(-1px); }
-    button:active { transform: translateY(0); }
-    
-    .google-btn { background: #fff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .google-btn:hover { background: #e6e6e6; }
-    .google-btn svg { width: 18px; height: 18px; }
-    .toggle-link { color: var(--blurple); cursor: pointer; font-size: 13px; margin-top: 15px; display: inline-block; text-decoration: none; }
-    .toggle-link:hover { text-decoration: underline; }
-
-    /* Core Workspace Layout structure */
-    .chat-container { display: flex; height: 100%; width: 100%; position: relative; }
-    
-    /* Server Dock layout */
-    .server-sidebar { width: 72px; background: var(--bg-servers); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 8px; flex-shrink: 0; overflow-y: auto; }
-    .server-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid transparent; background-size: cover; background-position: center; overflow: hidden; text-align: center; }
-    .server-icon:hover, .server-icon.active { border-radius: 16px; background-color: var(--blurple); color: #fff; }
-    .server-icon.active { border-color: #fff; }
-    .server-separator { width: 32px; height: 2px; background: #35363c; margin: 4px 0; }
-    .server-add-btn { background: #35363c; color: var(--success); font-size: 22px; }
-    .server-add-btn:hover { background: var(--success); color: #fff; }
-
-    /* Context Side Panel structure */
-    .sidebar { width: 240px; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; z-index: 5; }
-    .sidebar-top { display: flex; flex-direction: column; height: calc(100% - 70px); }
-    .sidebar-header { padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.2); font-weight: bold; font-size: 15px; color: white; display: flex; justify-content: space-between; align-items: center; }
-    .sidebar-header span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
-    .server-config-trigger { cursor: pointer; font-size: 14px; opacity: 0.6; transition: opacity 0.2s; }
-    .server-config-trigger:hover { opacity: 1; }
-    
-    .friend-search-box { padding: 12px; background: rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.1); }
-    .friend-search-box .flex { display: flex; gap: 6px; }
-    .friend-search-box input { padding: 8px; font-size: 12px; }
-    .friend-search-box button { width: auto; padding: 6px 12px; margin-top: 0; font-size: 12px; background: var(--success); white-space: nowrap; }
-
-    .channels-list { flex-grow: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 2px; }
-    .list-section-header-flex { display: flex; justify-content: space-between; align-items: center; padding: 12px 8px 4px 6px; }
-    .list-section-title { font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .section-add-action { color: var(--text-muted); cursor: pointer; font-size: 15px; padding: 0 4px; }
-    .section-add-action:hover { color: #fff; }
-
-    .channel-item { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 4px; cursor: pointer; color: var(--text-muted); font-size: 14px; position: relative; transition: background 0.15s, color 0.15s; }
-    .channel-item:hover, .channel-item.active { background: rgba(78,80,88,0.3); color: var(--text-main); }
-    .channel-item.active { color: #fff; background: rgba(78,80,88,0.4); }
-    .channel-item .avatar-sm { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #35363c; }
-    
-    /* Presence State micro-indicators */
-    .presence-wrapper { position: relative; display: inline-block; }
-    .presence-badge { width: 10px; height: 10px; border-radius: 50%; background: #80848e; border: 2px solid var(--bg-dark); position: absolute; bottom: -2px; right: -2px; transition: background 0.3s; }
-    .presence-badge.online { background: var(--success); }
-
-    /* Footer Profile layout */
-    .user-profile { padding: 10px; background: rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; height: 70px; }
-    .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--text-muted); cursor: pointer; transition: filter 0.2s; flex-shrink: 0; }
-    .avatar:hover { filter: brightness(0.85); }
-    .user-info { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; }
-    .user-info .username { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; font-size: 13px; cursor: pointer; }
-    .user-controls { display: flex; align-items: center; flex-shrink: 0; }
-    .control-icon-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 4px; font-size: 15px; display: flex; align-items: center; transition: background 0.2s, color 0.2s; }
-    .control-icon-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
-
-    /* Main Chat Interface layout */
-    .main-chat { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-light); position: relative; width: 0; }
-    .chat-header { height: 48px; padding: 0 16px; border-bottom: 1px solid rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; background: var(--bg-light); flex-shrink: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-    .chat-header h3 { color: #fff; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .back-btn { display: none; background: transparent; color: var(--text-main); border: none; font-size: 16px; cursor: pointer; width: auto; margin:0; padding:4px; }
-    .server-id-badge { font-size: 10px; background: var(--bg-darker); padding: 4px 8px; border-radius: 4px; color: var(--text-muted); margin-left: auto; font-family: monospace; }
-    
-    /* Interactive Messages Feed layout */
-    .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-    .message { display: flex; gap: 16px; align-items: flex-start; position: relative; animation: slideUpMsg 0.2s ease-out forwards; group: hover; }
-    
-    /* Structural Role Badges styling */
-    .role-badge { font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; color: #fff; display: inline-block; vertical-align: middle; text-transform: uppercase; margin-left: 4px; letter-spacing: 0.5px; }
-    .owner-tag { background: var(--warning); color: #111214; }
-    .custom-assigned-role { background: var(--blurple); }
-
-    .message-content { display: flex; flex-direction: column; width: 100%; overflow: hidden; }
-    .message-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .msg-username { font-weight: 500; color: #f2f3f5; font-size: 14px; cursor: pointer; }
-    .msg-username:hover { text-decoration: underline; }
-    .msg-time { font-size: 11px; color: var(--text-muted); }
-    .msg-edited { font-size: 10px; color: var(--text-muted); font-style: italic; margin-left: 4px; }
-    .msg-text { color: var(--text-main); font-size: 14px; word-break: break-word; line-height: 1.375; margin-top: 4px; }
-    .embed-gif { max-width: 100%; max-height: 280px; border-radius: 4px; margin-top: 6px; display: block; object-fit: contain; }
-
-    /* Interactive Contextual Actions toolbar */
-    .message-actions { position: absolute; right: 10px; top: -10px; background: var(--bg-dark); border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; display: none; gap: 2px; padding: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .message:hover .message-actions { display: flex; }
-    .action-btn { background: transparent; color: var(--text-muted); width: 26px; height: 26px; padding: 0; font-size: 12px; margin: 0; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
-    .action-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
-    .action-btn.delete:hover { color: var(--danger); background: rgba(242,63,67,0.1); }
-
-    /* Input Board layout */
-    .input-area { padding: 0 20px 20px 20px; background: var(--bg-light); flex-shrink: 0; position: relative; }
-    .typing-indicator-bar { height: 20px; font-size: 11px; color: var(--text-main); padding-left: 4px; display: flex; align-items: center; font-style: italic; }
-    .input-box-wrapper { background: #383a40; border-radius: 8px; padding: 10px 16px; display: flex; align-items: center; }
-    .input-box-wrapper input { background: transparent; border: none; flex-grow: 1; color: #fff; font-size: 14px; outline: none; }
-
-    /* Layout Overlay layer */
-    .modal-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(2px); }
-    
-    .settings-card { width: 90%; max-width: 520px; background: var(--bg-dark); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
-    .settings-header { padding: 18px 20px; border-bottom: 1px solid rgba(0,0,0,0.15); font-weight: 600; font-size: 17px; color: #fff; }
-    .settings-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; max-height: 58vh; }
-    .settings-footer { padding: 14px 20px; background: var(--bg-darker); display: flex; justify-content: flex-end; gap: 10px; }
-    .settings-footer button { width: auto; margin: 0; padding: 8px 16px; font-size: 14px; }
-    .cancel-btn { background: transparent; color: #fff; }
-    .cancel-btn:hover { background: rgba(255,255,255,0.05); }
-
-    /* Interactive Profile Overlay card component */
-    .profile-popup-card { width: 330px; background: var(--bg-modal); border-radius: 12px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.04); }
-    .profile-banner { height: 105px; width: 100%; background-color: var(--blurple); background-size: cover; background-position: center; position: relative; }
-    .profile-avatar-wrapper { position: absolute; bottom: -36px; left: 16px; }
-    .profile-avatar-wrapper .avatar-lg { width: 82px; height: 82px; border-radius: 50%; border: 6px solid var(--bg-modal); object-fit: cover; background: var(--text-muted); }
-    
-    .profile-info-content { padding: 46px 16px 16px 16px; background: var(--bg-modal); }
-    .profile-info-content h4 { color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-    .profile-card-presence-status { font-size: 12px; display: flex; align-items: center; gap: 6px; margin: 4px 0 12px 0; font-weight: 500; }
-    .profile-card-presence-status .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #80848e; }
-    .profile-card-presence-status.online .dot { background: var(--success); color: var(--success); }
-    .profile-card-presence-status.online .label-text::after { content: "Online"; color: var(--success); }
-    .profile-card-presence-status.offline .label-text::after { content: "Offline"; color: var(--text-muted); }
-
-    .profile-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 12px 0; }
-    .profile-section-heading { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
-    .profile-bio-text { font-size: 13px; color: var(--text-main); line-height: 1.4; word-break: break-word; }
-
-    /* Custom Roles Config list styles */
-    .roles-management-container { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 6px; max-height: 150px; overflow-y: auto; }
-    .role-config-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-darker); padding: 6px 10px; border-radius: 4px; font-size: 13px; }
-    .role-remove-btn { color: var(--danger); cursor: pointer; font-size: 12px; font-weight: bold; }
-
-    /* Device Responsive layout rules */
-    @media (max-width: 768px) {
-      .server-sidebar { display: flex; }
-      .sidebar { width: calc(100% - 72px); display: flex; }
-      .main-chat { display: none; }
-      .back-btn { display: block; }
-      
-      .show-chat-window .sidebar { display: none; }
-      .show-chat-window .server-sidebar { display: none; }
-      .show-chat-window .main-chat { display: flex; width: 100%; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- LAYER 1: AUTHENTICATION FRAME -->
-  <div id="auth-screen" class="screen">
-    <div class="centered-form animate-scale">
-      <h2 id="auth-title">Welcome to WhatsCord</h2>
-      <form id="email-form">
-        <div class="input-group">
-          <label>Email Address</label>
-          <input type="email" id="auth-email" required>
-        </div>
-        <div class="input-group">
-          <label>Password</label>
-          <input type="password" id="auth-password" required>
-        </div>
-        <button type="submit" id="auth-submit-btn">Login</button>
-      </form>
-      <button class="google-btn" id="google-btn">
-        <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0112 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.33 0 3.357 2.673 1.414 6.564l3.852 3.201z"/><path fill="#4285F4" d="M23.455 12.273c0-.818-.068-1.609-.205-2.364H12v4.483h6.436c-.277 1.477-1.114 2.727-2.368 3.568v2.964h3.823c2.236-2.064 3.564-5.105 3.564-8.651z"/><path fill="#FBBC05" d="M5.266 14.235L1.414 17.436A11.947 11.947 0 010 12c0-1.959.473-3.814 1.309-5.464l3.957 3.11c-.245.728-.377 1.505-.377 2.354 0 .895.145 1.755.477 2.235z"/><path fill="#34A853" d="M12 24c3.24 0 5.973-1.077 7.964-2.923l-3.823-2.964c-1.06.714-2.427 1.141-4.141 1.141-3.186 0-5.89-2.155-6.855-5.055L.291 17.305C2.205 21.236 6.273 24 12 24z"/></svg>
-        Sign in with Google
-      </button>
-      <span class="toggle-link" id="auth-toggle">Need an account? Register</span>
-    </div>
-  </div>
-
-  <!-- LAYER 2: CHOOSE USERNAME ON REGISTER -->
-  <div id="username-screen" class="screen hidden">
-    <div class="centered-form animate-scale">
-      <h2>Choose your Username</h2>
-      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Identity handling config element</p>
-      <form id="username-form">
-        <div class="input-group">
-          <label>Username</label>
-          <input type="text" id="setup-username" placeholder="e.g., CyberKnight" required minlength="3">
-        </div>
-        <button type="submit">Finish Setup</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- LAYER 3: CORE DESKTOP LAYOUT MAIN INTERFACE -->
-  <div id="chat-screen" class="screen hidden">
-    <div class="chat-container" id="chat-layout-wrapper">
-      
-      <!-- Server Selection Left Dock strip -->
-      <div class="server-sidebar" id="server-dock-render-target"></div>
-
-      <!-- Left Action Navigation column -->
-      <div class="sidebar">
-        <div class="sidebar-top">
-          <div class="sidebar-header">
-            <span id="sidebar-context-title">Home</span>
-            <div id="server-owner-settings-gear" class="server-config-trigger hidden" onclick="openServerSettingsModal()" title="Guild Server Configuration Settings">⚙️</div>
-          </div>
-          
-          <div id="sidebar-action-context-zone"></div>
-          <div class="channels-list" id="navigation-list-render-target"></div>
-        </div>
-
-        <!-- Identity Matrix Footer block -->
-        <div class="user-profile">
-          <div class="presence-wrapper">
-            <img id="user-avatar" class="avatar" src="" alt="Avatar" onclick="openSelfProfile()">
-            <div class="presence-badge online"></div>
-          </div>
-          <div class="user-info">
-            <div id="user-display-name" class="username" onclick="openSelfProfile()">Loading...</div>
-            <div style="font-size: 11px; color: var(--text-muted);">Active Status</div>
-          </div>
-          <div class="user-controls">
-            <button class="control-icon-btn" title="Profile Settings" onclick="toggleModal('settings-modal', true)">⚙️</button>
-            <button id="logout-btn" class="control-icon-btn" title="Log Out" style="color: var(--danger)">🚪</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Messages View panel -->
-      <div class="main-chat">
-        <div class="chat-header">
-          <button class="back-btn" onclick="leaveChatMobile()">⬅</button>
-          <h3 id="active-room-title">Global Chat Room</h3>
-          <span class="server-id-badge" id="server-id-display-badge"></span>
-        </div>
-        
-        <div class="messages-container" id="messages-container"></div>
-        
-        <!-- Chat Area Form structure -->
-        <div class="input-area">
-          <div class="typing-indicator-bar" id="typing-indicator-output-zone"></div>
-          <form id="chat-form" class="input-box-wrapper">
-            <input type="text" id="chat-input" placeholder="Type a message or paste image link..." autocomplete="off" required>
-          </form>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- MODAL: SERVER CREATION SYSTEM MODAL OVERLAY -->
-  <div id="server-create-modal" class="modal-overlay hidden animate-fade">
-    <div class="settings-card animate-scale">
-      <div class="settings-header">Create or Join a Server</div>
-      <div class="settings-body">
-        <form id="server-create-form">
-          <div class="list-section-title" style="margin-bottom: 5px;">Option A: Establish New Guild</div>
-          <div class="input-group">
-            <label>Server Name</label>
-            <input type="text" id="new-server-name" placeholder="My Awesome Guild">
-          </div>
-          <button type="submit" style="background: var(--success)">Create Server</button>
-        </form>
-        <div class="profile-divider"></div>
-        <form id="server-join-form">
-          <div class="list-section-title" style="margin-bottom: 5px;">Option B: Bind onto Guild ID Token</div>
-          <div class="input-group">
-            <label>Server Token ID</label>
-            <input type="text" id="join-server-id" placeholder="Paste server token target reference string" required>
-          </div>
-          <button type="submit">Join Server</button>
-        </form>
-      </div>
-      <div class="settings-footer">
-        <button type="button" class="cancel-btn" onclick="toggleModal('server-create-modal', false)">Close Window</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: SERVER ADMINISTRATIVE MANAGEMENT CONTROL PANEL -->
-  <div id="server-mgmt-modal" class="modal-overlay hidden animate-fade">
-    <div class="settings-card animate-scale">
-      <div class="settings-header" id="mgmt-server-title-label">Server Settings</div>
-      <div class="settings-body">
-        <div class="list-section-title">Roles configuration framework</div>
-        <form id="server-add-role-form" style="display:flex; gap:8px; align-items:flex-end; margin-bottom:10px;">
-          <div class="input-group" style="flex-grow:1; margin-bottom:0;">
-            <label>Create Custom Server Role Tag</label>
-            <input type="text" id="mgmt-role-name-input" placeholder="e.g. Moderator" required>
-          </div>
-          <button type="submit" style="width:auto; margin:0; padding:10px 16px;">Add Role</button>
-        </form>
-        <div class="roles-management-container" id="mgmt-roles-list-box"></div>
-      </div>
-      <div class="settings-footer">
-        <button type="button" class="cancel-btn" onclick="toggleModal('server-mgmt-modal', false)">Close Settings</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: CHANNEL CREATION ACTION FORM -->
-  <div id="channel-create-modal" class="modal-overlay hidden animate-fade">
-    <div class="settings-card animate-scale">
-      <div class="settings-header">Create New Text Channel</div>
-      <form id="channel-create-form">
-        <div class="settings-body">
-          <div class="input-group">
-            <label>Channel Name</label>
-            <input type="text" id="new-channel-name" placeholder="e.g. general-chat" required>
-          </div>
-        </div>
-        <div class="settings-footer">
-          <button type="button" class="cancel-btn" onclick="toggleModal('channel-create-modal', false)">Cancel</button>
-          <button type="submit" style="background: var(--success)">Create Channel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: INSPECT USER PROFILE COMPONENT CARD OVERLAY -->
-  <div id="profile-popup-modal" class="modal-overlay hidden animate-fade" onclick="toggleModal('profile-popup-modal', false)">
-    <div class="profile-popup-card animate-scale" onclick="event.stopPropagation()">
-      <div class="profile-banner" id="popup-banner">
-        <div class="profile-avatar-wrapper">
-          <img class="avatar-lg" id="popup-avatar" src="" alt="Avatar">
-        </div>
-      </div>
-      <div class="profile-info-content">
-        <h4 id="popup-username">Username</h4>
-        <div id="popup-presence-status-row" class="profile-card-presence-status">
-          <div class="dot"></div>
-          <span class="label-text"></span>
-        </div>
-        <div class="profile-divider"></div>
-        <div class="profile-section-heading">About Me</div>
-        <div class="profile-bio-text" id="popup-bio">No description provided.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: PERSONAL USER PROFILE & PREFERENCE PARAMETERS -->
-  <div id="settings-modal" class="modal-overlay hidden animate-fade">
-    <div class="settings-card animate-scale">
-      <div class="settings-header">User Profile & App Settings</div>
-      <form id="settings-form">
-        <div class="settings-body">
-          <div class="input-group">
-            <label>Display Username</label>
-            <input type="text" id="settings-username" required minlength="3">
-          </div>
-          <div class="input-group">
-            <label>Profile Avatar Picture (Select Image from Device Gallery)</label>
-            <div class="file-upload-wrapper">
-              <span class="file-upload-btn" id="file-upload-label-text">📂 Choose local image asset...</span>
-              <input type="file" id="settings-avatar-file-field" accept="image/*">
-            </div>
-            <!-- Hidden input link layer container target -->
-            <input type="hidden" id="settings-avatar-url">
-          </div>
-          <div class="input-group">
-            <label>Or Alternative Profile Picture Web URL Link</label>
-            <input type="text" id="settings-avatar-url-fallback" placeholder="Direct web link ending in image format extension">
-          </div>
-          <div class="input-group">
-            <label>Profile Banner Image URL Link</label>
-            <input type="text" id="settings-banner-url" placeholder="Paste background graphic web link address">
-          </div>
-          <div class="input-group">
-            <label>User Description (Bio)</label>
-            <textarea id="settings-bio" rows="2" maxlength="160" placeholder="Tell us about yourself..."></textarea>
-          </div>
-        </div>
-        <div class="settings-footer">
-          <button type="button" class="cancel-btn" onclick="toggleModal('settings-modal', false)">Cancel</button>
-          <button type="submit" style="background: var(--success)">Save Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- FIREBASE APPLICATION CODE LAYER CORE PACKAGES -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { 
-      getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, 
-      signInWithEmailAndPassword, signOut, onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { 
-      getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, where, onSnapshot, serverTimestamp, arrayUnion, getDocs, deleteDoc, arrayRemove 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeotdYyLjrcyN9PfGRp3zlt0x1iRoSQIU",
-      authDomain: "whatscord-616d2.firebaseapp.com",
-      projectId: "whatscord-616d2",
-      storageBucket: "whatscord-616d2.firebasestorage.app",
-      messagingSenderId: "453859845825",
-      appId: "1:453859845825:web:af5250fbb1206607f5d640"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const googleProvider = new GoogleAuthProvider();
-
-    // Context Navigation variables
-    let currentUserData = null;
-    let isLoginMode = true;
-    
-    let currentServerContext = "home"; 
-    let currentChannelId = "global";   
-    let activeServerMetadata = null; 
-    
-    // Unsubscribe Listener Hooks 
-    let unsubscribeMessages = null;
-    let unsubscribeServerDock = null;
-    let unsubscribeContextSidebar = null;
-    let unsubscribeTypingWatcher = null;
-    
-    let typingDebounceTimeout = null;
-
-    // Bind execution context methods onto global window matrix scope
-    window.switchServerContext = switchServerContext;
-    window.switchChannel = switchChannel;
-    window.toggleModal = toggleModal;
-    window.openSelfProfile = () => openUserProfileCard(currentUserData.uid);
-    window.openUserProfileCard = openUserProfileCard;
-    window.openServerSettingsModal = openServerSettingsModal;
-    window.removeServerRole = removeServerRole;
-    window.triggerEditMessage = triggerEditMessage;
-    window.triggerDeleteMessage = triggerDeleteMessage;
-    window.leaveChatMobile = () => chatLayoutWrapper.classList.remove('show-chat-window');
-
-    const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
-
-    function showScreen(screenId) {
-      document.getElementById('auth-screen').classList.add('hidden');
-      document.getElementById('username-screen').classList.add('hidden');
-      document.getElementById('chat-screen').classList.add('hidden');
-      document.getElementById(screenId).classList.remove('hidden');
-    }
-
-    function toggleModal(modalId, showStatus) {
-      const modal = document.getElementById(modalId);
-      if (showStatus) modal.classList.remove('hidden');
-      else modal.classList.add('hidden');
-    }
-
-    // GALLERY BASE64 IMAGE UPLOAD PIPELINE
-    document.getElementById('settings-avatar-file-field').addEventListener('change', function(e) {
-      const selectedFile = e.target.files[0];
-      if (!selectedFile) return;
-      
-      // Validation Check: Guard against huge base64 documents crashing Firestore 1MB limits
-      if (selectedFile.size > 400000) { 
-        alert("Image asset optimization required! Please select a file under 400KB.");
-        this.value = "";
-        return;
-      }
-
-      document.getElementById('file-upload-label-text').innerText = `✅ Asset loaded: ${selectedFile.name}`;
-      
-      const fileReaderModule = new FileReader();
-      fileReaderModule.onloadend = function() {
-        document.getElementById('settings-avatar-url').value = fileReaderModule.result;
-      };
-      fileReaderModule.readAsDataURL(selectedFile);
-    });
-
-    // --- USER PRESENCE & IDENTITY SYSTEMS ---
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await updateDoc(doc(db, "users", user.uid), { status: "online" }).catch(() => {});
-        
-        onSnapshot(doc(db, "users", user.uid), (snap) => {
-          if (snap.exists()) {
-            currentUserData = snap.data();
-            document.getElementById('user-display-name').innerText = currentUserData.username;
-            document.getElementById('user-avatar').src = currentUserData.photoURL;
-
-            if (document.getElementById('chat-screen').classList.contains('hidden')) {
-              setupServerDockStream();
-              switchServerContext('home');
-              showScreen('chat-screen');
-            }
-          } else {
-            showScreen('username-screen');
-          }
-        });
-      } else {
-        showScreen('auth-screen');
-      }
-    });
-
-    window.addEventListener('beforeunload', () => {
-      if (auth.currentUser) {
-        updateDoc(doc(db, "users", auth.currentUser.uid), { status: "offline" });
-      }
-    });
-
-    // --- REGISTER / LOGIN CAPTURES ---
-    document.getElementById('auth-toggle').addEventListener('click', () => {
-      isLoginMode = !isLoginMode;
-      document.getElementById('auth-title').innerText = isLoginMode ? "Welcome to WhatsCord" : "Create an Account";
-      document.getElementById('auth-submit-btn').innerText = isLoginMode ? "Login" : "Sign Up";
-      document.getElementById('auth-toggle').innerText = isLoginMode ? "Already a member? Login" : "Need an account? Register";
-    });
-
-    document.getElementById('email-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-password').value;
-      try {
-        if (isLoginMode) await signInWithEmailAndPassword(auth, email, password);
-        else await createUserWithEmailAndPassword(auth, email, password);
-      } catch (err) { alert(err.message); }
-    });
-
-    document.getElementById('google-btn').addEventListener('click', async () => {
-      try { await signInWithPopup(auth, googleProvider); } catch (err) { alert(err.message); }
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      if(auth.currentUser) await updateDoc(doc(db, "users", auth.currentUser.uid), { status: "offline" });
-      signOut(auth);
-    });
-
-    document.getElementById('username-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      const usernameInput = document.getElementById('setup-username').value.trim();
-      const generatedAvatar = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(usernameInput)}`;
-
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        username: usernameInput,
-        photoURL: generatedAvatar,
-        email: user.email,
-        bio: "Hey there! I am using WhatsCord.",
-        bannerURL: "",
-        status: "online",
-        friends: []
-      });
-    });
-
-    // --- DOCK STRIP NAVIGATION LOGIC ---
-    function setupServerDockStream() {
-      if(unsubscribeServerDock) unsubscribeServerDock();
-      
-      unsubscribeServerDock = onSnapshot(query(collection(db, "servers")), (snapshot) => {
-        const targetDock = document.getElementById('server-dock-render-target');
-        targetDock.innerHTML = `
-          <div class="server-icon ${currentServerContext === 'home' ? 'active' : ''}" id="dock-home" onclick="switchServerContext('home')" title="Home & DMs">🏠</div>
-          <div class="server-icon ${currentServerContext === 'global' ? 'active' : ''}" id="dock-global" onclick="switchServerContext('global')" title="Global Board">🌐</div>
-          <div class="server-separator"></div>
-        `;
-
-        snapshot.forEach((serverDoc) => {
-          const sData = serverDoc.data();
-          if (sData.members && sData.members.includes(auth.currentUser.uid)) {
-            const rowItem = document.createElement('div');
-            rowItem.className = `server-icon ${currentServerContext === serverDoc.id ? 'active' : ''}`;
-            rowItem.id = `dock-${serverDoc.id}`;
-            rowItem.title = sData.name;
-            rowItem.onclick = () => switchServerContext(serverDoc.id);
-            rowItem.innerText = sData.name.split(" ").map(w => w[0]).join("").substring(0, 3).toUpperCase();
-            targetDock.appendChild(rowItem);
-          }
-        });
-
-        const addBtn = document.createElement('div');
-        addBtn.className = "server-icon server-add-btn";
-        addBtn.innerText = "+";
-        addBtn.onclick = () => toggleModal('server-create-modal', true);
-        targetDock.appendChild(addBtn);
-      });
-    }
-
-    // --- CHANNEL CONTEXT SWAPBOARD ROUTER ---
-    async function switchServerContext(contextPointer) {
-      currentServerContext = contextPointer;
-      activeServerMetadata = null;
-      
-      document.querySelectorAll('.server-icon').forEach(el => el.classList.remove('active'));
-      const targetDockIcon = document.getElementById(`dock-${contextPointer}`);
-      if(targetDockIcon) targetDockIcon.classList.add('active');
-
-      const sideContextTitle = document.getElementById('sidebar-context-title');
-      const sideActionZone = document.getElementById('sidebar-action-context-zone');
-      const idBadge = document.getElementById('server-id-display-badge');
-      const configGear = document.getElementById('server-owner-settings-gear');
-      
-      idBadge.innerText = "";
-      configGear.classList.add('hidden');
-
-      if (contextPointer === "home") {
-        sideContextTitle.innerText = "Direct Messaging";
-        sideActionZone.className = "friend-search-box";
-        sideActionZone.innerHTML = `
-          <div class="list-section-title" style="padding-bottom:5px;">Add Friend</div>
-          <form id="friend-search-form" class="flex">
-            <input type="text" id="friend-username-input" placeholder="User match tag..." required>
-            <button type="submit">Add</button>
-          </form>
-        `;
-        document.getElementById('friend-search-form').addEventListener('submit', executeFriendPairSequence);
-        loadFriendsSidebarList();
-        switchChannel('global', 'Global Chat Room');
-      } 
-      else if (contextPointer === "global") {
-        sideContextTitle.innerText = "Public Grid";
-        sideActionZone.className = "";
-        sideActionZone.innerHTML = "";
-        document.getElementById('navigation-list-render-target').innerHTML = `
-          <div class="channel-item active"><span># global-chat</span></div>
-        `;
-        switchChannel('global', 'Global Chat Room');
-      } 
-      else {
-        // Active Server Processing Loop
-        const serverSnapshot = await getDoc(doc(db, "servers", contextPointer));
-        if(!serverSnapshot.exists()) return;
-        
-        activeServerMetadata = serverSnapshot.data();
-        sideContextTitle.innerText = activeServerMetadata.name;
-        idBadge.innerText = `ID: ${contextPointer}`;
-        
-        const isOwner = (activeServerMetadata.ownerId === auth.currentUser.uid);
-        
-        if (isOwner) {
-          configGear.classList.remove('hidden');
-          sideActionZone.className = "friend-search-box";
-          sideActionZone.innerHTML = `
-            <button onclick="toggleModal('channel-create-modal', true)" style="margin-top:0; padding:8px; font-size:12px;">+ Create Server Channel</button>
-          `;
-        } else {
-          sideActionZone.className = "";
-          sideActionZone.innerHTML = "";
-        }
-        
-        loadServerChannelsSidebarList();
-      }
-    }
-
-    // --- SIDEBAR NESTED CONTAINER STREAMS ---
-    function loadFriendsSidebarList() {
-      if(unsubscribeContextSidebar) unsubscribeContextSidebar();
-      
-      unsubscribeContextSidebar = onSnapshot(doc(db, "users", auth.currentUser.uid), (profileSnap) => {
-        const renderContainer = document.getElementById('navigation-list-render-target');
-        renderContainer.innerHTML = `<div class="list-section-title">All Contacts</div>`;
-        const friendsArray = profileSnap.data()?.friends || [];
-
-        friendsArray.forEach((fUID) => {
-          onSnapshot(doc(db, "users", fUID), (friendSnap) => {
-            if(!friendSnap.exists()) return;
-            const fData = friendSnap.data();
-            const dmChanId = [auth.currentUser.uid, fUID].sort().join("___");
-            
-            let existingRow = document.getElementById(`itemRow-${dmChanId}`);
-            if(!existingRow) {
-              existingRow = document.createElement('div');
-              existingRow.className = `channel-item`;
-              existingRow.id = `itemRow-${dmChanId}`;
-              renderContainer.appendChild(existingRow);
-            }
-            existingRow.onclick = () => switchChannel(dmChanId, `@ ${fData.username}`);
-            existingRow.innerHTML = `
-              <div class="presence-wrapper">
-                <img class="avatar-sm" src="${fData.photoURL}">
-                <div class="presence-badge ${fData.status === 'online' ? 'online' : ''}"></div>
-              </div>
-              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${fData.username}</span>
-            `;
-          });
-        });
-      });
-    }
-
-    function loadServerChannelsSidebarList() {
-      if(unsubscribeContextSidebar) unsubscribeContextSidebar();
-      
-      const chanQuery = query(collection(db, "channels"), where("serverId", "==", currentServerContext));
-      unsubscribeContextSidebar = onSnapshot(chanQuery, (snapshot) => {
-        const renderContainer = document.getElementById('navigation-list-render-target');
-        renderContainer.innerHTML = `<div class="list-section-title">Text Channels</div>`;
-        
-        let hasActiveChannels = false;
-        let targetedFirstChannel = null;
-        
-        snapshot.forEach((cDoc) => {
-          const cData = cDoc.data();
-          if(!targetedFirstChannel) targetedFirstChannel = { id: cDoc.id, name: cData.name };
-          hasActiveChannels = true;
-          
-          const elementChanRow = document.createElement('div');
-          elementChanRow.className = `channel-item ${currentChannelId === cDoc.id ? 'active' : ''}`;
-          elementChanRow.id = `chanRow-${cDoc.id}`;
-          elementChanRow.onclick = () => switchChannel(cDoc.id, `# ${cData.name}`);
-          elementChanRow.innerHTML = `<span>#</span> <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${cData.name}</span>`;
-          renderContainer.appendChild(elementChanRow);
-        });
-
-        if(!hasActiveChannels) {
-          renderContainer.innerHTML += `<div style="font-size:12px; color:var(--text-muted); padding:10px;">No visible feeds.</div>`;
-        } else if (currentChannelId === "global" || !document.getElementById(`chanRow-${currentChannelId}`)) {
-          switchChannel(targetedFirstChannel.id, `# ${targetedFirstChannel.name}`);
-        }
-      });
-    }
-
-    function switchChannel(channelPointerId, layoutDisplayTitle) {
-      currentChannelId = channelPointerId;
-      document.getElementById('active-room-title').innerText = layoutDisplayTitle;
-      
-      document.querySelectorAll('.channel-item').forEach(el => el.classList.remove('active'));
-      const activeItem = document.getElementById(`chanRow-${channelPointerId}`) || document.getElementById(`itemRow-${channelPointerId}`);
-      if(activeItem) activeItem.classList.add('active');
-
-      chatLayoutWrapper.classList.add('show-chat-window');
-      
-      loadMessagesStreamLog();
-      listenToTypingIndicators();
-    }
-
-    // --- CORE CHAT OPERATIONS LAYER ---
-    document.getElementById('chat-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fieldInput = document.getElementById('chat-input');
-      const plaintext = fieldInput.value.trim();
-      if(!plaintext) return;
-
-      await addDoc(collection(db, "messages"), {
-        channelId: currentChannelId,
-        uid: currentUserData.uid,
-        username: currentUserData.username,
-        photoURL: currentUserData.photoURL,
-        text: plaintext,
-        isEdited: false,
-        createdAt: serverTimestamp()
-      });
-      fieldInput.value = "";
-      broadcastTypingStatus(false);
-    });
-
-    function loadMessagesStreamLog() {
-      if(unsubscribeMessages) unsubscribeMessages();
-      
-      const logsViewBoard = document.getElementById('messages-container');
-      const msgQuery = query(collection(db, "messages"), orderBy("createdAt", "asc"));
-
-      unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
-        logsViewBoard.innerHTML = "";
-        
-        const serverOwnerId = activeServerMetadata ? activeServerMetadata.ownerId : null;
-        
-        snapshot.forEach((docItem) => {
-          const item = docItem.data();
-          if (item.channelId !== currentChannelId) return;
-
-          const isMsgOwner = (item.uid === serverOwnerId);
-          const isSelfMessage = (item.uid === auth.currentUser.uid);
-          const currentSessionUserIsServerOwner = (serverOwnerId === auth.currentUser.uid);
-
-          let roleTagsMarkup = "";
-          if(isMsgOwner) {
-            roleTagsMarkup += `<span class="role-badge owner-tag">OWNER</span>`;
-          }
-
-          // Build context access action row elements
-          let actionControlElements = "";
-          if (isSelfMessage) {
-            actionControlElements += `<button class="action-btn" onclick="triggerEditMessage('${docItem.id}', '${item.text.replace(/'/g, "\\'")}')" title="Edit Message">✏️</button>`;
-          }
-          if (isSelfMessage || currentSessionUserIsServerOwner) {
-            actionControlElements += `<button class="action-btn delete" onclick="triggerDeleteMessage('${docItem.id}')" title="Delete Message">🗑️</button>`;
-          }
-
-          const stamp = item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
-          const msgRow = document.createElement('div');
-          msgRow.className = 'message';
-          msgRow.innerHTML = `
-            <img class="avatar" src="${item.photoURL}" alt="Avatar" onclick="openUserProfileCard('${item.uid}')">
-            <div class="message-content">
-              <div class="message-header">
-                <span class="msg-username" onclick="openUserProfileCard('${item.uid}')">${item.username}</span>
-                ${roleTagsMarkup}
-                <span class="msg-time">${stamp}</span>
-                ${item.isEdited ? `<span class="msg-edited">(edited)</span>` : ''}
-              </div>
-              <div class="msg-text">${parseBodyEmbeds(item.text)}</div>
-            </div>
-            <div class="message-actions">${actionControlElements}</div>
-          `;
-          logsViewBoard.appendChild(msgRow);
-        });
-        logsViewBoard.scrollTop = logsViewBoard.scrollHeight;
-      });
-    }
-
-    async function triggerEditMessage(msgId, oldText) {
-      const updatedText = prompt("Modify message text context payload:", oldText);
-      if (updatedText === null) return; 
-      const trimmed = updatedText.trim();
-      if (!trimmed) {
-        triggerDeleteMessage(msgId);
-        return;
-      }
-      await updateDoc(doc(db, "messages", msgId), {
-        text: trimmed,
-        isEdited: true
-      });
-    }
-
-    async function triggerDeleteMessage(msgId) {
-      if(confirm("Confirm removal of target message data node?")) {
-        await deleteDoc(doc(db, "messages", msgId));
-      }
-    }
-
-    // --- TYPING TRACKING ENGINE ---
-    const textInputElement = document.getElementById('chat-input');
-    textInputElement.addEventListener('input', () => {
-      broadcastTypingStatus(true);
-      clearTimeout(typingDebounceTimeout);
-      typingDebounceTimeout = setTimeout(() => {
-        broadcastTypingStatus(false);
-      }, 3000);
-    });
-
-    async function broadcastTypingStatus(isTyping) {
-      if (!currentUserData) return;
-      const targetDocId = `${currentChannelId}___${currentUserData.uid}`;
-      if (isTyping) {
-        await setDoc(doc(db, "typing", targetDocId), {
-          channelId: currentChannelId,
-          uid: currentUserData.uid,
-          username: currentUserData.username,
-          lastActive: Date.now()
-        });
-      } else {
-        await deleteDoc(doc(db, "typing", targetDocId)).catch(()=>{});
-      }
-    }
-
-    function listenToTypingIndicators() {
-      if(unsubscribeTypingWatcher) unsubscribeTypingWatcher();
-      
-      const typingTargetZone = document.getElementById('typing-indicator-output-zone');
-      unsubscribeTypingWatcher = onSnapshot(collection(db, "typing"), (snapshot) => {
-        let typers = [];
-        snapshot.forEach((tDoc) => {
-          const tData = tDoc.data();
-          if(tData.channelId === currentChannelId && tData.uid !== currentUserData.uid) {
-            if (Date.now() - tData.lastActive < 5000) {
-              typers.push(tData.username);
-            }
-          }
-        });
-
-        if(typers.length === 0) typingTargetZone.innerText = "";
-        else if (typers.length === 1) typingTargetZone.innerText = `${typers[0]} is typing...`;
-        else typingTargetZone.innerText = `Multiple people are typing...`;
-      });
-    }
-
-    // --- ADMINISTRATIVE SERVER CONTROL CONFIGS ---
-    document.getElementById('server-create-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const sName = document.getElementById('new-server-name').value.trim();
-      if(!sName) return;
-
-      const serverDocRef = doc(collection(db, "servers"));
-      await setDoc(serverDocRef, {
-        name: sName,
-        ownerId: auth.currentUser.uid,
-        members: [auth.currentUser.uid],
-        roles: ["member", "admin"]
-      });
-
-      await addDoc(collection(db, "channels"), {
-        name: "general-chat",
-        serverId: serverDocRef.id
-      });
-
-      document.getElementById('new-server-name').value = "";
-      toggleModal('server-create-modal', false);
-      switchServerContext(serverDocRef.id);
-    });
-
-    document.getElementById('server-join-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const token = document.getElementById('join-server-id').value.trim();
-      try {
-        const sSnap = await getDoc(doc(db, "servers", token));
-        if(!sSnap.exists()) { alert("Target workspace server does not exist!"); return; }
-        
-        await updateDoc(doc(db, "servers", token), { members: arrayUnion(auth.currentUser.uid) });
-        document.getElementById('join-server-id').value = "";
-        toggleModal('server-create-modal', false);
-        switchServerContext(token);
-      } catch(err) { alert("Error joining server."); }
-    });
-
-    document.getElementById('channel-create-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (activeServerMetadata?.ownerId !== auth.currentUser.uid) {
-        alert("Operation Aborted: Server Owner permissions required.");
-        return;
-      }
-      
-      const cName = document.getElementById('new-channel-name').value.trim().toLowerCase().replace(/\s+/g, '-');
-      if(!cName) return;
-
-      await addDoc(collection(db, "channels"), {
-        name: cName,
-        serverId: currentServerContext
-      });
-
-      document.getElementById('new-channel-name').value = "";
-      toggleModal('channel-create-modal', false);
-    });
-
-    // --- ADMINISTRATIVE ROLES MANAGER INTERACTION ---
-    function openServerSettingsModal() {
-      if (!activeServerMetadata || activeServerMetadata.ownerId !== auth.currentUser.uid) return;
-      
-      document.getElementById('mgmt-server-title-label').innerText = `Settings: ${activeServerMetadata.name}`;
-      renderServerManagementRolesList();
-      toggleModal('server-mgmt-modal', true);
-    }
-
-    function renderServerManagementRolesList() {
-      const container = document.getElementById('mgmt-roles-list-box');
-      container.innerHTML = "";
-      const currentRoles = activeServerMetadata.roles || [];
-      
-      currentRoles.forEach(roleName => {
-        const row = document.createElement('div');
-        row.className = "role-config-row";
-        row.innerHTML = `
-          <span>🏷️ ${roleName}</span>
-          <span class="role-remove-btn" onclick="removeServerRole('${roleName}')">Delete</span>
-        `;
-        container.appendChild(row);
-      });
-    }
-
-    document.getElementById('server-add-role-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const roleInput = document.getElementById('mgmt-role-name-input');
-      const targetRoleName = roleInput.value.trim().toLowerCase();
-      
-      if(!targetRoleName) return;
-      if(activeServerMetadata.roles?.includes(targetRoleName)) {
-        alert("Role configuration entry already exists!");
-        return;
-      }
-
-      await updateDoc(doc(db, "servers", currentServerContext), {
-        roles: arrayUnion(targetRoleName)
-      });
-      
-      activeServerMetadata.roles = activeServerMetadata.roles || [];
-      activeServerMetadata.roles.push(targetRoleName);
-      roleInput.value = "";
-      renderServerManagementRolesList();
-    });
-
-    async function removeServerRole(roleName) {
-      if(!confirm(`Remove specified server role [${roleName}]?`)) return;
-      
-      await updateDoc(doc(db, "servers", currentServerContext), {
-        roles: arrayRemove(roleName)
-      });
-      
-      activeServerMetadata.roles = activeServerMetadata.roles.filter(r => r !== roleName);
-      renderServerManagementRolesList();
-    }
-
-    // --- SOCIAL FREND CONNECTIONS ---
-    async function executeFriendPairSequence(e) {
-      e.preventDefault();
-      const targetInput = document.getElementById('friend-username-input');
-      const matchName = targetInput.value.trim();
-
-      if(matchName === currentUserData.username) { alert("You cannot link onto yourself."); return; }
-
-      const qSearch = query(collection(db, "users"), where("username", "==", matchName));
-      const resDocs = await getDocs(qSearch);
-
-      if(resDocs.empty) { alert("User profile missing!"); return; }
-      const fUserData = resDocs.docs[0].data();
-
-      await updateDoc(doc(db, "users", auth.currentUser.uid), { friends: arrayUnion(fUserData.uid) });
-      await updateDoc(doc(db, "users", fUserData.uid), { friends: arrayUnion(auth.currentUser.uid) });
-      
-      targetInput.value = "";
-      alert(`Linked with ${fUserData.username}!`);
-    }
-
-    // --- DATA SAVE INTERFACE CAPTURES ---
-    document.getElementById('settings-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const uName = document.getElementById('settings-username').value.trim();
-      const fileUploadValue = document.getElementById('settings-avatar-url').value.trim();
-      const fallbackUrl = document.getElementById('settings-avatar-url-fallback').value.trim();
-      const uBann = document.getElementById('settings-banner-url').value.trim();
-      const uBio  = document.getElementById('settings-bio').value.trim();
-
-      // Prioritize file upload, fallback to manual input URL string if file is unselected
-      let finalAvatarUrlString = currentUserData.photoURL;
-      if (fileUploadValue) {
-        finalAvatarUrlString = fileUploadValue;
-      } else if (fallbackUrl) {
-        finalAvatarUrlString = fallbackUrl;
-      }
-
-      await updateDoc(doc(db, "users", auth.currentUser.uid), {
-        username: uName,
-        photoURL: finalAvatarUrlString,
-        bannerURL: uBann,
-        bio: uBio
-      });
-      toggleModal('settings-modal', false);
-    });
-
-    async function openUserProfileCard(uid) {
-      const uSnap = await getDoc(doc(db, "users", uid));
-      if(!uSnap.exists()) return;
-      const data = uSnap.data();
-
-      document.getElementById('popup-username').innerText = data.username;
-      document.getElementById('popup-avatar').src = data.photoURL;
-      document.getElementById('popup-bio').innerText = data.bio || "No profile bio description provided.";
-      
-      const presWrapper = document.getElementById('popup-presence-status-row');
-      presWrapper.className = `profile-card-presence-status ${data.status === 'online' ? 'online' : 'offline'}`;
-      
-      const bannerTarget = document.getElementById('popup-banner');
-      if (data.bannerURL) {
-        bannerTarget.style.backgroundImage = `url('${data.bannerURL}')`;
-      } else {
-        bannerTarget.style.backgroundImage = "none";
-        bannerTarget.style.backgroundColor = "var(--blurple)";
-      }
-      toggleModal('profile-popup-modal', true);
-    }
-
-    // --- ENHANCED EMBED IMAGE PROCESSOR ---
-    function parseBodyEmbeds(text) {
-      let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      const urlPattern = /(https?:\/\/[^\s]+)/gi;
-
-      return escaped.replace(urlPattern, (url) => {
-        if (url.match(/\.(jpeg|jpg|gif|png|webp)/i) || url.includes("giphy.com/media") || url.includes("tenor.com/view") || url.startsWith("data:image")) {
-          return `${url}<br><img src="${url}" class="embed-gif" onerror="this.style.display='none'" />`;
-        }
-        return `<a href="${url}" target="_blank" style="color: var(--blurple); text-decoration:none;">${url}</a>`;
-      });
-    }
-  </script>
-</body>
-</html>
-
