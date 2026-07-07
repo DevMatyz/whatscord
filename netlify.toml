@@ -1,8 +1,4 @@
-fetch('/.netlify/functions/messages', { 
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(messageData)
-})
-
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
