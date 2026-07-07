@@ -25,7 +25,6 @@
     /* Animation Framework */
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    @keyframes slideLeft { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes msgBounce { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
     .animate-fade { animation: fadeIn 0.2s ease-out forwards; }
@@ -114,11 +113,10 @@
     .back-btn { display: none; background: transparent; color: var(--text-main); border: none; font-size: 16px; cursor: pointer; width: auto; margin:0; padding:4px; }
     .server-id-badge { font-size: 10px; background: var(--bg-darker); padding: 4px 8px; border-radius: 4px; color: var(--text-muted); margin-left: auto; font-family: monospace; }
     
-    /* Messages Feed & Syntax */
+    /* Messages Feed */
     .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
     .message { display: flex; gap: 14px; align-items: flex-start; position: relative; animation: msgBounce 0.22s ease-out forwards; }
     
-    /* Tags & Permissions styling */
     .role-badge { font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; color: #fff; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; vertical-align: middle; }
     .owner-tag { background: var(--warning); color: #111214; }
 
@@ -131,7 +129,7 @@
     .msg-text { color: var(--text-main); font-size: 14px; word-break: break-word; line-height: 1.4; margin-top: 2px; }
     .embed-gif { max-width: 100%; max-height: 260px; border-radius: 4px; margin-top: 6px; display: block; object-fit: contain; }
 
-    /* Context Action Toolbars */
+    /* Action Toolbars */
     .message-actions { position: absolute; right: 14px; top: -10px; background: var(--bg-dark); border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; display: none; gap: 2px; padding: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
     .message:hover .message-actions { display: flex; }
     .action-btn { background: transparent; color: var(--text-muted); width: 24px; height: 24px; padding: 0; font-size: 12px; margin: 0; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
@@ -177,7 +175,7 @@
     .role-config-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-darker); padding: 6px 10px; border-radius: 3px; font-size: 12px; }
     .role-remove-btn { color: var(--danger); cursor: pointer; font-weight: bold; }
 
-    /* Mobile Adaptations */
+    /* Mobile Responsive Hooks */
     @media (max-width: 768px) {
       .sidebar { width: calc(100% - 72px); }
       .main-chat { display: none; }
@@ -281,7 +279,7 @@
       <div class="settings-header">Create or Join a Server</div>
       <div class="settings-body">
         <form id="server-create-form">
-          <div class="list-section-title" style="padding-left:0; padding-top:0;">Option A: Initialize New Server</div>
+          <div class="list-section-title" style="padding-left:0; padding-top:0;">Option A: Create New Guild</div>
           <div class="input-group">
             <label>Server Name</label>
             <input type="text" id="new-server-name" placeholder="My New Server">
@@ -290,10 +288,10 @@
         </form>
         <div class="profile-divider"></div>
         <form id="server-join-form">
-          <div class="list-section-title" style="padding-left:0; padding-top:0;">Option B: Enter Invite ID Token</div>
+          <div class="list-section-title" style="padding-left:0; padding-top:0;">Option B: Enter Invite Token ID</div>
           <div class="input-group">
             <label>Server Token ID</label>
-            <input type="text" id="join-server-id" placeholder="Paste server token target reference" required>
+            <input type="text" id="join-server-id" placeholder="Paste server token ID..." required>
           </div>
           <button type="submit">Join Server</button>
         </form>
@@ -424,14 +422,12 @@
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // Application state
     let currentUserData = null;
     let isLoginMode = true;
     let currentServerContext = "home"; 
     let currentChannelId = "global";   
     let activeServerMetadata = null; 
 
-    // Subscription Cleaners
     let unsubscribeMessages = null;
     let unsubscribeServerDock = null;
     let unsubscribeContextSidebar = null;
@@ -440,7 +436,7 @@
 
     const chatLayoutWrapper = document.getElementById('chat-layout-wrapper');
 
-    // Bind procedures to window scope
+    // Scoped execution bindings
     window.switchServerContext = switchServerContext;
     window.switchChannel = switchChannel;
     window.toggleModal = toggleModal;
@@ -465,13 +461,13 @@
       else modal.classList.add('hidden');
     }
 
-    // GALLERY SELECTION & OPTIMIZED BASE64 PIPELINE
+    // DEVICE PHOTO BUFFER PROCESSING PIPELINE
     document.getElementById('settings-avatar-file-field').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
       
       if (file.size > 400000) { 
-        alert("File size threshold exceeded! Please select an image asset under 400KB.");
+        alert("File size limit exceeded! Please select an image under 400KB.");
         this.value = "";
         return;
       }
@@ -485,7 +481,7 @@
       fileReader.readAsDataURL(file);
     });
 
-    // USER PRESENCE RUNTIME PIPELINE
+    // PRESENCE RUNTIME LIFECYCLE
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         await updateDoc(doc(db, "users", user.uid), { status: "online" }).catch(() => {});
@@ -516,7 +512,7 @@
       }
     });
 
-    // AUTH CAPTURE BINDINGS
+    // SYSTEM AUTH ROUTINES
     document.getElementById('auth-toggle').addEventListener('click', () => {
       isLoginMode = !isLoginMode;
       document.getElementById('auth-title').innerText = isLoginMode ? "Welcome to WhatsCord" : "Create an Account";
@@ -561,7 +557,7 @@
       });
     });
 
-    // SERVER DOCK MANAGED CONTROLLER
+    // SERVER SELECTION INTERFACES
     function setupServerDockStream() {
       if(unsubscribeServerDock) unsubscribeServerDock();
       
@@ -594,7 +590,6 @@
       });
     }
 
-    // SERVER OR DM ROUTING ENVIRONMENT CONTROL
     async function switchServerContext(contextPointer) {
       currentServerContext = contextPointer;
       activeServerMetadata = null;
@@ -617,7 +612,7 @@
         sideActionZone.innerHTML = `
           <div class="list-section-title" style="padding-bottom:5px; padding-left:0; padding-top:0;">Add Friend Connection</div>
           <form id="friend-search-form" class="flex">
-            <input type="text" id="friend-username-input" placeholder="Enter username tag..." required>
+            <input type="text" id="friend-username-input" placeholder="Enter username..." required>
             <button type="submit">Add</button>
           </form>
         `;
@@ -642,7 +637,7 @@
         sideContextTitle.innerText = activeServerMetadata.name;
         idBadge.innerText = `ID: ${contextPointer}`;
         
-        // GATING LOGIC: Render channel creator and settings gear only for Server Owner
+        // Owner Permission Gate Evaluation
         const isOwner = (activeServerMetadata.ownerId === auth.currentUser.uid);
         if (isOwner) {
           configGear.classList.remove('hidden');
@@ -659,7 +654,7 @@
       }
     }
 
-    // LIVE INTERACTION SIDEBAR RENDERING
+    // REALTIME SIDEBAR CONTEXT SYNCS
     function loadFriendsSidebarList() {
       if(unsubscribeContextSidebar) unsubscribeContextSidebar();
       
@@ -740,7 +735,7 @@
       listenToTypingIndicators();
     }
 
-    // MESSAGES CONTEXT HUB
+    // MESSAGE OPERATIONS & DATA PIPELINES
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fieldInput = document.getElementById('chat-input');
@@ -784,7 +779,6 @@
             roleTagsMarkup += `<span class="role-badge owner-tag">OWNER</span>`;
           }
 
-          // Build Dynamic Contextual Actions Bar
           let actionControlElements = "";
           if (isSelfMessage) {
             actionControlElements += `<button class="action-btn" onclick="triggerEditMessage('${docItem.id}', '${item.text.replace(/'/g, "\\'")}')" title="Edit Message">✏️</button>`;
@@ -835,7 +829,7 @@
       }
     }
 
-    // TYPING TRACKING ENGINE
+    // TYPING STATE CONTROLLERS
     const textInputElement = document.getElementById('chat-input');
     textInputElement.addEventListener('input', () => {
       broadcastTypingStatus(true);
@@ -881,7 +875,7 @@
       });
     }
 
-    // SERVER STRUCTURE CREATION / MODIFICATION
+    // SERVER STRUCTURE FABRICATION ENGINE
     document.getElementById('server-create-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const sName = document.getElementById('new-server-name').value.trim();
@@ -938,7 +932,7 @@
       toggleModal('channel-create-modal', false);
     });
 
-    // ROLES PANEL CONFIGS (OWNER ONLY GATED)
+    // SYSTEM MANAGEMENT PARAMETERS (OWNER ONLY GATED)
     function openServerSettingsModal() {
       if (!activeServerMetadata || activeServerMetadata.ownerId !== auth.currentUser.uid) return;
       
@@ -995,7 +989,7 @@
       renderServerManagementRolesList();
     }
 
-    // SOCIAL INTERFACE MANAGER
+    // RELATIONSHIP NETWORKS
     async function executeFriendPairSequence(e) {
       e.preventDefault();
       const targetInput = document.getElementById('friend-username-input');
@@ -1013,10 +1007,10 @@
       await updateDoc(doc(db, "users", fUserData.uid), { friends: arrayUnion(auth.currentUser.uid) });
       
       targetInput.value = "";
-      alert(`Successfully coupled connections with ${fUserData.username}!`);
+      alert(`Connected successfully with ${fUserData.username}!`);
     }
 
-    // SAVING USER PREFERENCES
+    // USER PROFILE UPDATE PIPELINE
     document.getElementById('settings-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const uName = document.getElementById('settings-username').value.trim();
@@ -1041,7 +1035,7 @@
       toggleModal('settings-modal', false);
     });
 
-    // PROFILE VISUALIZATION WITH ONLINE/OFFLINE PRESENCE EXTRACTION
+    // PROFILE OVERLAY PRESENCE CHECKER
     async function openUserProfileCard(uid) {
       const uSnap = await getDoc(doc(db, "users", uid));
       if(!uSnap.exists()) return;
@@ -1065,7 +1059,7 @@
       toggleModal('profile-popup-modal', true);
     }
 
-    // EMBED PARSER PIPELINE
+    // REGEX EMBED RENDERING
     function parseBodyEmbeds(text) {
       let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const urlPattern = /(https?:\/\/[^\s]+)/gi;
@@ -1080,3 +1074,4 @@
   </script>
 </body>
 </html>
+
