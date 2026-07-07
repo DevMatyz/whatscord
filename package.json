@@ -1,8 +1,12 @@
 {
-  "name": "whatscord-turso",
+  "name": "whatscord",
   "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step required'"
+  },
   "dependencies": {
     "@libsql/client": "^0.6.0"
   }
 }
-
