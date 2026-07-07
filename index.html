@@ -43,7 +43,7 @@
     .file-upload-container { position: relative; width: 100%; margin-bottom: 4px; }
     .file-upload-trigger { border: 2px dashed #4e5058; padding: 14px; border-radius: 6px; text-align: center; cursor: pointer; display: block; background: rgba(0,0,0,0.15); transition: all 0.2s; font-size: 13px; }
     .file-upload-trigger:hover { border-color: var(--blurple); background: rgba(88,101,242,0.05); }
-    .file-upload-container input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .file-upload-container input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
 
     button { width: 100%; padding: 11px; background: var(--blurple); border: none; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 8px; }
     button:hover { background: #4752c4; }
@@ -528,19 +528,18 @@
       fileReader.readAsDataURL(file);
     });
 
-    // Handle Image Upload within Chat Area
     document.getElementById('chat-image-upload').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
-      if (file.size > 500000) {
-        alert("Please select an image smaller than 500KB.");
+      if (file.size > 150000) {
+        alert("Please select an image smaller than 150KB to protect proxy bandwidth.");
         this.value = ""; return;
       }
       
       const fileReader = new FileReader();
       fileReader.onloadend = async () => {
         try {
-          await fetch('/api/messages', {
+          const response = await fetch('/api/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -551,9 +550,11 @@
               text: fileReader.result
             })
           });
+          if (!response.ok) throw new Error("Image upload payload error.");
           await loadMessagesStreamLog();
         } catch (err) {
           console.error("Failed sending upload:", err);
+          alert("Image transmission failed. Check function logs.");
         }
       };
       fileReader.readAsDataURL(file);
@@ -626,7 +627,7 @@
     });
 
     document.getElementById('logout-btn').addEventListener('click', async () => {
-      if(auth.currentUser) await updateDoc(doc(db, "users", auth.currentUser.uid), { status: "offline" });
+      if(auth.currentUser) await updateDoc(doc(db, "users", auth.currentUser.uid), { status: "offline" }).catch(() => {});
       signOut(auth);
     });
 
@@ -899,12 +900,6 @@
       });
     }
 
-    document.addEventListener("click", (e) => {
-      if (!autocompleteBox.contains(e.target) && e.target !== chatInputElem) {
-        autocompleteBox.classList.add("hidden");
-      }
-    });
-
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fieldInput = document.getElementById('chat-input');
@@ -912,7 +907,7 @@
       if(!plaintext) return;
 
       try {
-        await fetch('/api/messages', {
+        const response = await fetch('/api/messages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -923,12 +918,14 @@
             text: plaintext
           })
         });
+        if(!response.ok) throw new Error("Proxy response error");
         fieldInput.value = "";
         autocompleteBox.classList.add("hidden");
         broadcastTypingStatus(false);
         await loadMessagesStreamLog(); 
       } catch (err) {
         console.error("Error creating message row via Turso:", err);
+        alert("Failed to send message over proxy link.");
       }
     });
 
@@ -941,8 +938,11 @@
         if (!response.ok) throw new Error("API Route failure");
 
         const messagesArray = await response.json();
-        logsViewBoard.innerHTML = "";
         
+        // Prevent clearing screen or crashing if empty/non-array response arrives during server build
+        if (!Array.isArray(messagesArray)) return;
+
+        logsViewBoard.innerHTML = "";
         const serverOwnerId = activeServerMetadata ? activeServerMetadata.ownerId : null;
 
         messagesArray.forEach((item) => {
@@ -987,7 +987,11 @@
           `;
           logsViewBoard.appendChild(msgRow);
         });
-        logsViewBoard.scrollTop = logsViewBoard.scrollHeight;
+        
+        // Dynamic scroll execution safety boundary lock
+        if(logsViewBoard.innerHTML !== "") {
+          logsViewBoard.scrollTop = logsViewBoard.scrollHeight;
+        }
       } catch (err) {
         console.error("Failed pulling channel text data feeds:", err);
       }
@@ -1021,11 +1025,12 @@
       }
     }
 
+    // Set pooling interval cadence gracefully to 4000ms to allow Netlify functions to answer without congestion
     setInterval(() => {
       if (document.getElementById('chat-screen').classList.contains('hidden') === false) {
         loadMessagesStreamLog();
       }
-    }, 3000);
+    }, 4000);
 
     chatInputElem.addEventListener('input', () => {
       broadcastTypingStatus(true);
@@ -1044,7 +1049,7 @@
           uid: currentUserData.uid,
           username: currentUserData.username,
           lastActive: Date.now()
-        });
+        }).catch(()=>{});
       } else {
         await deleteDoc(doc(db, "typing", targetDocId)).catch(()=>{});
       }
@@ -1326,14 +1331,16 @@
     function parseBodyEmbeds(text) {
       if(!text) return "";
       
-      // If the content itself is a raw base64 image strings from file upload
       if (text.startsWith("data:image/")) {
-        return `<img src="${text}" class="embed-gif" />`;
+        return `<img src="${text}" class="embed-gif" alt="Attached Media" />`;
       }
 
       let escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      const urlPattern = /(https?:\/\/[^\s]+)/gi;
+      
+      // Inline Markdown code injection fallback parser (`code`)
+      escaped = escaped.replace(/`([^`]+)`/g, '<code style="background:var(--bg-darker); color:#e67e22; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:12px;">$1</code>');
 
+      const urlPattern = /(https?:\/\/[^\s]+)/gi;
       return escaped.replace(urlPattern, (url) => {
         if (url.match(/\.(jpeg|jpg|gif|png|webp)/i) || url.includes("giphy.com/media") || url.includes("tenor.com/view")) {
           return `${url}<br><img src="${url}" class="embed-gif" onerror="this.style.display='none'" />`;
@@ -1341,6 +1348,13 @@
         return `<a href="${url}" target="_blank" style="color: var(--blurple); text-decoration:none;">${url}</a>`;
       });
     }
+    
+    // Auto-dismiss layout popups when clicking outer overlay regions
+    document.addEventListener("click", (e) => {
+      if (!autocompleteBox.contains(e.target) && e.target !== chatInputElem) {
+        autocompleteBox.classList.add("hidden");
+      }
+    });
   </script>
 </body>
 </html>
